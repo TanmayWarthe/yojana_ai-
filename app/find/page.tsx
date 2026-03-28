@@ -1,404 +1,607 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import SchemeCard from "@/components/schemes/SchemeCard";
 import { eligibilityEngine } from "@/lib/eligibility";
-import { STATES, OCCUPATIONS, CATEGORIES } from "@/lib/constants";
+import { STATES, OCCUPATIONS, CAT_META } from "@/lib/constants";
 import type { CitizenProfile, MatchedScheme, Scheme } from "@/types";
 
-const SCAN_STEPS = [
-  "🔌 Initializing AI Engine...",
-  "📡 Analyzing Profile Data...",
-  "📊 Scanning 219+ Government Schemes...",
-  "🤖 Calculating Eligibility Matches...",
-  "✅ Preparing Your Results...",
+const CATEGORIES_FILTER = [
+  "All","Agriculture","Health","Education","Housing",
+  "Women & Child","Business & Finance","Employment",
+  "Social Welfare","Insurance","Food Security","Digital & Tech",
 ];
 
-const DEFAULT_PROFILE: CitizenProfile = {
-  name: "Ramu",
-  age: 45,
-  gender: "Male",
-  state: "Maharashtra",
-  occupation: "farmer",
-  income: 80000,
-  category: "sc",
-  bpl: true,
-  has_land: true,
-  disabled: false,
+const CATEGORY_SHORT: Record<string,string> = {
+  "General / Unreserved":"General","SC — Scheduled Caste":"SC",
+  "ST — Scheduled Tribe":"ST","OBC — Other Backward Class (Central List)":"OBC",
+  "OBC — Other Backward Class (State List)":"OBC",
+  "EWS — Economically Weaker Section":"EWS",
+  "DNT — De-notified / Nomadic Tribe":"ST",
+  "Minority — Muslim":"minority","Minority — Christian":"minority",
+  "Minority — Sikh":"minority","Minority — Buddhist":"minority",
+  "Minority — Parsi":"minority","Minority — Jain":"minority",
 };
 
+const EMPTY: CitizenProfile = {
+  name:"",age:30,gender:"Male",state:"",occupation:"",
+  income:0,category:"General",bpl:false,has_land:false,disabled:false,
+};
+
+type SortMode = "best_match" | "verified_first" | "state_first" | "income_schemes";
+
 export default function FindPage() {
-  const [profile, setProfile]     = useState<CitizenProfile>(DEFAULT_PROFILE);
-  const [results, setResults]     = useState<MatchedScheme[]>([]);
-  const [loading, setLoading]     = useState(false);
-  const [searched, setSearched]   = useState(false);
-  const [searchMode, setSearchMode] = useState<"ml" | "rule">("ml");
-  const [compareList, setCompareList] = useState<Scheme[]>([]);
-  const [filterCat, setFilterCat] = useState("All");
-  const [showN, setShowN]         = useState(10);
-  const [scanStep, setScanStep]   = useState(0);
-  const scanRef = useRef<NodeJS.Timeout | null>(null);
+  const [profile,       setProfile]       = useState<CitizenProfile>(EMPTY);
+  const [allResults,    setAllResults]    = useState<MatchedScheme[]>([]);
+  const [loading,       setLoading]       = useState(false);
+  const [searched,      setSearched]      = useState(false);
+  const [profileLoaded, setProfileLoaded] = useState(false);
+  const [catFilter,     setCatFilter]     = useState("All");
+  const [sortMode,      setSortMode]      = useState<SortMode>("best_match");
+  const [expanded,      setExpanded]      = useState<Set<string>>(new Set());
 
+  // ── Auto-load profile ──────────────────────────────────────────────────────
   useEffect(() => {
-    if (loading) {
-      setScanStep(0);
-      let step = 0;
-      scanRef.current = setInterval(() => {
-        step++;
-        if (step < SCAN_STEPS.length) setScanStep(step);
-      }, 800);
-    } else {
-      if (scanRef.current) clearInterval(scanRef.current);
-    }
-    return () => { if (scanRef.current) clearInterval(scanRef.current); };
-  }, [loading]);
+    fetch("/api/profile").then(r => r.json()).then(d => {
+      if (d.profile) {
+        const p = d.profile;
+        const det = p.details ? JSON.parse(p.details) : {};
+        setProfile({
+          name:       p.name       || "",
+          age:        p.age        || 30,
+          gender:     p.gender     || "Male",
+          state:      p.state      || "",
+          occupation: p.occupation || "",
+          income:     p.income     || 0,
+          category:   p.category   || "General",
+          bpl:        p.bpl        || false,
+          has_land:   p.has_land   || false,
+          disabled:   p.disabled   || false,
+        });
+        setProfileLoaded(true);
+      }
+    }).catch(() => {});
+  }, []);
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setResults([]);
-    setSearched(false);
-    setLoading(true);
+  function setP(k: keyof CitizenProfile, v: unknown) {
+    setProfile(p => ({ ...p, [k]: v }));
+  }
+
+  // ── Find schemes ───────────────────────────────────────────────────────────
+  async function handleFind() {
+    if (!profile.state || !profile.occupation) return;
+    setLoading(true); setSearched(true); setCatFilter("All");
     try {
-      // ── Step 1: Fetch schemes (needed for both ML and fallback) ──
-      const schemesRes = await fetch("/api/schemes");
-      const db         = await schemesRes.json();
-      const schemes: Scheme[] = db.schemes || [];
-
-      // ── Step 2: Try ML search first ──
-      let matched: MatchedScheme[] = [];
-      let usedML = false;
-
+      // Try ML search first
       try {
         const mlRes = await fetch("/api/ml-search", {
-          method:  "POST",
-          headers: { "Content-Type": "application/json" },
-          body:    JSON.stringify({ 
-            profile, 
-            schemes,
-            _t: Date.now()
-          }),
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query: "", profile }),
         });
-
-        const mlData = await mlRes.json();
-
-        if (mlRes.ok && !mlData.fallback && mlData.results?.length >= 0) {
-          matched = mlData.results;
-          usedML  = true;
-        } else {
-          // ML index not built yet → fall through to rule-based
-          throw new Error(mlData.error || "ML unavailable");
+        if (mlRes.ok) {
+          const d = await mlRes.json();
+          setAllResults(d.results || []);
+          setLoading(false); return;
         }
-      } catch {
-        // ── Step 3: Graceful fallback to original rule-based engine ──
-        matched = eligibilityEngine(profile, schemes);
-        usedML  = false;
-      }
-
-      setResults(matched);
-      setSearchMode(usedML ? "ml" : "rule");
-      setSearched(true);
-
-      setTimeout(() => {
-        document.getElementById("results-section")?.scrollIntoView({ 
-          behavior: "smooth" 
-        });
-      }, 100);
-
-    } catch {
-      setResults([]);
-    }
+      } catch { /* fallback */ }
+      // Rule-based fallback
+      const res = await fetch("/api/schemes");
+      const db  = await res.json();
+      setAllResults(eligibilityEngine(profile, db.schemes || []));
+    } catch { setAllResults([]); }
     setLoading(false);
   }
 
-  const filtered = filterCat === "All"
-    ? results
-    : results.filter((r) => r.scheme.category === filterCat);
+  // ── Filter + Sort ──────────────────────────────────────────────────────────
+  const displayed = useMemo(() => {
+    let list = [...allResults];
+    if (catFilter !== "All") list = list.filter(r => r.scheme.category === catFilter);
+    if (sortMode === "verified_first")
+      list.sort((a,b) => (b.scheme.data_quality === "verified" ? 1 : 0) - (a.scheme.data_quality === "verified" ? 1 : 0) || b.score - a.score);
+    else if (sortMode === "state_first")
+      list.sort((a,b) => {
+        const aS = a.scheme.state === profile.state ? 1 : 0;
+        const bS = b.scheme.state === profile.state ? 1 : 0;
+        return bS - aS || b.score - a.score;
+      });
+    else if (sortMode === "income_schemes")
+      list.sort((a,b) => {
+        const aI = JSON.stringify(a.scheme.eligibility_tags).includes("income") ? 1 : 0;
+        const bI = JSON.stringify(b.scheme.eligibility_tags).includes("income") ? 1 : 0;
+        return bI - aI || b.score - a.score;
+      });
+    else list.sort((a,b) => b.score - a.score);
+    return list;
+  }, [allResults, catFilter, sortMode, profile.state]);
 
-  const high = results.filter((r) => r.confidence >= 75);
-  const mid  = results.filter((r) => r.confidence >= 50 && r.confidence < 75);
+  // ── Category breakdown ─────────────────────────────────────────────────────
+  const catBreakdown = useMemo(() => {
+    const counts: Record<string,number> = {};
+    allResults.forEach(r => {
+      const c = r.scheme.category || "General";
+      counts[c] = (counts[c] || 0) + 1;
+    });
+    return counts;
+  }, [allResults]);
 
-  function addCompare(s: Scheme) {
-    if (compareList.length >= 3 || compareList.some((c) => c.id === s.id)) return;
-    const updated = [...compareList, s];
-    setCompareList(updated);
-    // Persist to localStorage so compare/page.tsx can read it
-    try {
-      localStorage.setItem("yojana_compare", JSON.stringify(updated));
-    } catch {}
+  function toggleExpand(id: string) {
+    setExpanded(s => {
+      const n = new Set(s);
+      n.has(id) ? n.delete(id) : n.add(id);
+      return n;
+    });
   }
 
   return (
     <>
       <Header />
-      <main>
-        <div className="page-wrap">
-          <div className="section-title">
-            🔍 Find Your Eligible Schemes
-            <small>अपनी जानकारी भरें और योजनाएं खोजें</small>
-          </div>
+      <main style={{ background: "#f0f4f8", minHeight: "100vh" }}>
+        <div style={{ maxWidth: 1540, width: "100%", margin: "0 auto", padding: "10px 8px 30px" }}>
 
-          <div className="box box-info">
-            📋 Fill in your details. All fields help match the best schemes for you.
-            Your information is used locally only — <strong>never stored or shared</strong>.
-          </div>
-
-          {/* FORM */}
-          <form onSubmit={handleSubmit}>
-            <div className="form-section">
-              <div className="form-section-title">👤 Citizen Profile / नागरिक प्रोफ़ाइल</div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 18 }}>
-
-                {/* Column 1 */}
-                <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                  <div className="form-group">
-                    <label className="form-label">👤 Full Name / पूरा नाम</label>
-                    <input className="form-input" placeholder="e.g. Ramesh Kumar"
-                      value={profile.name}
-                      onChange={(e) => setProfile({ ...profile, name: e.target.value })} />
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">🎂 Age / उम्र *</label>
-                    <input className="form-input" type="number" min={1} max={100}
-                      value={profile.age}
-                      onChange={(e) => setProfile({ ...profile, age: +e.target.value })} />
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">⚧ Gender / लिंग *</label>
-                    <select className="form-select"
-                      value={profile.gender}
-                      onChange={(e) => setProfile({ ...profile, gender: e.target.value })}>
-                      <option>Male</option>
-                      <option>Female</option>
-                      <option>Other</option>
-                    </select>
-                  </div>
-                </div>
-
-                {/* Column 2 */}
-                <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                  <div className="form-group">
-                    <label className="form-label">📍 State / राज्य *</label>
-                    <select className="form-select"
-                      value={profile.state}
-                      onChange={(e) => setProfile({ ...profile, state: e.target.value })}>
-                      {STATES.map((s) => <option key={s}>{s}</option>)}
-                    </select>
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">💼 Occupation / व्यवसाय *</label>
-                    <select className="form-select"
-                      value={profile.occupation}
-                      onChange={(e) => setProfile({
-                        ...profile,
-                        occupation: e.target.value.split("/")[0].trim().toLowerCase(),
-                      })}>
-                      {OCCUPATIONS.map((o) => <option key={o}>{o}</option>)}
-                    </select>
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">💰 Annual Income / सालाना आमदनी (₹) *</label>
-                    <input className="form-input" type="number" min={0} step={10000}
-                      value={profile.income}
-                      onChange={(e) => setProfile({ ...profile, income: +e.target.value })} />
-                  </div>
-                </div>
-
-                {/* Column 3 */}
-                <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                  <div className="form-group">
-                    <label className="form-label">🏷️ Social Category / सामाजिक वर्ग *</label>
-                    <select className="form-select"
-                      value={profile.category}
-                      onChange={(e) => setProfile({ ...profile, category: e.target.value })}>
-                      {[
-                        { value: "general",  label: "General" },
-                        { value: "sc",       label: "SC — Scheduled Caste" },
-                        { value: "st",       label: "ST — Scheduled Tribe" },
-                        { value: "obc",      label: "OBC — Other Backward Class" },
-                        { value: "minority", label: "Minority" },
-                        { value: "ews",      label: "EWS — Economically Weaker Section" },
-                      ].map(({ value, label }) => (
-                        <option key={value} value={value}>{label}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 6 }}>
-                    {[
-                      { field: "bpl",      label: "BPL Card Holder / BPL कार्ड है" },
-                      { field: "has_land", label: "Own agricultural land / कृषि भूमि है" },
-                      { field: "disabled", label: "Person with Disability / विकलांग" },
-                    ].map(({ field, label }) => (
-                      <label key={field} className="form-checkbox">
-                        <input type="checkbox"
-                          checked={Boolean(profile[field as keyof CitizenProfile])}
-                          onChange={(e) => setProfile({ ...profile, [field]: e.target.checked })} />
-                        {label}
-                      </label>
-                    ))}
-                  </div>
-                </div>
+          {/* Page title */}
+          <div style={{ background:"#002366", color:"#fff", borderRadius:"8px 8px 0 0",
+            padding:"16px 22px", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+            <div>
+              <div style={{ fontSize:10, letterSpacing:2, opacity:0.65, textTransform:"uppercase", marginBottom:2 }}>
+                YojanaAI · Personalised Scheme Finder
               </div>
-
-              <div style={{ marginTop: 22 }}>
-                <button type="submit" className="btn-primary"
-                  disabled={loading}
-                  style={{ width: "100%", fontSize: 15, padding: "13px 24px" }}>
-                  {loading ? (
-                    <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10 }}>
-                      <span className="spinner" />
-                      {SCAN_STEPS[scanStep]}
-                    </span>
-                  ) : "🔍 Find My Schemes / मेरी योजनाएं खोजें"}
-                </button>
-              </div>
+              <div style={{ fontSize:17, fontWeight:800 }}>🔍 Find Government Schemes</div>
             </div>
-          </form>
+            {profileLoaded && (
+              <div style={{ fontSize:12, opacity:0.85, textAlign:"right" }}>
+                <div style={{ fontWeight:700 }}>👤 {profile.name || "Your Profile"}</div>
+                <a href="/profile" style={{ color:"#fbbf24", fontSize:11, textDecoration:"none" }}>✎ Edit Profile</a>
+              </div>
+            )}
+          </div>
 
-          {/* RESULTS */}
-          {searched && (
-            <div id="results-section">
-              {/* Personalized Results Header */}
-              <div style={{
-                background: "linear-gradient(135deg, #002366 0%, #003a8c 100%)",
-                color: "#fff",
-                borderRadius: 12,
-                padding: "20px 24px",
-                marginBottom: 16,
-              }}>
-                <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 6 }}>
-                  🎯 Hi {profile.name || "there"},
-                  <span style={{
-                    float: "right", fontSize: 11, fontWeight: 600,
-                    background: searchMode === "ml" ? "rgba(34,197,94,0.2)" : "rgba(255,152,0,0.2)",
-                    color: searchMode === "ml" ? "#86efac" : "#fed7aa",
-                    padding: "3px 10px", borderRadius: 99,
+          <div style={{ display:"grid", gridTemplateColumns:"360px 1fr", gap:0,
+            border:"1px solid #d0d9e8", borderTop:"none", borderRadius:"0 0 8px 8px",
+            background:"#fff", overflow:"hidden" }}>
+
+            {/* ── LEFT: Form ── */}
+            <div style={{ borderRight:"1px solid #eef0f8", background:"#fafbff" }}>
+
+              {profileLoaded && (
+                <div style={{ background:"#edfbf3", borderBottom:"1px solid #b8dfc8",
+                  padding:"8px 14px", fontSize:12, color:"#155d2b", display:"flex",
+                  justifyContent:"space-between", alignItems:"center" }}>
+                  <span>✅ Profile auto-loaded</span>
+                  <a href="/profile" style={{ color:"#002366", fontWeight:700, fontSize:11, textDecoration:"none" }}>Edit</a>
+                </div>
+              )}
+              {!profileLoaded && (
+                <div style={{ background:"#fff8e6", borderBottom:"1px solid #f0d080",
+                  padding:"8px 14px", fontSize:12, color:"#92400e" }}>
+                  💡 <a href="/profile" style={{ color:"#002366", fontWeight:700 }}>Save profile</a> to auto-fill
+                </div>
+              )}
+
+              <div style={{ padding:"12px" }}>
+
+                {/* Personal */}
+                <div style={{ fontSize:11, fontWeight:700, color:"#6b7a99", letterSpacing:1,
+                  textTransform:"uppercase", marginBottom:8, paddingBottom:6,
+                  borderBottom:"1px solid #eef0f8" }}>Personal</div>
+
+                <div style={{ marginBottom:10 }}>
+                  <label style={{ fontSize:11, fontWeight:600, color:"#4a5568", display:"block", marginBottom:3 }}>
+                    Full Name
+                  </label>
+                  <input className="fi" placeholder="Your name"
+                    value={profile.name} onChange={e => setP("name", e.target.value)} />
+                </div>
+
+                <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8, marginBottom:10 }}>
+                  <div>
+                    <label style={{ fontSize:11, fontWeight:600, color:"#4a5568", display:"block", marginBottom:3 }}>Age</label>
+                    <input className="fi" type="number" min={1} max={120} placeholder="35"
+                      value={profile.age} onChange={e => setP("age", Number(e.target.value))} />
+                  </div>
+                  <div>
+                    <label style={{ fontSize:11, fontWeight:600, color:"#4a5568", display:"block", marginBottom:3 }}>Gender</label>
+                    <select className="fi" value={profile.gender} onChange={e => setP("gender", e.target.value)}>
+                      {["Male","Female","Other"].map(g=><option key={g}>{g}</option>)}
+                    </select>
+                  </div>
+                </div>
+
+                <div style={{ marginBottom:10 }}>
+                  <label style={{ fontSize:11, fontWeight:600, color:"#4a5568", display:"block", marginBottom:3 }}>
+                    State / UT <span style={{ color:"#dc2626" }}>*</span>
+                  </label>
+                  <select className="fi" value={profile.state} onChange={e => setP("state", e.target.value)}>
+                    <option value="">— Select State —</option>
+                    {STATES.map(s=><option key={s}>{s}</option>)}
+                  </select>
+                </div>
+
+                {/* Economic */}
+                <div style={{ fontSize:11, fontWeight:700, color:"#6b7a99", letterSpacing:1,
+                  textTransform:"uppercase", margin:"14px 0 8px", paddingBottom:6,
+                  borderBottom:"1px solid #eef0f8" }}>Economic</div>
+
+                <div style={{ marginBottom:10 }}>
+                  <label style={{ fontSize:11, fontWeight:600, color:"#4a5568", display:"block", marginBottom:3 }}>
+                    Occupation <span style={{ color:"#dc2626" }}>*</span>
+                  </label>
+                  <select className="fi" value={profile.occupation} onChange={e => setP("occupation", e.target.value)}>
+                    <option value="">— Select occupation —</option>
+                    {OCCUPATIONS.map(o=><option key={o}>{o}</option>)}
+                  </select>
+                </div>
+
+                <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8, marginBottom:10 }}>
+                  <div>
+                    <label style={{ fontSize:11, fontWeight:600, color:"#4a5568", display:"block", marginBottom:3 }}>
+                      Category
+                    </label>
+                    <select className="fi" value={profile.category}
+                      onChange={e => setP("category", CATEGORY_SHORT[e.target.value] || e.target.value)}>
+                      {["General","SC","ST","OBC","EWS","Minority"].map(c=><option key={c}>{c}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label style={{ fontSize:11, fontWeight:600, color:"#4a5568", display:"block", marginBottom:3 }}>
+                      Annual Income (₹)
+                    </label>
+                    <input className="fi" type="number" min={0} placeholder="96000"
+                      value={profile.income} onChange={e => setP("income", Number(e.target.value))} />
+                  </div>
+                </div>
+
+                {/* Attributes */}
+                <div style={{ fontSize:11, fontWeight:700, color:"#6b7a99", letterSpacing:1,
+                  textTransform:"uppercase", margin:"14px 0 8px", paddingBottom:6,
+                  borderBottom:"1px solid #eef0f8" }}>Attributes</div>
+
+                {[
+                  { k:"bpl"      as const, label:"BPL / AAY Card Holder" },
+                  { k:"has_land" as const, label:"Agricultural Land Owner" },
+                  { k:"disabled" as const, label:"Person with Disability" },
+                ].map(({ k, label }) => (
+                  <div key={k} onClick={() => setP(k, !profile[k])} style={{
+                    display:"flex", alignItems:"center", gap:8, marginBottom:6,
+                    padding:"7px 10px", border:`1px solid ${profile[k]?"#002366":"#d0d9e8"}`,
+                    background: profile[k]?"#f0f4ff":"#fff", borderRadius:5,
+                    cursor:"pointer", transition:"all 0.15s",
                   }}>
-                    {searchMode === "ml" ? "🤖 ML Semantic" : "📋 Rule-based"}
-                  </span>
-                </div>
-                <div style={{ fontSize: 14, opacity: 0.85, lineHeight: 1.6 }}>
-                  Based on your profile as a <strong>{profile.age}-year-old {profile.occupation}</strong>{" "}
-                  from <strong>{profile.state}</strong>, our AI found{" "}
-                  <span style={{ color: "#FF9800", fontWeight: 700, fontSize: 18 }}>{results.length}</span>{" "}
-                  relevant schemes —{" "}
-                  <span style={{ color: "#6ee7a0" }}>{high.length} high match</span>,{" "}
-                  <span style={{ color: "#fbbf24" }}>{mid.length} medium match</span>.
-                </div>
-              </div>
+                    <div style={{ width:16, height:16, borderRadius:3, flexShrink:0,
+                      border:`2px solid ${profile[k]?"#002366":"#aab4c8"}`,
+                      background: profile[k]?"#002366":"#fff",
+                      display:"flex", alignItems:"center", justifyContent:"center" }}>
+                      {profile[k] && <span style={{ color:"#fff", fontSize:10, fontWeight:700, lineHeight:1 }}>✓</span>}
+                    </div>
+                    <span style={{ fontSize:12, fontWeight:600, color: profile[k]?"#002366":"#4a5568" }}>{label}</span>
+                  </div>
+                ))}
 
-              {searchMode === "rule" && (
-                <div className="box box-warn">
-                  ⚠️ ML index not built yet — using rule-based matching.
-                  Run <code>npx ts-node scripts/build-ml-index.ts</code> to enable semantic search.
-                </div>
-              )}
-
-              {mid.length > 0 && (
-                <div className="box box-warn">
-                  ⚠️ <strong>Possible Missed Benefits:</strong> You may also qualify for{" "}
-                  {mid.length} more schemes (50–75% match).
-                </div>
-              )}
-
-              {/* METRICS */}
-              <div className="metrics-row">
-                <div className="metric-card">
-                  <div className="metric-num">{results.length}</div>
-                  <div className="metric-lbl">Total Found</div>
-                </div>
-                <div className="metric-card">
-                  <div className="metric-num" style={{ color: "#138808" }}>{high.length}</div>
-                  <div className="metric-lbl">High Match 75%+</div>
-                </div>
-                <div className="metric-card">
-                  <div className="metric-num" style={{ color: "#f59e0b" }}>{mid.length}</div>
-                  <div className="metric-lbl">Medium Match</div>
-                </div>
-                <div className="metric-card">
-                  <div className="metric-num">{results[0]?.confidence ?? 0}%</div>
-                  <div className="metric-lbl">Best Score</div>
-                </div>
-              </div>
-
-              <div style={{ textAlign: "right", marginBottom: 12 }}>
-                <button
-                  className="btn-outline btn-sm"
-                  onClick={() => {
-                    setResults([]);
-                    setSearched(false);
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }}
-                >
-                  🔄 Change Profile & Search Again
+                <button onClick={handleFind}
+                  disabled={loading || !profile.state || !profile.occupation}
+                  style={{
+                    width:"100%", marginTop:14, padding:"11px 0",
+                    background: (!profile.state||!profile.occupation) ? "#c8d0de" : "#002366",
+                    color:"#fff", border:"none", borderRadius:5,
+                    fontSize:13, fontWeight:700, cursor: (!profile.state||!profile.occupation) ? "not-allowed" : "pointer",
+                    display:"flex", alignItems:"center", justifyContent:"center", gap:8,
+                  }}>
+                  {loading
+                    ? <><span style={{ width:14,height:14,border:"2px solid rgba(255,255,255,0.3)",
+                        borderTopColor:"#fff",borderRadius:"50%",display:"inline-block",
+                        animation:"spin 0.7s linear infinite" }}/> Finding...</>
+                    : "🎯 Find My Schemes"
+                  }
                 </button>
-              </div>
-
-              {/* FILTERS */}
-              <div style={{ display: "flex", gap: 12, margin: "16px 0", flexWrap: "wrap", alignItems: "center" }}>
-                <div className="form-group" style={{ flex: 2, minWidth: 140 }}>
-                  <label className="form-label">Filter Category</label>
-                  <select className="form-select" value={filterCat}
-                    onChange={(e) => setFilterCat(e.target.value)}>
-                    {CATEGORIES.map((c) => <option key={c}>{c}</option>)}
-                  </select>
-                </div>
-                <div className="form-group" style={{ flex: 1, minWidth: 100 }}>
-                  <label className="form-label">Show</label>
-                  <select className="form-select" value={showN}
-                    onChange={(e) => setShowN(+e.target.value)}>
-                    {[5,10,15,20,50].map((n) => <option key={n} value={n}>{n}</option>)}
-                  </select>
-                </div>
-                {compareList.length > 0 && (
-                  <div style={{
-                    marginLeft: "auto", background: "#e8eaf6",
-                    border: "1px solid #9fa8da", borderRadius: 8,
-                    padding: "8px 14px", fontSize: 13, color: "#283593", fontWeight: 600,
-                  }}>
-                    ⚖️ Compare list: {compareList.length}/3
+                {(!profile.state || !profile.occupation) && (
+                  <div style={{ fontSize:11, color:"#dc2626", marginTop:6, textAlign:"center" }}>
+                    State and Occupation are required
                   </div>
                 )}
               </div>
+            </div>
 
-              <div style={{ fontSize: 13, color: "#8898aa", marginBottom: 14 }}>
-                Showing {Math.min(showN, filtered.length)} of {filtered.length} schemes
-              </div>
+            {/* ── RIGHT: Results ── */}
+            <div style={{ minHeight:500, background:"#fff" }}>
 
-              {filtered.slice(0, showN).map((r, i) => (
-                <SchemeCard
-                  key={r.scheme.id}
-                  result={r}
-                  index={i}
-                  onAddCompare={addCompare}
-                  compareCount={compareList.length}
-                  inCompareList={compareList.some((c) => c.id === r.scheme.id)}
-                />
-              ))}
+              {/* Empty / pre-search state */}
+              {!searched && !loading && (
+                <div style={{ display:"flex", flexDirection:"column", alignItems:"center",
+                  justifyContent:"center", height:"100%", padding:"24px 20px", textAlign:"center" }}>
+                  <div style={{ fontSize:52, marginBottom:16 }}>🎯</div>
+                  <div style={{ fontSize:16, fontWeight:700, color:"#002366", marginBottom:8 }}>
+                    {profileLoaded ? `Welcome back, ${profile.name.split(" ")[0] || "Citizen"}!` : "Ready to find your schemes"}
+                  </div>
+                  <div style={{ fontSize:13, color:"#8898aa", maxWidth:300, lineHeight:1.7 }}>
+                    {profileLoaded
+                      ? "Your profile is loaded. Click Find My Schemes to get personalised results."
+                      : "Fill in the form on the left and click Find My Schemes."}
+                  </div>
+                  {!profileLoaded && (
+                    <a href="/profile" style={{ marginTop:16, background:"#002366", color:"#fff",
+                      borderRadius:6, padding:"9px 20px", fontSize:13, fontWeight:700, textDecoration:"none" }}>
+                      👤 Complete Full Profile →
+                    </a>
+                  )}
+                </div>
+              )}
 
-              {compareList.length > 0 && (
-                <div style={{
-                  position: "fixed", bottom: 24, right: 24, background: "#002366",
-                  color: "#fff", borderRadius: 12, padding: "14px 22px",
-                  boxShadow: "0 6px 24px rgba(0,35,102,0.4)", zIndex: 200,
-                  display: "flex", alignItems: "center", gap: 14,
-                }}>
-                  <span style={{ fontWeight: 700 }}>
-                    ⚖️ {compareList.length} scheme{compareList.length > 1 ? "s" : ""} in compare
-                  </span>
-                  <a href="/compare" style={{
-                    background: "#FF9800", color: "#fff", padding: "6px 14px",
-                    borderRadius: 6, textDecoration: "none", fontWeight: 700, fontSize: 13,
-                  }}>
-                    View Compare →
-                  </a>
+              {/* Loading */}
+              {loading && (
+                <div style={{ display:"flex", flexDirection:"column", alignItems:"center",
+                  justifyContent:"center", height:260, gap:12 }}>
+                  <div style={{ width:36,height:36,border:"3px solid #002366",
+                    borderTopColor:"transparent",borderRadius:"50%",animation:"spin 0.8s linear infinite" }}/>
+                  <div style={{ fontSize:13, color:"#8898aa" }}>Running eligibility engine...</div>
+                </div>
+              )}
+
+              {/* Results */}
+              {!loading && searched && allResults.length > 0 && (
+                <div>
+                  {/* Results header bar */}
+                  <div style={{ padding:"10px 16px", borderBottom:"1px solid #eef0f8",
+                    display:"flex", alignItems:"center", justifyContent:"space-between",
+                    flexWrap:"wrap", gap:8, background:"#fafbff" }}>
+                    <div style={{ fontSize:13, fontWeight:700, color:"#002366" }}>
+                      {displayed.length} schemes
+                      {catFilter !== "All" && <span style={{ color:"#FF9933" }}> · {catFilter}</span>}
+                      <span style={{ fontSize:11, color:"#8898aa", fontWeight:400, marginLeft:8 }}>
+                        of {allResults.length} total
+                      </span>
+                    </div>
+                    <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+                      <span style={{ fontSize:11, color:"#8898aa" }}>Sort:</span>
+                      <select value={sortMode} onChange={e => setSortMode(e.target.value as SortMode)}
+                        style={{ fontSize:11, padding:"4px 8px", border:"1px solid #d0d9e8",
+                          borderRadius:4, color:"#374567", background:"#fff", cursor:"pointer" }}>
+                        <option value="best_match">Best Match</option>
+                        <option value="verified_first">Verified First</option>
+                        <option value="state_first">State Schemes First</option>
+                        <option value="income_schemes">Income-based First</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Category filter chips */}
+                  <div style={{ padding:"10px 14px", display:"flex", gap:6, flexWrap:"wrap",
+                    borderBottom:"1px solid #eef0f8", background:"#fff" }}>
+                    {CATEGORIES_FILTER.filter(c => c === "All" || catBreakdown[c]).map(c => {
+                      const cm = CAT_META[c] || { icon:"📋", color:"#374567", bg:"#f0f4ff", border:"#c8d0e0" };
+                      const cnt = c === "All" ? allResults.length : catBreakdown[c] || 0;
+                      const active = catFilter === c;
+                      return (
+                        <button key={c} onClick={() => setCatFilter(c)} style={{
+                          display:"flex", alignItems:"center", gap:4,
+                          padding:"4px 10px", borderRadius:99, fontSize:11, fontWeight:600,
+                          cursor:"pointer", transition:"all 0.15s",
+                          background: active ? "#002366" : cm.bg,
+                          color: active ? "#fff" : cm.color,
+                          border: `1px solid ${active?"#002366":cm.border}`,
+                        }}>
+                          {c !== "All" && cm.icon} {c}
+                          <span style={{ background: active?"rgba(255,255,255,0.25)":"rgba(0,0,0,0.08)",
+                            borderRadius:99, padding:"1px 6px", fontSize:10 }}>{cnt}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Scheme cards */}
+                  <div style={{ padding:"0" }}>
+                    {displayed.slice(0, 40).map((r, i) => (
+                      <SchemeRow key={r.scheme.id} r={r} index={i}
+                        isOpen={expanded.has(r.scheme.id)}
+                        onToggle={() => toggleExpand(r.scheme.id)}
+                        profileState={profile.state} />
+                    ))}
+                    {displayed.length === 0 && (
+                      <div style={{ padding:32, textAlign:"center", color:"#8898aa", fontSize:13 }}>
+                        No schemes in this category. Try another filter.
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {!loading && searched && allResults.length === 0 && (
+                <div style={{ padding:"24px 20px", textAlign:"center" }}>
+                  <div style={{ fontSize:40, marginBottom:12 }}>😔</div>
+                  <div style={{ fontSize:14, fontWeight:700, color:"#002366", marginBottom:8 }}>
+                    No matching schemes found
+                  </div>
+                  <div style={{ fontSize:13, color:"#8898aa" }}>
+                    Try changing your state or occupation, or{" "}
+                    <a href="/browse" style={{ color:"#002366", fontWeight:700 }}>browse all schemes</a>.
+                  </div>
                 </div>
               )}
             </div>
-          )}
+          </div>
         </div>
       </main>
       <Footer />
+      <style>{`
+        .fi{width:100%;padding:7px 9px;border:1.5px solid #c8d0de;border-radius:4px;
+          font-size:12px;color:#1a2340;background:#fff;outline:none;font-family:inherit;box-sizing:border-box;}
+        .fi:focus{border-color:#002366;box-shadow:0 0 0 2px rgba(0,35,102,0.08);}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        @media(max-width:980px){
+          div[style*="grid-template-columns:360px 1fr"]{grid-template-columns:1fr!important;}
+        }
+      `}</style>
     </>
+  );
+}
+
+// ── Scheme Row Card ────────────────────────────────────────────────────────────
+function SchemeRow({ r, index, isOpen, onToggle, profileState }: {
+  r: MatchedScheme; index: number; isOpen: boolean;
+  onToggle: () => void; profileState: string;
+}) {
+  const s = r.scheme;
+  const cm = CAT_META[s.category] || CAT_META["General"];
+  const conf = r.confidence;
+  const confColor = conf >= 75 ? "#138808" : conf >= 50 ? "#d97706" : "#94a3b8";
+  const isStateMatch = s.state !== "Central" && s.state === profileState;
+  const isVerified   = s.data_quality === "verified";
+
+  const applyUrl = s.apply_link && !s.apply_link.includes("wikipedia")
+    ? s.apply_link
+    : `https://www.myscheme.gov.in/search?q=${encodeURIComponent(s.name.slice(0,60))}`;
+
+  return (
+    <div style={{
+      borderBottom:"1px solid #eef0f8",
+      background: isOpen ? "#fafbff" : "#fff",
+      transition:"background 0.15s",
+    }}>
+      {/* Row header — always visible */}
+      <div style={{ display:"flex", alignItems:"center", gap:0, cursor:"pointer" }}
+        onClick={onToggle}>
+
+        {/* Rank */}
+        <div style={{ width:36, textAlign:"center", fontSize:11, fontWeight:700,
+          color:"#aab4c8", flexShrink:0, padding:"14px 0" }}>
+          {index+1}
+        </div>
+
+        {/* Confidence bar (vertical) */}
+        <div style={{ width:4, alignSelf:"stretch", background:"#f0f4f8", flexShrink:0, position:"relative" }}>
+          <div style={{
+            position:"absolute", bottom:0, left:0, right:0,
+            height:`${conf}%`, background:confColor,
+            transition:"height 0.3s",
+          }}/>
+        </div>
+
+        {/* Main content */}
+        <div style={{ flex:1, padding:"12px 14px", minWidth:0 }}>
+          <div style={{ display:"flex", alignItems:"flex-start", gap:8, marginBottom:5 }}>
+            <div style={{ flex:1, minWidth:0 }}>
+              {/* Badges row */}
+              <div style={{ display:"flex", gap:5, flexWrap:"wrap", marginBottom:4 }}>
+                <span style={{ fontSize:10, fontWeight:700, padding:"2px 7px", borderRadius:99,
+                  background:cm.bg, color:cm.color, border:`1px solid ${cm.border}` }}>
+                  {cm.icon} {s.category}
+                </span>
+                {s.state === "Central"
+                  ? <span style={{ fontSize:10, fontWeight:700, padding:"2px 7px", borderRadius:99,
+                      background:"#f0f4ff", color:"#374567", border:"1px solid #c8d4f0" }}>🇮🇳 Central</span>
+                  : <span style={{ fontSize:10, fontWeight:700, padding:"2px 7px", borderRadius:99,
+                      background: isStateMatch?"#edfbf3":"#f8f9ff",
+                      color: isStateMatch?"#138808":"#556080",
+                      border:`1px solid ${isStateMatch?"#a8d5b8":"#d0d9e8"}` }}>
+                      📍 {s.state}
+                    </span>
+                }
+                {isVerified && <span style={{ fontSize:10, fontWeight:700, padding:"2px 7px", borderRadius:99,
+                  background:"#edfbf3", color:"#155d2b", border:"1px solid #a8d5b8" }}>✓ Verified</span>}
+              </div>
+              {/* Scheme name */}
+              <div style={{ fontSize:14, fontWeight:700, color:"#002366", lineHeight:1.3,
+                whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>
+                {s.name}
+              </div>
+              <div style={{ fontSize:11, color:"#8898aa", marginTop:2 }}>🏢 {s.ministry}</div>
+            </div>
+
+            {/* Confidence badge */}
+            <div style={{ textAlign:"center", flexShrink:0 }}>
+              <div style={{ fontSize:16, fontWeight:800, color:confColor, lineHeight:1 }}>{conf}%</div>
+              <div style={{ fontSize:9, color:"#aab4c8", marginTop:1 }}>match</div>
+            </div>
+          </div>
+
+          {/* Reasons pills */}
+          {r.reasons.length > 0 && (
+            <div style={{ display:"flex", gap:5, flexWrap:"wrap" }}>
+              {r.reasons.slice(0,3).map((reason,i) => (
+                <span key={i} style={{ fontSize:10, padding:"2px 8px", borderRadius:99,
+                  background:"#f0f8ff", color:"#1565c0", border:"1px solid #bee3f8" }}>
+                  ✓ {reason}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Expand toggle */}
+        <div style={{ padding:"14px 14px", flexShrink:0, color:"#aab4c8", fontSize:12 }}>
+          <span style={{ display:"inline-block", transition:"transform 0.2s",
+            transform: isOpen ? "rotate(180deg)" : "none" }}>▾</span>
+        </div>
+      </div>
+
+      {/* Expanded detail panel */}
+      {isOpen && (
+        <div style={{ borderTop:"1px solid #eef0f8", padding:"16px 20px 16px 54px",
+          background:"#fafbff" }}>
+
+          {/* Description */}
+          {s.description && (
+            <p style={{ fontSize:13, color:"#4a5568", lineHeight:1.7, marginBottom:14,
+              padding:"10px 14px", background:"#fff", border:"1px solid #eef0f8",
+              borderLeft:"3px solid #002366", borderRadius:"0 6px 6px 0" }}>
+              {s.description.slice(0,300)}{s.description.length>300?"...":""}
+            </p>
+          )}
+
+          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:16, marginBottom:14 }}>
+            {/* Benefits */}
+            <div>
+              <div style={{ fontSize:11, fontWeight:700, color:"#002366", marginBottom:6,
+                textTransform:"uppercase", letterSpacing:0.5 }}>✅ Benefits</div>
+              {(s.benefits||[]).slice(0,4).map((b,i)=>(
+                <div key={i} style={{ fontSize:12, color:"#374567", padding:"3px 0",
+                  borderBottom:"1px solid #f4f6fa", lineHeight:1.5 }}>• {b}</div>
+              ))}
+            </div>
+            {/* Eligibility */}
+            <div>
+              <div style={{ fontSize:11, fontWeight:700, color:"#002366", marginBottom:6,
+                textTransform:"uppercase", letterSpacing:0.5 }}>📋 Eligibility</div>
+              {(s.eligibility_criteria||[]).slice(0,4).map((e,i)=>(
+                <div key={i} style={{ fontSize:12, color:"#374567", padding:"3px 0",
+                  borderBottom:"1px solid #f4f6fa", lineHeight:1.5 }}>• {e}</div>
+              ))}
+            </div>
+            {/* Documents */}
+            <div>
+              <div style={{ fontSize:11, fontWeight:700, color:"#002366", marginBottom:6,
+                textTransform:"uppercase", letterSpacing:0.5 }}>📎 Documents</div>
+              {(s.documents_required||[]).slice(0,5).map((d,i)=>(
+                <div key={i} style={{ fontSize:12, color:"#374567", padding:"3px 0",
+                  borderBottom:"1px solid #f4f6fa", lineHeight:1.5 }}>• {d}</div>
+              ))}
+            </div>
+          </div>
+
+          {/* Action buttons */}
+          <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
+            <a href={applyUrl} target="_blank" rel="noopener noreferrer" style={{
+              background:"#002366", color:"#fff", borderRadius:5,
+              padding:"8px 18px", fontSize:12, fontWeight:700, textDecoration:"none",
+            }}>
+              🔗 Apply / आवेदन करें
+            </a>
+            <a href={`/chat?scheme=${encodeURIComponent(s.name)}`} style={{
+              background:"#fff", color:"#002366", border:"1.5px solid #002366",
+              borderRadius:5, padding:"8px 14px", fontSize:12, fontWeight:600, textDecoration:"none",
+            }}>
+              💬 Ask AI about this
+            </a>
+            <button onClick={() => {
+              const msg=`🏛️ *${s.name}*\n\n✅ ${s.benefits?.[0]||"Govt scheme"}\n\n📎 Documents: ${(s.documents_required||[]).slice(0,3).join(", ")}\n\n🔗 Apply: ${applyUrl}\n\n_YojanaAI — आपकी योजना, आपकी आवाज़_`;
+              window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,"_blank");
+            }} style={{
+              background:"#25D366", color:"#fff", border:"none", borderRadius:5,
+              padding:"8px 14px", fontSize:12, fontWeight:600, cursor:"pointer",
+            }}>
+              📲 WhatsApp
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }

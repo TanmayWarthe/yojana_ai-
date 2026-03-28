@@ -2,7 +2,8 @@
 import { useState, useEffect, useMemo } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import type { Scheme } from "@/types";
+import { eligibilityEngine } from "@/lib/eligibility";
+import type { Scheme, CitizenProfile } from "@/types";
 
 const COMPARE_KEY = "yojana_compare";
 
@@ -22,8 +23,12 @@ export default function ComparePage() {
   const [allSchemes, setAllSchemes] = useState<Scheme[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [showPicker, setShowPicker] = useState(false);
+  const [profile, setProfile] = useState<CitizenProfile | null>(null);
+  const [confidence, setConfidence] = useState<Record<string, number>>({});
+  const [verdict, setVerdict] = useState("");
+  const [verdictLoading, setVerdictLoading] = useState(false);
 
-  // Load compare list from localStorage + fetch all schemes for search
+  // Load compare list from localStorage + fetch all schemes for search + load profile
   useEffect(() => {
     try {
       const saved = JSON.parse(localStorage.getItem(COMPARE_KEY) || "[]");
@@ -34,11 +39,52 @@ export default function ComparePage() {
       .then((r) => r.json())
       .then((d) => setAllSchemes(d.schemes || []))
       .catch(() => {});
+
+    // Load user profile for confidence scoring
+    fetch("/api/profile")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.profile) {
+          setProfile(d.profile);
+        }
+      })
+      .catch(() => {});
   }, []);
 
   function persist(updated: Scheme[]) {
     setList(updated);
     try { localStorage.setItem(COMPARE_KEY, JSON.stringify(updated)); } catch {}
+  }
+
+  // Compute confidence scores whenever list or profile changes
+  useEffect(() => {
+    if (!profile || list.length === 0) {
+      setConfidence({});
+      return;
+    }
+
+    const conf: Record<string, number> = {};
+    const matches = eligibilityEngine(profile as CitizenProfile, list);
+    matches.forEach((m) => {
+      conf[m.scheme.id] = Math.min(100, Math.round((m.score || 0) * 100));
+    });
+    setConfidence(conf);
+  }, [list, profile]);
+
+  // Determine which scheme has the "best" value in each row
+  function getBestSchemeId(fn: (s: Scheme) => string): string | null {
+    if (list.length === 0) return null;
+    const vals = list.map((s) => ({ id: s.id, val: fn(s) }));
+    
+    // Find the one with longest text (excluding "—")
+    const validVals = vals.filter((v) => v.val !== "—");
+    if (validVals.length === 0) return null;
+    
+    return validVals.reduce((best, curr) => {
+      const bestLen = best.val.length;
+      const currLen = curr.val.length;
+      return currLen > bestLen ? curr : best;
+    }).id;
   }
 
   function addScheme(s: Scheme) {
@@ -50,6 +96,55 @@ export default function ComparePage() {
 
   function remove(id: string) { persist(list.filter((s) => s.id !== id)); }
   function clear() { persist([]); }
+
+  // Stream AI verdict for comparison
+  async function handleGetVerdict() {
+    if (list.length < 2) return;
+
+    setVerdictLoading(true);
+    setVerdict("");
+
+    try {
+      const schemes_text = list.map((s) => `${s.name}: ${(s.benefits || []).slice(0, 2).join(", ")}`).join("\n");
+      const profile_text = profile 
+        ? `${profile.name}, ${profile.age} yrs, ${profile.occupation}, ₹${profile.income}/yr, ${profile.state}`
+        : "No profile saved";
+
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: [{
+            role: "user",
+            content: `Given this user profile: ${profile_text}\n\nAnd these schemes being compared:\n${schemes_text}\n\nProvide a brief (2-3 sentence) expert verdict on which scheme is BEST for this person and why. Be direct and actionable.`,
+          }],
+        }),
+      });
+
+      if (!res.body) {
+        setVerdict("Failed to get response");
+        setVerdictLoading(false);
+        return;
+      }
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let fullText = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        const chunk = decoder.decode(value, { stream: true });
+        fullText += chunk;
+        setVerdict(fullText);
+      }
+    } catch (err) {
+      console.error(err);
+      setVerdict("Error fetching verdict. Try again.");
+    } finally {
+      setVerdictLoading(false);
+    }
+  }
 
   // Filter search results (exclude already-selected)
   const searchResults = useMemo(() => {
@@ -173,6 +268,52 @@ export default function ComparePage() {
           {/* ── COMPARISON TABLE ── */}
           {list.length >= 2 ? (
             <>
+              {/* Confidence cards if profile exists */}
+              {profile && Object.keys(confidence).length > 0 && (
+                <div style={{ marginBottom: 20 }}>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: "var(--text-muted)", marginBottom: 10 }}>
+                    💡 ML Confidence Scores for Your Profile
+                  </div>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginBottom: 20 }}>
+                    {list.map((s) => (
+                      <div key={s.id} style={{
+                        background: "linear-gradient(135deg, #f0f4ff, #f8faff)",
+                        border: "1px solid #d0dce8",
+                        borderRadius: 10,
+                        padding: "14px 16px",
+                      }}>
+                        <div style={{ fontSize: 12, fontWeight: 600, color: "var(--navy)", marginBottom: 6 }}>
+                          {s.name?.slice(0, 40)}
+                        </div>
+                        <div style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 8,
+                        }}>
+                          <div style={{
+                            width: 40,
+                            height: 40,
+                            borderRadius: "50%",
+                            background: "#e8eef8",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontWeight: 700,
+                            fontSize: 18,
+                            color: "#002366",
+                          }}>
+                            {confidence[s.id] || 0}%
+                          </div>
+                          <div style={{ fontSize: 11, color: "var(--text-muted)" }}>
+                            Match Score
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               <div className="box box-ok" style={{ marginBottom: 16 }}>
                 ✅ Comparing <strong>{list.length} schemes</strong> side-by-side.
                 Differences are highlighted for quick scanning.
@@ -191,17 +332,37 @@ export default function ComparePage() {
                     {ROWS.map(({ label, icon, fn }) => {
                       const vals = list.map(fn);
                       const allSame = vals.every((v) => v === vals[0]);
+                      const bestId = getBestSchemeId(fn);
                       return (
                         <tr key={label}>
                           <td>{icon} {label}</td>
-                          {list.map((s, i) => (
-                            <td key={s.id} style={{
-                              background: !allSame && vals[i] !== "—" ? "#fffbec" : undefined,
-                              fontWeight: !allSame ? 600 : 400,
-                            }}>
-                              {vals[i]}
-                            </td>
-                          ))}
+                          {list.map((s, i) => {
+                            const isBest = bestId === s.id && vals[i] !== "—";
+                            return (
+                              <td key={s.id} style={{
+                                background: !allSame && vals[i] !== "—" ? "#fffbec" : undefined,
+                                fontWeight: !allSame ? 600 : 400,
+                                position: "relative",
+                              }}>
+                                {isBest && (
+                                  <span style={{
+                                    position: "absolute",
+                                    top: 4,
+                                    right: 4,
+                                    background: "#fbbf24",
+                                    color: "#78350f",
+                                    padding: "2px 6px",
+                                    borderRadius: 4,
+                                    fontSize: 10,
+                                    fontWeight: 700,
+                                  }}>
+                                    🏆 Best
+                                  </span>
+                                )}
+                                {vals[i]}
+                              </td>
+                            );
+                          })}
                         </tr>
                       );
                     })}
@@ -224,6 +385,58 @@ export default function ComparePage() {
                     </tr>
                   </tbody>
                 </table>
+              </div>
+
+              {/* AI Verdict Section */}
+              <div style={{ marginTop: 24 }}>
+                <button
+                  className="btn-primary"
+                  onClick={handleGetVerdict}
+                  disabled={verdictLoading}
+                  style={{
+                    width: "100%",
+                    marginBottom: 16,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: 8,
+                  }}
+                >
+                  {verdictLoading ? (
+                    <>
+                      <span className="spinner" style={{ width: 14, height: 14, borderWidth: 2 }} />
+                      Getting AI Verdict...
+                    </>
+                  ) : (
+                    <>🤖 Get AI Expert Verdict</>
+                  )}
+                </button>
+
+                {verdict && (
+                  <div style={{
+                    background: "#f0f4ff",
+                    border: "2px solid #002366",
+                    borderRadius: 12,
+                    padding: "16px 20px",
+                    marginTop: 12,
+                  }}>
+                    <div style={{
+                      fontSize: 12,
+                      fontWeight: 700,
+                      color: "#002366",
+                      marginBottom: 8,
+                    }}>
+                      🤖 AI Expert Verdict
+                    </div>
+                    <div style={{
+                      fontSize: 14,
+                      lineHeight: 1.6,
+                      color: "#1e293b",
+                    }}>
+                      {verdict}
+                    </div>
+                  </div>
+                )}
               </div>
             </>
           ) : list.length === 1 ? (

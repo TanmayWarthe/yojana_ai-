@@ -42,3 +42,9 @@ next-env.d.ts
 
 *.zip
 .zip
+twilio.json
+.env
+*.env
+node_modules/
+__pycache__/
+*.log

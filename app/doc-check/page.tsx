@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
@@ -21,6 +21,82 @@ const COMMON_SCHEMES = [
 
 const LANGUAGES = ["English", "हिंदी", "मराठी"];
 
+// Scheme to required documents mapping
+const SCHEME_DOCS: Record<string, string[]> = {
+  "PM-KISAN (Farmer Income Support)": [
+    "Aadhaar Card",
+    "Bank Account (activated on PMJDY)",
+    "Land ownership proof",
+    "Application form",
+  ],
+  "Ayushman Bharat PM-JAY (Health Insurance)": [
+    "Aadhaar Card (family head)",
+    "Ration Card",
+    "Income Certificate",
+    "Bank account details",
+  ],
+  "PMAY-G (Rural Housing)": [
+    "Aadhaar Card",
+    "House allocation letter",
+    "Bank account",
+    "Income certificate",
+  ],
+  "PMAY-U (Urban Housing)": [
+    "Aadhaar Card",
+    "Income certificate",
+    "Property ownership proof",
+    "Bank account",
+  ],
+  "MUDRA Loan (Business)": [
+    "Business plan",
+    "Bank statement",
+    "IT Return / Income proof",
+    "Aadhaar + PAN",
+  ],
+  "NSP Scholarship (Education)": [
+    "Student registration ID",
+    "College / University ID",
+    "Income certificate (family)",
+    "Caste certificate (if applicable)",
+  ],
+  "MGNREGA (Employment)": [
+    "Aadhaar Card",
+    "BPL / APL card",
+    "Job card",
+    "Bank account",
+  ],
+  "PM Ujjwala Yojana (LPG Connection)": [
+    "Aadhaar Card",
+    "Bank account proof",
+    "Signature / Thumb impression",
+    "Address proof",
+  ],
+  "Sukanya Samriddhi Yojana (Girl Child)": [
+    "Girl child birth certificate",
+    "Parent ID proof (Aadhaar)",
+    "Guardian bank account",
+    "KYC documents",
+  ],
+  "PMJDY (Jan Dhan Account)": [
+    "Aadhaar Card",
+    "Address proof",
+    "Signature / Thumb impression",
+    "Photos (if required)",
+  ],
+  "Ladki Bahin Yojana MH (₹1500/month)": [
+    "Aadhaar Card",
+    "Domicile proof (Maharashtra)",
+    "Income certificate",
+    "Bank account",
+  ],
+  "MJPJAY Maharashtra (Health ₹1.5L)": [
+    "Aadhaar Card",
+    "BPL / APL card",
+    "Domicile proof",
+    "Bank account",
+  ],
+};
+
 export default function DocCheckPage() {
   const [image, setImage] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -29,8 +105,19 @@ export default function DocCheckPage() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [checkedDocs, setCheckedDocs] = useState<Record<string, boolean>>({});
   const fileRef = useRef<HTMLInputElement>(null);
   const cameraRef = useRef<HTMLInputElement>(null);
+
+  // Parse verdict counts from AI response
+  const verdictCounts = useMemo(() => {
+    if (!result) return { valid: 0, warnings: 0, issues: 0 };
+    return {
+      valid: (result.match(/✅/g) || []).length,
+      warnings: (result.match(/⚠️/g) || []).length,
+      issues: (result.match(/❌/g) || []).length,
+    };
+  }, [result]);
 
   function handleFile(file: File) {
     if (!file.type.startsWith("image/")) {
@@ -82,41 +169,175 @@ export default function DocCheckPage() {
     setLoading(false);
   }
 
-  // Format AI response into styled sections
+  // Format AI response into structured verdict cards
   function formatResult(text: string) {
-    const lines = text.split("\n").filter(Boolean);
-    return lines.map((line, i) => {
-      const isHeader = line.startsWith("📄") || line.startsWith("👁️") ||
-        line.startsWith("✅") || line.startsWith("🎯") ||
-        line.startsWith("⚠️") || line.startsWith("💡");
+    const lines = text.split("\n").filter((l) => l.trim());
+    const cards: Array<{ type: "success" | "warning" | "error" | "info"; title: string; items: string[] }> = [];
+    let currentCard: { type: "success" | "warning" | "error" | "info"; title: string; items: string[] } | null = null;
 
-      const isOk = line.includes("✅") || line.toLowerCase().includes("valid") ||
-        line.toLowerCase().includes("clear") || line.toLowerCase().includes("sufficient");
-      const isWarn = line.includes("⚠️") || line.toLowerCase().includes("missing") ||
-        line.toLowerCase().includes("unclear") || line.toLowerCase().includes("issue");
-
-      return (
-        <div key={i} style={{
-          padding: isHeader ? "10px 14px" : "6px 14px 6px 28px",
-          background: isHeader
-            ? (isOk ? "#edfbf3" : isWarn ? "#fff8e6" : "#f0f4ff")
-            : "transparent",
-          borderLeft: isHeader
-            ? (isOk ? "3px solid #138808" : isWarn ? "3px solid #f59e0b" : "3px solid #002366")
-            : "none",
-          marginBottom: isHeader ? 8 : 2,
-          borderRadius: isHeader ? "0 6px 6px 0" : 0,
-          fontWeight: isHeader ? 600 : 400,
-          fontSize: isHeader ? 14 : 13,
-          color: isHeader
-            ? (isOk ? "#155d2b" : isWarn ? "#92400e" : "#002366")
-            : "#374567",
-          lineHeight: 1.6,
-        }}>
-          {line}
-        </div>
-      );
+    lines.forEach((line) => {
+      const trimmed = line.trim();
+      
+      // Detect card headers
+      if (trimmed.startsWith("✅") || trimmed.toLowerCase().includes("valid") && trimmed.startsWith("📄")) {
+        if (currentCard) cards.push(currentCard);
+        currentCard = {
+          type: "success",
+          title: trimmed.replace(/^✅\s*/, "").replace(/^📄\s*/, ""),
+          items: [],
+        };
+      } else if (trimmed.startsWith("⚠️") || trimmed.startsWith("👁️")) {
+        if (currentCard) cards.push(currentCard);
+        currentCard = {
+          type: "warning",
+          title: trimmed.replace(/^⚠️\s*/, "").replace(/^👁️\s*/, ""),
+          items: [],
+        };
+      } else if (trimmed.startsWith("❌") || trimmed.startsWith("🎯")) {
+        if (currentCard) cards.push(currentCard);
+        currentCard = {
+          type: "error",
+          title: trimmed.replace(/^❌\s*/, "").replace(/^🎯\s*/, ""),
+          items: [],
+        };
+      } else if (trimmed.startsWith("💡")) {
+        if (currentCard) cards.push(currentCard);
+        currentCard = {
+          type: "info",
+          title: trimmed.replace(/^💡\s*/, ""),
+          items: [],
+        };
+      } else if (currentCard && trimmed) {
+        // Add to current card items
+        currentCard.items.push(trimmed);
+      }
     });
+
+    if (currentCard) cards.push(currentCard);
+
+    return (
+      <>
+        {/* Summary pills */}
+        <div style={{ display: "flex", gap: 10, marginBottom: 16, flexWrap: "wrap" }}>
+          {verdictCounts.valid > 0 && (
+            <div
+              style={{
+                background: "#edfbf3",
+                border: "1px solid #a8d5b8",
+                borderRadius: 20,
+                padding: "6px 14px",
+                fontSize: 12,
+                fontWeight: 700,
+                color: "#155d2b",
+              }}
+            >
+              ✅ {verdictCounts.valid} Valid
+            </div>
+          )}
+          {verdictCounts.warnings > 0 && (
+            <div
+              style={{
+                background: "#fff8e6",
+                border: "1px solid #fcd34d",
+                borderRadius: 20,
+                padding: "6px 14px",
+                fontSize: 12,
+                fontWeight: 700,
+                color: "#92400e",
+              }}
+            >
+              ⚠️ {verdictCounts.warnings} Warnings
+            </div>
+          )}
+          {verdictCounts.issues > 0 && (
+            <div
+              style={{
+                background: "#fee2e2",
+                border: "1px solid #fca5a5",
+                borderRadius: 20,
+                padding: "6px 14px",
+                fontSize: 12,
+                fontWeight: 700,
+                color: "#dc2626",
+              }}
+            >
+              ❌ {verdictCounts.issues} Issues
+            </div>
+          )}
+        </div>
+
+        {/* Verdict cards */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          {cards.map((card, i) => {
+            const borderColors = {
+              success: "#138808",
+              warning: "#f59e0b",
+              error: "#dc2626",
+              info: "#002366",
+            };
+            const bgColors = {
+              success: "#edfbf3",
+              warning: "#fff8e6",
+              error: "#fee2e2",
+              info: "#f0f4ff",
+            };
+            const textColors = {
+              success: "#155d2b",
+              warning: "#92400e",
+              error: "#991b1b",
+              info: "#1e3a8a",
+            };
+            const icons = {
+              success: "✅",
+              warning: "⚠️",
+              error: "❌",
+              info: "💡",
+            };
+
+            return (
+              <div
+                key={i}
+                style={{
+                  border: `3px solid ${borderColors[card.type]}`,
+                  borderLeft: `6px solid ${borderColors[card.type]}`,
+                  borderRadius: 10,
+                  background: bgColors[card.type],
+                  padding: "14px 16px",
+                }}
+              >
+                <div
+                  style={{
+                    fontWeight: 700,
+                    fontSize: 14,
+                    color: textColors[card.type],
+                    marginBottom: card.items.length > 0 ? 8 : 0,
+                  }}
+                >
+                  {icons[card.type]} {card.title}
+                </div>
+                {card.items.length > 0 && (
+                  <ul
+                    style={{
+                      margin: 0,
+                      paddingLeft: 20,
+                      fontSize: 13,
+                      color: textColors[card.type],
+                      listStyle: "disc",
+                    }}
+                  >
+                    {card.items.map((item, j) => (
+                      <li key={j} style={{ margin: "4px 0" }}>
+                        {item.replace(/^[-•]\s*/, "")}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </>
+    );
   }
 
   return (
@@ -146,7 +367,10 @@ export default function DocCheckPage() {
                 <div className="form-group">
                   <label className="form-label">Scheme / योजना</label>
                   <select className="form-select" value={scheme}
-                    onChange={(e) => setScheme(e.target.value)}>
+                    onChange={(e) => {
+                      setScheme(e.target.value);
+                      setCheckedDocs({});
+                    }}>
                     {COMMON_SCHEMES.map((s) => (
                       <option key={s} value={s}>{s}</option>
                     ))}
@@ -206,14 +430,12 @@ export default function DocCheckPage() {
                 style={{ display: "none" }}
                 onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])} />
 
-              <div style={{ display: "flex", gap: 10 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 12 }}>
                 <button className="btn-outline btn-sm"
-                  style={{ flex: 1 }}
                   onClick={(e) => { e.stopPropagation(); cameraRef.current?.click(); }}>
                   📷 Take Photo
                 </button>
                 <button className="btn-outline btn-sm"
-                  style={{ flex: 1 }}
                   onClick={(e) => { e.stopPropagation(); fileRef.current?.click(); }}>
                   📁 Choose File
                 </button>
@@ -241,8 +463,85 @@ export default function DocCheckPage() {
               </button>
             </div>
 
-            {/* RIGHT — Results */}
-            <div>
+            {/* RIGHT — Documents Checklist / Results */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              {/* Document Checklist */}
+              {SCHEME_DOCS[scheme] && (
+                <div style={{
+                  background: "#f8f9ff",
+                  border: "1px solid #dde4f0",
+                  borderRadius: 12,
+                  padding: "14px 16px",
+                }}>
+                  <div style={{
+                    fontSize: 13,
+                    fontWeight: 700,
+                    color: "#002366",
+                    marginBottom: 12,
+                  }}>
+                    📋 Required Documents
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                    {SCHEME_DOCS[scheme].map((doc) => (
+                      <label key={doc} style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 10,
+                        fontSize: 12,
+                        cursor: "pointer",
+                        padding: "8px 10px",
+                        background: checkedDocs[doc] ? "#e8eef8" : "transparent",
+                        borderRadius: 6,
+                        transition: "background 0.15s",
+                      }}>
+                        <input
+                          type="checkbox"
+                          checked={checkedDocs[doc] || false}
+                          onChange={(e) => {
+                            setCheckedDocs({
+                              ...checkedDocs,
+                              [doc]: e.target.checked,
+                            });
+                          }}
+                          style={{
+                            width: 16,
+                            height: 16,
+                            cursor: "pointer",
+                          }}
+                        />
+                        <span style={{
+                          fontWeight: checkedDocs[doc] ? 700 : 500,
+                          color: checkedDocs[doc] ? "#002366" : "#556080",
+                          textDecoration: checkedDocs[doc] ? "line-through" : "none",
+                        }}>
+                          {doc}
+                        </span>
+                        {checkedDocs[doc] && (
+                          <span style={{
+                            marginLeft: "auto",
+                            fontSize: 12,
+                            color: "#138808",
+                          }}>
+                            ✓
+                          </span>
+                        )}
+                      </label>
+                    ))}
+                  </div>
+                  <div style={{
+                    marginTop: 12,
+                    fontSize: 11,
+                    color: "#8898aa",
+                    padding: "8px 10px",
+                    background: "#f0f4ff",
+                    borderRadius: 6,
+                  }}>
+                    {Object.values(checkedDocs).filter(Boolean).length} of {SCHEME_DOCS[scheme].length} documents ready
+                  </div>
+                </div>
+              )}
+
+              {/* Results */}
               {!result && !error && !loading && (
                 <div style={{ background: "#f8f9ff", border: "1px solid #dde4f0",
                   borderRadius: 12, padding: 24, textAlign: "center",

@@ -3,6 +3,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { LANG_MAP, LANGUAGES } from "@/lib/constants";
+import { loadProfile } from "@/lib/profile";
 import type { ChatMessage, CitizenProfile, Language } from "@/types";
 
 const SUGGESTIONS: Record<string, string[]> = {
@@ -64,12 +65,16 @@ export default function ChatPage() {
   const [ttsEnabled,    setTtsEnabled]    = useState(true);
   const [sttStatus,     setSttStatus]     = useState<"idle"|"recording"|"transcribing"|"done"|"error">("idle");
   const [sttMsg,        setSttMsg]        = useState("");
-  const [profile]       = useState<Partial<CitizenProfile>>({});
+  const [profile, setProfile] = useState<Partial<CitizenProfile>>({});
 
   const bodyRef    = useRef<HTMLDivElement>(null);
   const mediaRef   = useRef<MediaRecorder | null>(null);
+  const streamRef  = useRef<MediaStream | null>(null);
   const chunksRef  = useRef<Blob[]>([]);
+  const mimeRef    = useRef("audio/webm");
   const audioRef   = useRef<HTMLAudioElement | null>(null);
+  const recTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const sttTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Auto-scroll to bottom on new message
   useEffect(() => {
@@ -85,6 +90,36 @@ export default function ChatPage() {
     if (schemeName) {
       setInput(`Tell me more about ${schemeName} — who is eligible and how to apply?`);
     }
+  }, []);
+
+  useEffect(() => {
+    const saved = loadProfile();
+    if (saved) {
+      setProfile(saved);
+    }
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (recTimerRef.current) clearTimeout(recTimerRef.current);
+      if (sttTimerRef.current) clearTimeout(sttTimerRef.current);
+
+      if (mediaRef.current && mediaRef.current.state !== "inactive") {
+        try { mediaRef.current.stop(); } catch {}
+      }
+
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((t) => t.stop());
+        streamRef.current = null;
+      }
+
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+
+      window.speechSynthesis?.cancel();
+    };
   }, []);
 
   // ── TTS: gTTS via /api/tts, fallback to Web Speech API ──────────
@@ -209,88 +244,208 @@ const speakText = useCallback(async (text: string) => {
   }, [messages, loading, language, profile, speakText]);
 
   // ── Voice recording ──────────────────────────────────────────────
-  async function toggleRecording() {
-    // STOP recording
-    if (recording) {
-      mediaRef.current?.stop();
-      setRecording(false);
-      return;
+  function clearSttTimer() {
+    if (sttTimerRef.current) {
+      clearTimeout(sttTimerRef.current);
+      sttTimerRef.current = null;
     }
+  }
 
-    // START recording
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  function stopStream() {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((t) => t.stop());
+      streamRef.current = null;
+    }
+  }
 
-      // Pick best supported MIME type
-      const mimeType = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
-        ? "audio/webm;codecs=opus"
-        : MediaRecorder.isTypeSupported("audio/webm")
-        ? "audio/webm"
-        : "";
+  function scheduleSttReset(ms: number) {
+    clearSttTimer();
+    sttTimerRef.current = setTimeout(() => {
+      setSttStatus("idle");
+      setSttMsg("");
+    }, ms);
+  }
 
-      const mr = new MediaRecorder(stream, mimeType ? { mimeType } : undefined);
-      mediaRef.current  = mr;
-      chunksRef.current = [];
+  const transcribeAudio = useCallback(async (blob: Blob, mimeType: string) => {
+    clearSttTimer();
+    setSttStatus("transcribing");
+    setSttMsg("Transcribing your voice...");
 
-      mr.ondataavailable = (e) => {
-        if (e.data.size > 0) chunksRef.current.push(e.data);
-      };
+    const ext = mimeType.includes("ogg")
+      ? "ogg"
+      : mimeType.includes("wav")
+      ? "wav"
+      : mimeType.includes("mp4") || mimeType.includes("m4a")
+      ? "m4a"
+      : mimeType.includes("mpeg") || mimeType.includes("mp3")
+      ? "mp3"
+      : "webm";
 
-      mr.onstop = async () => {
-        // Stop all mic tracks
-        stream.getTracks().forEach((t) => t.stop());
+    let lastError = "Could not transcribe — please try again";
 
-        const blob = new Blob(chunksRef.current, { type: "audio/webm" });
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 30000);
+      const fd = new FormData();
+      fd.append("audio", blob, `recording.${ext}`);
+      fd.append("language", LANG_MAP[language]?.dg || "hi");
 
-        if (blob.size < 500) {
-          setSttStatus("error");
-          setSttMsg("Recording too short — speak for at least 2 seconds");
-          setTimeout(() => setSttStatus("idle"), 3000);
-          return;
-        }
+      try {
+        const res = await fetch("/api/stt", { method: "POST", body: fd, signal: controller.signal });
+        const data = await res.json();
 
-        // Transcribe
-        setSttStatus("transcribing");
-        setSttMsg("Transcribing your voice...");
+        if (res.ok && data?.transcript) {
+          const transcript = String(data.transcript).trim();
+          const confidence = typeof data.confidence === "number" ? Math.round(data.confidence * 100) : null;
 
-        const fd = new FormData();
-        fd.append("audio", blob, "recording.webm");
-        fd.append("language", LANG_MAP[language]?.dg || "hi");
-
-        try {
-          const res  = await fetch("/api/stt", { method: "POST", body: fd });
-          const data = await res.json();
-
-          if (data.transcript) {
+          if (!transcript) {
+            lastError = "No speech detected — speak clearly and try again";
+          } else {
+            setInput(transcript);
             setSttStatus("done");
-            setSttMsg(`✅ Heard: "${data.transcript}" (${Math.round(data.confidence * 100)}% confidence)`);
+            setSttMsg(
+              confidence !== null
+                ? `✅ Heard: "${transcript}" (${confidence}% confidence)`
+                : `✅ Heard: "${transcript}"`
+            );
 
-            // ✅ AUTO-SEND — no need to click Send button
             setTimeout(() => {
               setSttStatus("idle");
               setSttMsg("");
-              sendMessage(data.transcript);
-            }, 800);
-
-          } else {
-            setSttStatus("error");
-            setSttMsg(data.error || "Could not transcribe — please try again");
-            setTimeout(() => { setSttStatus("idle"); setSttMsg(""); }, 4000);
+              sendMessage(transcript);
+            }, 700);
+            clearTimeout(timeout);
+            return;
           }
-        } catch {
-          setSttStatus("error");
-          setSttMsg("Transcription failed — please type your question");
-          setTimeout(() => { setSttStatus("idle"); setSttMsg(""); }, 4000);
+        } else {
+          lastError = data?.error || `Transcription failed (${res.status})`;
         }
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : "";
+        lastError = msg.includes("abort")
+          ? "Transcription timed out. Please retry in a quiet place."
+          : "Transcription failed — please type your question";
+      } finally {
+        clearTimeout(timeout);
+      }
+
+      if (attempt < 2) await new Promise((r) => setTimeout(r, 250));
+    }
+
+    setSttStatus("error");
+    setSttMsg(lastError);
+    scheduleSttReset(4500);
+  }, [language, sendMessage]);
+
+  async function toggleRecording() {
+    if (sttStatus === "transcribing") return;
+
+    if (recording) {
+      if (mediaRef.current && mediaRef.current.state !== "inactive") {
+        mediaRef.current.stop();
+      }
+      return;
+    }
+
+    if (!navigator.mediaDevices?.getUserMedia) {
+      setSttStatus("error");
+      setSttMsg("Microphone is not supported in this browser");
+      scheduleSttReset(4000);
+      return;
+    }
+
+    if (typeof MediaRecorder === "undefined") {
+      setSttStatus("error");
+      setSttMsg("Voice recording is not supported in this browser");
+      scheduleSttReset(4000);
+      return;
+    }
+
+    try {
+      clearSttTimer();
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true,
+        },
+      });
+      streamRef.current = stream;
+
+      const preferredTypes = [
+        "audio/webm;codecs=opus",
+        "audio/webm",
+        "audio/ogg;codecs=opus",
+        "audio/ogg",
+        "audio/mp4",
+      ];
+      const selectedType = preferredTypes.find((m) => MediaRecorder.isTypeSupported(m));
+      const mr = selectedType
+        ? new MediaRecorder(stream, { mimeType: selectedType })
+        : new MediaRecorder(stream);
+
+      mediaRef.current = mr;
+      chunksRef.current = [];
+      mimeRef.current = mr.mimeType || selectedType || "audio/webm";
+
+      mr.ondataavailable = (e) => {
+        if (e.data && e.data.size > 0) chunksRef.current.push(e.data);
       };
 
-      mr.start();
+      mr.onerror = () => {
+        setRecording(false);
+        setSttStatus("error");
+        setSttMsg("Recording failed. Please retry.");
+        scheduleSttReset(3500);
+        stopStream();
+      };
+
+      mr.onstop = async () => {
+        if (recTimerRef.current) {
+          clearTimeout(recTimerRef.current);
+          recTimerRef.current = null;
+        }
+
+        const mimeType = chunksRef.current[0]?.type || mimeRef.current || "audio/webm";
+        const blob = new Blob(chunksRef.current, { type: mimeType });
+
+        mediaRef.current = null;
+        chunksRef.current = [];
+        setRecording(false);
+        stopStream();
+
+        if (blob.size < 700) {
+          setSttStatus("error");
+          setSttMsg("Recording too short — speak for at least 1-2 seconds");
+          scheduleSttReset(3500);
+          return;
+        }
+
+        await transcribeAudio(blob, mimeType);
+      };
+
+      mr.start(250);
       setRecording(true);
       setSttStatus("recording");
-      setSttMsg("🔴 Listening... speak now, then click Stop");
+      setSttMsg("🔴 Listening... speak now, then press Stop");
 
-    } catch {
-      alert("Microphone access denied. Please allow mic permissions in browser settings.");
+      recTimerRef.current = setTimeout(() => {
+        if (mediaRef.current && mediaRef.current.state === "recording") {
+          setSttMsg("Stopping recording and preparing transcript...");
+          mediaRef.current.stop();
+        }
+      }, 20000);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message.toLowerCase() : "";
+      const denied = msg.includes("denied") || msg.includes("notallowed");
+
+      setRecording(false);
+      setSttStatus("error");
+      setSttMsg(denied
+        ? "Microphone access denied. Please allow mic permission and retry."
+        : "Could not start microphone. Check device permission and retry.");
+      scheduleSttReset(4500);
+      stopStream();
     }
   }
 
@@ -418,8 +573,8 @@ const speakText = useCallback(async (text: string) => {
                 <div
                   className={`box ${
                     sttStatus === "error"         ? "box-error"
-                    : sttStatus === "done"        ? "box-success"
-                    : sttStatus === "recording"   ? "box-error"
+                    : sttStatus === "done"        ? "box-ok"
+                    : sttStatus === "recording"   ? "box-warn"
                     : "box-info"
                   }`}
                   style={{ marginBottom:10, padding:"8px 14px", fontSize:13 }}
@@ -452,7 +607,7 @@ const speakText = useCallback(async (text: string) => {
                   className="btn-primary"
                   style={{ flex:3 }}
                   onClick={() => sendMessage(input)}
-                  disabled={loading || !input.trim() || sttStatus === "transcribing"}
+                  disabled={loading || recording || !input.trim() || sttStatus === "transcribing"}
                 >
                   {loading ? "⏳ Sending..." : "📨 Send / भेजें"}
                 </button>
@@ -466,7 +621,7 @@ const speakText = useCallback(async (text: string) => {
                     color: recording ? "#fff" : undefined,
                   }}
                   onClick={toggleRecording}
-                  disabled={sttStatus === "transcribing"}
+                  disabled={loading || sttStatus === "transcribing"}
                   title={recording ? "Click to stop recording" : `Record voice in ${language}`}
                 >
                   {recording ? "⏹ Stop" : "🎤 Voice"}

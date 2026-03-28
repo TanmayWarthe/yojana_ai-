@@ -1,7 +1,7 @@
 import type { Language } from "@/types";
 
 export const LANG_MAP: Record<Language, { dg: string; tts: string }> = {
-  English:  { dg: "en-IN", tts: "en" },
+  English:  { dg: "en", tts: "en" },
   "हिंदी":  { dg: "hi",    tts: "hi" },
   "தமிழ்": { dg: "ta",    tts: "ta" },
   "తెలుగు":{ dg: "te",    tts: "te" },

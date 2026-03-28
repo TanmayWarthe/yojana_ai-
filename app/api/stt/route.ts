@@ -2,20 +2,60 @@ import { NextRequest, NextResponse } from "next/server";
 
 const DEEPGRAM_API_KEY = process.env.DEEPGRAM_API_KEY || "";
 
-// Max 4MB — prevents accidental 30s+ recordings from hitting Deepgram
-const MAX_AUDIO_BYTES = 4 * 1024 * 1024;
+const MAX_AUDIO_BYTES = 8 * 1024 * 1024;
 
-function normalizeContentType(raw: string): string {
-  const base    = raw.split(";")[0].trim().toLowerCase();
-  const allowed = ["audio/webm","audio/ogg","audio/wav","audio/mp3","audio/flac","audio/mp4","audio/mpeg"];
-  return allowed.includes(base) ? base : "audio/webm";
+const ALLOWED_CONTENT_TYPES = new Set([
+  "audio/webm",
+  "audio/ogg",
+  "audio/wav",
+  "audio/x-wav",
+  "audio/mpeg",
+  "audio/mp3",
+  "audio/flac",
+  "audio/mp4",
+  "audio/x-m4a",
+]);
+
+function normalizeLanguage(raw: string): string {
+  const value = (raw || "hi").trim().toLowerCase();
+  const short = value.split("-")[0];
+  const allowed = new Set(["hi", "en", "ta", "te", "mr", "bn", "pa", "gu", "kn", "ml"]);
+  return allowed.has(short) ? short : "hi";
 }
 
-async function tryTranscribe(audioBuffer: ArrayBuffer, contentType: string, language: string) {
-  const url = `https://api.deepgram.com/v1/listen?model=nova-2&language=${language}&smart_format=true&punctuate=true`;
-  return fetch(url, {
+function contentTypeFromFilename(fileName: string): string | null {
+  const lower = (fileName || "").toLowerCase();
+  if (lower.endsWith(".webm")) return "audio/webm";
+  if (lower.endsWith(".ogg") || lower.endsWith(".oga")) return "audio/ogg";
+  if (lower.endsWith(".wav")) return "audio/wav";
+  if (lower.endsWith(".flac")) return "audio/flac";
+  if (lower.endsWith(".m4a")) return "audio/x-m4a";
+  if (lower.endsWith(".mp3")) return "audio/mpeg";
+  if (lower.endsWith(".mp4")) return "audio/mp4";
+  return null;
+}
+
+function normalizeContentType(raw: string, fileName: string): string {
+  const base = (raw || "").split(";")[0].trim().toLowerCase();
+  if (ALLOWED_CONTENT_TYPES.has(base)) return base;
+  return contentTypeFromFilename(fileName) || "audio/webm";
+}
+
+async function transcribeWithDeepgram(audioBuffer: ArrayBuffer, contentType: string, language?: string) {
+  const qs = new URLSearchParams({
+    model: "nova-2",
+    smart_format: "true",
+    punctuate: "true",
+  });
+  if (language) qs.set("language", language);
+
+  return fetch(`https://api.deepgram.com/v1/listen?${qs.toString()}`, {
     method: "POST",
-    headers: { Authorization:`Token ${DEEPGRAM_API_KEY}`, "Content-Type":contentType },
+    headers: {
+      Authorization: `Token ${DEEPGRAM_API_KEY}`,
+      "Content-Type": contentType,
+      Accept: "application/json",
+    },
     body: audioBuffer,
   });
 }
@@ -27,10 +67,15 @@ export async function POST(req: NextRequest) {
     }
 
     const formData = await req.formData();
-    const audio    = formData.get("audio") as Blob | null;
-    const language = (formData.get("language") as string) || "hi";
+    const audioField = formData.get("audio");
+    const language = normalizeLanguage((formData.get("language") as string) || "hi");
 
-    if (!audio) return NextResponse.json({ error:"No audio provided" }, { status:400 });
+    if (!(audioField instanceof Blob)) {
+      return NextResponse.json({ error: "No audio provided" }, { status: 400 });
+    }
+
+    const audio = audioField;
+    const fileName = audioField instanceof File && audioField.name ? audioField.name : "recording.webm";
 
     const audioBuffer = await audio.arrayBuffer();
 
@@ -43,25 +88,19 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error:"Recording too long — please keep it under 30 seconds" }, { status:400 });
     }
 
-    const contentType = normalizeContentType(audio.type || "audio/webm");
+    const contentType = normalizeContentType(audio.type || "", fileName);
 
-    // Try original type → wav → ogg (with small delay between retries to avoid rate limit)
-    let dgRes = await tryTranscribe(audioBuffer, contentType, language);
+    let dgRes = await transcribeWithDeepgram(audioBuffer, contentType, language);
 
-    if (dgRes.status === 400 && contentType !== "audio/wav") {
-      await new Promise((r) => setTimeout(r, 300)); // small backoff
-      dgRes = await tryTranscribe(audioBuffer, "audio/wav", language);
-    }
-
-    if (dgRes.status === 400) {
-      await new Promise((r) => setTimeout(r, 300));
-      dgRes = await tryTranscribe(audioBuffer, "audio/ogg", language);
+    if (!dgRes.ok && (dgRes.status === 400 || dgRes.status === 422)) {
+      await new Promise((r) => setTimeout(r, 250));
+      dgRes = await transcribeWithDeepgram(audioBuffer, contentType);
     }
 
     if (!dgRes.ok) {
       const err = await dgRes.text();
       return NextResponse.json(
-        { error:`Transcription failed (${dgRes.status}). Please try again.`, detail:err.slice(0,100) },
+        { error:`Transcription failed (${dgRes.status}). Please try again.`, detail:err.slice(0,220) },
         { status: dgRes.status }
       );
     }
