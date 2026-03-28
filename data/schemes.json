@@ -1,0 +1,3795 @@
+{
+  "meta": {
+    "total_schemes": 120,
+    "last_updated": "2026-03-28T10:27:08.096198",
+    "next_update": "2026-03-28T16:27:08.096229",
+    "scrape_interval_hours": 6,
+    "categories": {
+      "Agriculture": 9,
+      "Health": 10,
+      "Education": 23,
+      "Women & Child": 8,
+      "Business & Finance": 7,
+      "Housing": 7,
+      "Employment": 5,
+      "Social Welfare": 39,
+      "Food Security": 1,
+      "Digital & Tech": 4,
+      "General": 5,
+      "Insurance": 1,
+      "Environment": 1
+    },
+    "states_covered": {
+      "Central": 97,
+      "Jammu & Kashmir": 1,
+      "Assam": 2,
+      "Maharashtra": 8,
+      "Karnataka": 1,
+      "Andhra Pradesh": 1,
+      "Telangana": 1,
+      "Rajasthan": 1,
+      "Uttar Pradesh": 1,
+      "West Bengal": 1,
+      "Himachal Pradesh": 1,
+      "Kerala": 1,
+      "Odisha": 1,
+      "Haryana": 1,
+      "Manipur": 1,
+      "Delhi": 1
+    },
+    "data_quality": {
+      "verified": 66,
+      "scraped": 14,
+      "portal_only": 40
+    },
+    "sources": {
+      "hardcoded_baseline": 53,
+      "myscheme_gov_in": 0,
+      "scholarships_gov_in": 15,
+      "wikipedia": 104,
+      "ministry_state_portals": 59,
+      "india_gov_in": 0,
+      "pib_press_releases": 0
+    }
+  },
+  "schemes": [
+    {
+      "id": "pmfby",
+      "name": "PMFBY — Crop Insurance",
+      "description": "Financial support to farmers for crop loss due to natural calamities",
+      "category": "Agriculture",
+      "ministry": "Ministry of Agriculture",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Farmer with notified crops",
+        "Loanee and non-loanee farmers",
+        "Sharecroppers/tenant farmers eligible"
+      ],
+      "benefits": [
+        "Premium 2% Kharif, 1.5% Rabi, 5% commercial",
+        "Full sum insured on crop loss",
+        "Coverage for post-harvest losses"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Land records",
+        "Bank account",
+        "Sowing certificate"
+      ],
+      "tags": [
+        "farmer",
+        "crop",
+        "insurance",
+        "pmfby"
+      ],
+      "apply_link": "https://pmfby.gov.in",
+      "source_url": "https://pmfby.gov.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 100,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:44.059700"
+    },
+    {
+      "id": "kcc",
+      "name": "Kisan Credit Card (KCC)",
+      "description": "Short-term credit up to Rs.3 lakh at subsidized rates for farmers",
+      "category": "Agriculture",
+      "ministry": "Ministry of Agriculture",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Farmer/fisherman/animal husbandry worker",
+        "Age 18-75 years",
+        "Valid land records or tenancy agreement"
+      ],
+      "benefits": [
+        "Credit up to Rs.3 lakh at 7% interest",
+        "2% interest subvention + 3% prompt repayment incentive",
+        "Covers crop, post-harvest, allied activities"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Land records",
+        "Passport photo",
+        "KCC application"
+      ],
+      "tags": [
+        "farmer",
+        "credit",
+        "loan",
+        "kcc"
+      ],
+      "apply_link": "https://www.nabard.org",
+      "source_url": "https://www.nabard.org",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 100,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:44.260088"
+    },
+    {
+      "id": "pm-kusum",
+      "name": "PM-KUSUM Solar",
+      "description": "Solar pump and grid-connected solar power for farmers",
+      "category": "Agriculture",
+      "ministry": "Ministry of New & RE",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Farmer with agricultural land",
+        "Individual/cooperative/panchayat",
+        "Financially weak farmers prioritized"
+      ],
+      "benefits": [
+        "60% subsidy on solar pumps",
+        "Sell surplus power to DISCOM",
+        "Income from leasing land for solar plants"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Land records",
+        "Bank account",
+        "Electricity connection details"
+      ],
+      "tags": [
+        "farmer",
+        "solar",
+        "energy",
+        "renewable",
+        "pm-kusum"
+      ],
+      "apply_link": "https://pmkusum.mnre.gov.in",
+      "source_url": "https://pmkusum.mnre.gov.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 100,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:44.460265"
+    },
+    {
+      "id": "e-nam",
+      "name": "e-NAM Electronic Market",
+      "description": "Online trading platform for agricultural produce — better prices for farmers",
+      "category": "Agriculture",
+      "ministry": "Ministry of Agriculture",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Registered farmer",
+        "Produce must be notified commodity",
+        "State must have integrated e-NAM APMC"
+      ],
+      "benefits": [
+        "Transparent price discovery",
+        "Pan-India market access",
+        "Reduced transaction costs",
+        "Online payment"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Bank account",
+        "Produce details"
+      ],
+      "tags": [
+        "farmer",
+        "market",
+        "trade",
+        "e-nam"
+      ],
+      "apply_link": "https://enam.gov.in",
+      "source_url": "https://enam.gov.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 100,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:44.660477"
+    },
+    {
+      "id": "mfms",
+      "name": "Micro Food Enterprises Scheme",
+      "description": "Formalization and upgrading of micro food processing enterprises",
+      "category": "Agriculture",
+      "ministry": "Ministry of Food Processing",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Individual micro food enterprise",
+        "Annual turnover up to Rs.3 crore",
+        "Existing or new enterprise"
+      ],
+      "benefits": [
+        "35% credit-linked subsidy max Rs.10 lakh",
+        "SHG: working capital + equipment",
+        "FPO: seed capital up to Rs.4 lakh/member"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Business registration",
+        "Bank statement",
+        "Project report"
+      ],
+      "tags": [
+        "food",
+        "processing",
+        "enterprise",
+        "micro",
+        "business"
+      ],
+      "apply_link": "https://mofpi.gov.in/PMFME",
+      "source_url": "https://mofpi.gov.in/PMFME",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 100,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:44.860737"
+    },
+    {
+      "id": "ayushman-bharat",
+      "name": "Ayushman Bharat PM-JAY",
+      "description": "Rs.5 lakh health cover per family per year — 50 crore beneficiaries",
+      "category": "Health",
+      "ministry": "Ministry of Health",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Listed in SECC 2011",
+        "BPL/poor families",
+        "Rural: SC/ST, landless, manual scavengers",
+        "Urban: construction, street vendor, domestic worker",
+        "No family size or age limit"
+      ],
+      "benefits": [
+        "Rs.5 lakh hospitalization cover/family/year",
+        "Cashless at 25,000+ hospitals",
+        "1500+ procedures covered",
+        "Pre+post hospitalization",
+        "No waiting period"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Ration card",
+        "SECC verification"
+      ],
+      "tags": [
+        "health",
+        "hospital",
+        "insurance",
+        "bpl",
+        "ayushman"
+      ],
+      "apply_link": "https://pmjay.gov.in",
+      "source_url": "https://pmjay.gov.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 100,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:45.060905"
+    },
+    {
+      "id": "jsy",
+      "name": "Janani Suraksha Yojana (JSY)",
+      "description": "Cash assistance for institutional delivery to reduce maternal mortality",
+      "category": "Health",
+      "ministry": "Ministry of Health",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Pregnant woman",
+        "BPL/SC/ST",
+        "Age 19+",
+        "Up to 2 live births"
+      ],
+      "benefits": [
+        "Rs.1400 cash (rural LPS)",
+        "Rs.1000 cash (urban LPS)",
+        "ASHA incentive",
+        "Free institutional delivery"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "JSY card",
+        "BPL certificate",
+        "Pregnancy registration"
+      ],
+      "tags": [
+        "women",
+        "health",
+        "maternal",
+        "pregnancy",
+        "jsy"
+      ],
+      "apply_link": "https://nhm.gov.in",
+      "source_url": "https://nhm.gov.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 100,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:45.261163"
+    },
+    {
+      "id": "pmsma",
+      "name": "Pradhan Mantri Surakshit Matritva Abhiyan",
+      "description": "Free prenatal checkups for pregnant women on 9th of every month",
+      "category": "Health",
+      "ministry": "Ministry of Health",
+      "state": "Central",
+      "eligibility_criteria": [
+        "All pregnant women",
+        "2nd and 3rd trimester",
+        "Free at government health facilities"
+      ],
+      "benefits": [
+        "Free ANC checkup",
+        "Free investigations",
+        "Free medicines",
+        "High-risk case management"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Pregnancy proof",
+        "Previous health records"
+      ],
+      "tags": [
+        "women",
+        "health",
+        "maternal",
+        "pregnancy",
+        "antenatal"
+      ],
+      "apply_link": "https://pmsma.nhp.gov.in",
+      "source_url": "https://pmsma.nhp.gov.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 100,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:45.461518"
+    },
+    {
+      "id": "pmjay-sehat",
+      "name": "PMJAY-Sehat (J&K)",
+      "description": "Extension of Ayushman Bharat to all residents of J&K including APL",
+      "category": "Health",
+      "ministry": "Ministry of Health",
+      "state": "Jammu & Kashmir",
+      "eligibility_criteria": [
+        "All residents of J&K",
+        "Including APL families",
+        "No income limit"
+      ],
+      "benefits": [
+        "Rs.5 lakh health cover per family",
+        "Cashless treatment",
+        "5 lakh+ beneficiary families"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "J&K domicile certificate"
+      ],
+      "tags": [
+        "health",
+        "hospital",
+        "jk",
+        "ayushman"
+      ],
+      "apply_link": "https://pmjay.gov.in/sehat",
+      "source_url": "https://pmjay.gov.in/sehat",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 100,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:45.661784"
+    },
+    {
+      "id": "mental-health-nmhp",
+      "name": "National Mental Health Programme (NMHP)",
+      "description": "Mental health services through district hospitals and community centers",
+      "category": "Health",
+      "ministry": "Ministry of Health",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Any Indian citizen",
+        "Priority to poor and rural",
+        "Free at government facilities"
+      ],
+      "benefits": [
+        "Free consultation",
+        "Free medicines",
+        "Crisis intervention",
+        "Rehabilitation support"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Referral from PHC (for specialists)"
+      ],
+      "tags": [
+        "mental health",
+        "health",
+        "psychology"
+      ],
+      "apply_link": "https://mohfw.gov.in",
+      "source_url": "https://mohfw.gov.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 100,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:45.861963"
+    },
+    {
+      "id": "vidya-lakshmi",
+      "name": "Vidya Lakshmi Education Loan",
+      "description": "Single-window platform for education loans from 38 banks",
+      "category": "Education",
+      "ministry": "Ministry of Finance",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Indian national",
+        "Admission to recognized course",
+        "Age 18-35 for most loans",
+        "For CSIS: family income below Rs.4.5 lakh"
+      ],
+      "benefits": [
+        "Loans up to Rs.10 lakh (India), Rs.20 lakh (abroad)",
+        "Interest subsidy under CSIS",
+        "Moratorium during study",
+        "Single window for 38 banks"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Admission letter",
+        "Income certificate",
+        "Academic records",
+        "Collateral (loans > Rs.7.5 lakh)"
+      ],
+      "tags": [
+        "education",
+        "loan",
+        "student",
+        "higher education",
+        "vidya-lakshmi"
+      ],
+      "apply_link": "https://vidyalakshmi.co.in",
+      "source_url": "https://vidyalakshmi.co.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 100,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:46.062134"
+    },
+    {
+      "id": "inspire",
+      "name": "INSPIRE Scholarship",
+      "description": "Rs.80,000/year for 5 years for top science students",
+      "category": "Education",
+      "ministry": "Ministry of Science",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Pursuing natural/basic sciences at BSc/BS level",
+        "Min 50% marks",
+        "Family income below threshold",
+        "Indian citizen",
+        "Top 1% Class 12, science stream",
+        "Top 1% in Class 12 board",
+        "Age below 22 at time of admission"
+      ],
+      "benefits": [
+        "Rs.80,000/year for 5 years",
+        "Annual renewal on maintaining grades",
+        "Mentorship from scientists",
+        "Summer research internship"
+      ],
+      "documents_required": [
+        "College enrollment",
+        "Income certificate",
+        "Class 12 marksheet",
+        "Aadhaar",
+        "Caste/community certificate",
+        "Marksheet",
+        "Bank account"
+      ],
+      "tags": [
+        "inspire",
+        "education",
+        "student",
+        "nsp",
+        "research",
+        "science",
+        "scholarship"
+      ],
+      "apply_link": "https://online-inspire.gov.in",
+      "source_url": "https://online-inspire.gov.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 100,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:46.262298"
+    },
+    {
+      "id": "ujjwala",
+      "name": "PM Ujjwala Yojana (PMUY)",
+      "description": "Free LPG connection to BPL women to replace traditional chulhas",
+      "category": "Women & Child",
+      "ministry": "Ministry of Petroleum",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Adult woman 18+ years",
+        "BPL household",
+        "No existing LPG connection",
+        "SECC-2011 or SC/ST/AAY/PMAY beneficiary"
+      ],
+      "benefits": [
+        "Free LPG connection (deposit waived)",
+        "Free first refill",
+        "Rs.1600 financial assistance",
+        "Free stove in some states"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "BPL ration card",
+        "Bank account",
+        "Address proof"
+      ],
+      "tags": [
+        "women",
+        "lpg",
+        "cooking",
+        "bpl",
+        "rural",
+        "ujjwala"
+      ],
+      "apply_link": "https://pmuy.gov.in",
+      "source_url": "https://pmuy.gov.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 100,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:46.462677"
+    },
+    {
+      "id": "sukanya",
+      "name": "Sukanya Samriddhi Yojana (SSY)",
+      "description": "High-interest savings scheme for girl child education and marriage",
+      "category": "Women & Child",
+      "ministry": "Ministry of Finance",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Girl child below 10 years",
+        "Parent/guardian opens account",
+        "Max 2 accounts per family",
+        "Indian citizens only"
+      ],
+      "benefits": [
+        "8.2% interest per annum (tax-free)",
+        "Section 80C deduction up to Rs.1.5 lakh",
+        "Partial withdrawal at 18 for education",
+        "Maturity at 21"
+      ],
+      "documents_required": [
+        "Girl's birth certificate",
+        "Parent's Aadhaar",
+        "Parent's PAN",
+        "Address proof"
+      ],
+      "tags": [
+        "girl",
+        "savings",
+        "education",
+        "women",
+        "sukanya",
+        "tax-saving"
+      ],
+      "apply_link": "https://www.indiapost.gov.in",
+      "source_url": "https://www.indiapost.gov.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 100,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:46.662915"
+    },
+    {
+      "id": "mission-shakti",
+      "name": "Mission Shakti",
+      "description": "Umbrella scheme for women safety, empowerment, and welfare",
+      "category": "Women & Child",
+      "ministry": "Ministry of Women & Child",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Women and girl children",
+        "Priority to marginalized women",
+        "All age groups"
+      ],
+      "benefits": [
+        "Sambal: One-stop centres, helpline 181, Beti Bachao, Nari Adalat",
+        "Samarthya: PMMVY, IGMSY, creches, training"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Address proof"
+      ],
+      "tags": [
+        "women",
+        "safety",
+        "empowerment",
+        "mission-shakti"
+      ],
+      "apply_link": "https://wcd.nic.in",
+      "source_url": "https://wcd.nic.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 100,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:46.863094"
+    },
+    {
+      "id": "icds-anganwadi",
+      "name": "Integrated Child Development Services (ICDS)",
+      "description": "Nutrition, health, and preschool education for children under 6",
+      "category": "Women & Child",
+      "ministry": "Ministry of Women & Child",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Children 0-6 years",
+        "Pregnant/lactating women",
+        "Adolescent girls",
+        "Registered at anganwadi center"
+      ],
+      "benefits": [
+        "Supplementary nutrition",
+        "Immunization",
+        "Health checkup",
+        "Referral services",
+        "Preschool education"
+      ],
+      "documents_required": [
+        "Birth certificate (for children)",
+        "Aadhaar of mother"
+      ],
+      "tags": [
+        "child",
+        "nutrition",
+        "anganwadi",
+        "icds",
+        "health"
+      ],
+      "apply_link": "https://wcd.nic.in/icds",
+      "source_url": "https://wcd.nic.in/icds",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 100,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:47.063253"
+    },
+    {
+      "id": "jan-dhan",
+      "name": "PM Jan Dhan Yojana (PMJDY)",
+      "description": "Zero-balance bank account with RuPay card, insurance, and overdraft",
+      "category": "Business & Finance",
+      "ministry": "Ministry of Finance",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Indian citizen 10+ years",
+        "No existing bank account",
+        "Can open at any bank/BC outlet"
+      ],
+      "benefits": [
+        "Zero balance savings account",
+        "RuPay debit card",
+        "Rs.2 lakh accident insurance",
+        "Rs.30,000 life insurance",
+        "Overdraft up to Rs.10,000"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "PAN (optional)",
+        "Passport photo"
+      ],
+      "tags": [
+        "banking",
+        "account",
+        "financial inclusion",
+        "jandhan",
+        "insurance"
+      ],
+      "apply_link": "https://pmjdy.gov.in",
+      "source_url": "https://pmjdy.gov.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 100,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:47.263500"
+    },
+    {
+      "id": "mudra",
+      "name": "MUDRA Loan — PM Mudra Yojana",
+      "description": "Collateral-free loans for small/micro business up to Rs.10 lakh",
+      "category": "Business & Finance",
+      "ministry": "Ministry of Finance",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Any Indian citizen with business plan",
+        "Non-farm income generating activity",
+        "Not in default with any bank",
+        "Shishu/Kishore/Tarun based on loan size"
+      ],
+      "benefits": [
+        "Shishu: up to Rs.50,000",
+        "Kishore: Rs.50k-5 lakh",
+        "Tarun: Rs.5-10 lakh",
+        "Subsidized interest rate",
+        "RuPay debit card"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "PAN",
+        "Bank statement 6 months",
+        "Business plan",
+        "Address proof"
+      ],
+      "tags": [
+        "loan",
+        "business",
+        "entrepreneur",
+        "mudra",
+        "self-employed"
+      ],
+      "apply_link": "https://mudra.org.in",
+      "source_url": "https://mudra.org.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 100,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:47.463789"
+    },
+    {
+      "id": "pmegp",
+      "name": "PMEGP — Employment Generation",
+      "description": "Subsidy 15-35% for new micro enterprise in manufacturing/service",
+      "category": "Business & Finance",
+      "ministry": "Ministry of MSME",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Age 18+",
+        "VIII pass for projects > Rs.10 lakh",
+        "New enterprise only",
+        "Not expanding existing unit",
+        "EDP training mandatory"
+      ],
+      "benefits": [
+        "15% (urban), 25% (rural) — general",
+        "25% (urban), 35% (rural) — SC/ST/OBC/Women/PH",
+        "Max project Rs.50L manufacturing, Rs.20L service"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "PAN",
+        "8th pass certificate",
+        "Project report",
+        "EDP certificate",
+        "Caste certificate if applicable"
+      ],
+      "tags": [
+        "employment",
+        "entrepreneur",
+        "subsidy",
+        "pmegp",
+        "msme"
+      ],
+      "apply_link": "https://www.kviconline.gov.in/pmegpeportal/",
+      "source_url": "https://www.kviconline.gov.in/pmegpeportal/",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 100,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:47.664132"
+    },
+    {
+      "id": "startup-india",
+      "name": "Startup India",
+      "description": "Ecosystem support, tax benefits, and funding for startups",
+      "category": "Business & Finance",
+      "ministry": "DPIIT",
+      "state": "Central",
+      "eligibility_criteria": [
+        "DPIIT-recognized startup",
+        "Incorporated less than 10 years ago",
+        "Annual turnover < Rs.100 crore",
+        "Working on innovative solution"
+      ],
+      "benefits": [
+        "Tax exemption for 3 years",
+        "80% patent fee rebate",
+        "Fast-track patent examination",
+        "Self-certification under labour laws",
+        "Rs.10,000 crore Fund of Funds"
+      ],
+      "documents_required": [
+        "Certificate of incorporation",
+        "DPIIT recognition certificate",
+        "PAN",
+        "Bank account"
+      ],
+      "tags": [
+        "startup",
+        "business",
+        "entrepreneur",
+        "tax",
+        "dpiit"
+      ],
+      "apply_link": "https://www.startupindia.gov.in",
+      "source_url": "https://www.startupindia.gov.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 100,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:47.864481"
+    },
+    {
+      "id": "pmay-g",
+      "name": "PMAY-G — Rural Housing",
+      "description": "Rs.1.2-1.3 lakh grant for pucca house construction in rural areas",
+      "category": "Housing",
+      "ministry": "Ministry of Rural Development",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Homeless/kutcha house",
+        "SECC 2011 listed",
+        "No pucca house anywhere",
+        "Income < Rs.3 lakh",
+        "Priority: SC/ST/minorities/BPL"
+      ],
+      "benefits": [
+        "Rs.1.20 lakh (plains)",
+        "Rs.1.30 lakh (hilly/NE)",
+        "Rs.12,000 for toilet (SBM-G)",
+        "90 days MGNREGS wages"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Bank account",
+        "Job card",
+        "BPL certificate",
+        "Land documents"
+      ],
+      "tags": [
+        "housing",
+        "rural",
+        "bpl",
+        "construction",
+        "pmay"
+      ],
+      "apply_link": "https://pmayg.nic.in",
+      "source_url": "https://pmayg.nic.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 100,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:48.064825"
+    },
+    {
+      "id": "pmay-u",
+      "name": "PMAY-U — Urban Housing",
+      "description": "Interest subsidy on home loans for EWS/LIG/MIG urban families",
+      "category": "Housing",
+      "ministry": "Ministry of Housing",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Urban area resident",
+        "EWS: income < Rs.3 lakh",
+        "LIG: Rs.3-6 lakh",
+        "MIG-I: Rs.6-12 lakh",
+        "MIG-II: Rs.12-18 lakh",
+        "No pucca house"
+      ],
+      "benefits": [
+        "EWS/LIG: 6.5% subsidy on Rs.6 lakh loan",
+        "MIG-I: 4% on Rs.9 lakh",
+        "MIG-II: 3% on Rs.12 lakh",
+        "Direct construction/enhancement grants"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Income certificate",
+        "Property documents",
+        "Affidavit of no pucca house",
+        "Bank account"
+      ],
+      "tags": [
+        "housing",
+        "urban",
+        "loan",
+        "subsidy",
+        "pmay",
+        "ews",
+        "lig"
+      ],
+      "apply_link": "https://pmaymis.gov.in",
+      "source_url": "https://pmaymis.gov.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 100,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:48.265153"
+    },
+    {
+      "id": "jal-jeevan-mission",
+      "name": "Jal Jeevan Mission",
+      "description": "Tap water connection to every rural household by 2024",
+      "category": "Housing",
+      "ministry": "Ministry of Jal Shakti",
+      "state": "Central",
+      "eligibility_criteria": [
+        "BPL households prioritized",
+        "Rural households without piped water",
+        "All districts covered"
+      ],
+      "benefits": [
+        "55 lpcd water supply",
+        "Water quality testing",
+        "Free functional household tap connection"
+      ],
+      "documents_required": [
+        "Address proof",
+        "Aadhaar",
+        "Application to Gram Panchayat"
+      ],
+      "tags": [
+        "housing",
+        "water",
+        "insurance",
+        "jal-jeevan",
+        "rural"
+      ],
+      "apply_link": "https://jaljeevanmission.gov.in",
+      "source_url": "https://jaljeevanmission.gov.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 100,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:48.465392"
+    },
+    {
+      "id": "swachh-bharat",
+      "name": "Swachh Bharat Mission — Individual Household Toilet",
+      "description": "Rs.12,000 incentive for toilet construction in rural areas",
+      "category": "Housing",
+      "ministry": "Ministry of Jal Shakti",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Rural household without toilet",
+        "BPL families prioritized",
+        "Must not have received earlier ODF incentive"
+      ],
+      "benefits": [
+        "Rs.12,000 incentive (Central + State combined)",
+        "Technical support for construction",
+        "IHHL certified after construction"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Bank account",
+        "BPL card (if applicable)",
+        "Application to Gram Panchayat"
+      ],
+      "tags": [
+        "toilet",
+        "sanitation",
+        "rural",
+        "swachh",
+        "housing"
+      ],
+      "apply_link": "https://swachhbharatmission.gov.in",
+      "source_url": "https://swachhbharatmission.gov.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 100,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:48.665666"
+    },
+    {
+      "id": "mgnrega",
+      "name": "MGNREGA — 100 Days Employment",
+      "description": "100 days guaranteed wage employment per year for rural households",
+      "category": "Employment",
+      "ministry": "Ministry of Rural Development",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Rural household member",
+        "Adult willing for unskilled manual work",
+        "Must have job card",
+        "Demand-based: apply at Gram Panchayat"
+      ],
+      "benefits": [
+        "100 days guaranteed employment/year",
+        "Minimum wage ~Rs.220-350/day (state-wise)",
+        "Unemployment allowance if not provided in 15 days",
+        "Asset creation in villages"
+      ],
+      "documents_required": [
+        "Job card",
+        "Aadhaar",
+        "Bank/Post Office account"
+      ],
+      "tags": [
+        "employment",
+        "rural",
+        "wage",
+        "mgnrega",
+        "job",
+        "labour"
+      ],
+      "apply_link": "https://nrega.nic.in",
+      "source_url": "https://nrega.nic.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 100,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:48.865823"
+    },
+    {
+      "id": "pmkvy",
+      "name": "PMKVY — Skill Development",
+      "description": "Free skill training with certification and job placement support",
+      "category": "Employment",
+      "ministry": "Ministry of Skill Development",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Age 15-45 years",
+        "Indian citizen",
+        "Education: varies by course (Class 8/10/12)",
+        "Unemployed or school dropout"
+      ],
+      "benefits": [
+        "Free short-term skill training",
+        "Industry-recognized certification",
+        "Rs.8,000/month stipend",
+        "Placement support",
+        "Rs.500 recognition of prior learning"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Bank account",
+        "Educational certificate",
+        "Passport photo"
+      ],
+      "tags": [
+        "skill",
+        "employment",
+        "training",
+        "youth",
+        "pmkvy"
+      ],
+      "apply_link": "https://www.pmkvyofficial.org",
+      "source_url": "https://www.pmkvyofficial.org",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 100,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:49.066060"
+    },
+    {
+      "id": "national-apprenticeship",
+      "name": "National Apprenticeship Training Scheme",
+      "description": "Practical training in companies with stipend for ITI graduates",
+      "category": "Employment",
+      "ministry": "Ministry of Skill Development",
+      "state": "Central",
+      "eligibility_criteria": [
+        "ITI/diploma/degree holders",
+        "Age 14+ years",
+        "For trade/technician/graduate apprentices",
+        "Applied at apprenticeshipindia.gov.in"
+      ],
+      "benefits": [
+        "Stipend Rs.7,700-10,971/month",
+        "1-3 year practical training",
+        "Certificate of apprenticeship",
+        "Potential absorption in company"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Educational certificate",
+        "Bank account",
+        "Medical fitness certificate"
+      ],
+      "tags": [
+        "apprenticeship",
+        "employment",
+        "training",
+        "iti",
+        "skill"
+      ],
+      "apply_link": "https://apprenticeshipindia.gov.in",
+      "source_url": "https://apprenticeshipindia.gov.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 100,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:49.266223"
+    },
+    {
+      "id": "standup-india",
+      "name": "StandUp India — SC/ST/Women Entrepreneurship",
+      "description": "Bank loans Rs.10 lakh - 1 crore for SC/ST/Women entrepreneurs",
+      "category": "Employment",
+      "ministry": "Ministry of Finance",
+      "state": "Central",
+      "eligibility_criteria": [
+        "SC/ST or woman entrepreneur",
+        "First-time enterprise (greenfield)",
+        "Age 18+ years",
+        "Not in default with any bank"
+      ],
+      "benefits": [
+        "Loans Rs.10 lakh to Rs.1 crore",
+        "Composite loan (75% of project cost)",
+        "7-year repayment period",
+        "Credit guarantee through NCGTC"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "PAN",
+        "Project report",
+        "Caste/gender certificate",
+        "Bank statement",
+        "No-default certificate"
+      ],
+      "tags": [
+        "entrepreneur",
+        "sc",
+        "st",
+        "women",
+        "loan",
+        "standup"
+      ],
+      "apply_link": "https://www.standupmitra.in",
+      "source_url": "https://www.standupmitra.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 100,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:49.466592"
+    },
+    {
+      "id": "apy",
+      "name": "Atal Pension Yojana (APY)",
+      "description": "Guaranteed pension Rs.1,000-5,000/month after 60 for unorganized sector",
+      "category": "Social Welfare",
+      "ministry": "Ministry of Finance",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Age 18-40 years",
+        "Savings bank account",
+        "Not income taxpayer",
+        "Not in formal social security",
+        "Unorganized sector worker"
+      ],
+      "benefits": [
+        "Monthly pension Rs.1000-5000 after 60",
+        "Spouse gets same pension after death",
+        "Nominee gets corpus on death of both",
+        "Govt co-contribution for early joiners"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Savings bank account",
+        "Mobile number"
+      ],
+      "tags": [
+        "pension",
+        "retirement",
+        "unorganized",
+        "old age",
+        "apy"
+      ],
+      "apply_link": "https://www.npscra.nsdl.co.in/apy.php",
+      "source_url": "https://www.npscra.nsdl.co.in/apy.php",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 100,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:49.666755"
+    },
+    {
+      "id": "naps",
+      "name": "National Social Assistance Programme (NSAP)",
+      "description": "Monthly pension for elderly, widows, and disabled BPL persons",
+      "category": "Social Welfare",
+      "ministry": "Ministry of Rural Development",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Age 60+ (IGNOAPS)",
+        "Widow 40+ years (IGNWPS)",
+        "Disabled 18+ (IGNDPS)",
+        "BPL household",
+        "Listed in SECC"
+      ],
+      "benefits": [
+        "Rs.200-500/month (central share, states add more)",
+        "Direct bank transfer",
+        "IGNOAPS / IGNWPS / IGNDPS components"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Bank account",
+        "BPL card",
+        "Age/widow/disability certificate"
+      ],
+      "tags": [
+        "pension",
+        "elderly",
+        "widow",
+        "disabled",
+        "nsap",
+        "bpl"
+      ],
+      "apply_link": "https://nsap.nic.in",
+      "source_url": "https://nsap.nic.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 100,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:49.867082"
+    },
+    {
+      "id": "pm-daksh",
+      "name": "PM DAKSH — Upskilling Marginalized Communities",
+      "description": "Free skill training for SC/OBC/safai karamcharis and waste pickers",
+      "category": "Social Welfare",
+      "ministry": "Ministry of Social Justice",
+      "state": "Central",
+      "eligibility_criteria": [
+        "SC/OBC/EBC/DNT/safai karamcharis",
+        "Economically backward communities",
+        "Age 18-45 years"
+      ],
+      "benefits": [
+        "Free short-term training (5-6 months)",
+        "Free long-term training (6-12 months)",
+        "Stipend during training",
+        "Certification",
+        "Job placement"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Caste certificate",
+        "Educational certificate",
+        "Bank account"
+      ],
+      "tags": [
+        "skill",
+        "sc",
+        "obc",
+        "training",
+        "empowerment",
+        "pm-daksh"
+      ],
+      "apply_link": "https://pmdaksh.dosje.gov.in",
+      "source_url": "https://pmdaksh.dosje.gov.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 100,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:50.067243"
+    },
+    {
+      "id": "merit-cum-means-scholarship-minority",
+      "name": "Merit-cum-Means Scholarship Minority",
+      "description": "NSP scholarship: Minority students professional courses",
+      "category": "Education",
+      "ministry": "Ministry of Minority Affairs",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Minority students professional courses",
+        "Family income below threshold",
+        "Min 50% marks",
+        "Indian citizen"
+      ],
+      "benefits": [
+        "Rs.1000/month + course fee up to Rs.20k",
+        "Annual renewal on maintaining grades"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Income certificate",
+        "Marksheet",
+        "Caste/community certificate",
+        "Bank account"
+      ],
+      "tags": [
+        "nsp",
+        "student",
+        "scholarship",
+        "education"
+      ],
+      "apply_link": "https://scholarships.gov.in",
+      "source_url": "https://scholarships.gov.in",
+      "scraped_at": "2026-03-28T10:18:53.301270",
+      "data_quality": "verified",
+      "quality_score": 100,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:50.267491"
+    },
+    {
+      "id": "aicte-saksham-scholarship-disabled",
+      "name": "AICTE Saksham Scholarship Disabled",
+      "description": "NSP scholarship: Disabled students technical courses",
+      "category": "Education",
+      "ministry": "AICTE",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Disabled students technical courses",
+        "Family income below threshold",
+        "Min 50% marks",
+        "Indian citizen"
+      ],
+      "benefits": [
+        "Rs.50,000/year",
+        "Annual renewal on maintaining grades"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Income certificate",
+        "Marksheet",
+        "Caste/community certificate",
+        "Bank account"
+      ],
+      "tags": [
+        "nsp",
+        "student",
+        "scholarship",
+        "education"
+      ],
+      "apply_link": "https://scholarships.gov.in",
+      "source_url": "https://scholarships.gov.in",
+      "scraped_at": "2026-03-28T10:18:53.301639",
+      "data_quality": "verified",
+      "quality_score": 100,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:50.467761"
+    },
+    {
+      "id": "pm-kisan",
+      "name": "PM-KISAN",
+      "description": "Income support Rs.6,000/year to all farmer families in 3 installments",
+      "category": "Agriculture",
+      "ministry": "Ministry of Agriculture",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Landholding farmer family",
+        "Valid Aadhaar",
+        "Bank account linked",
+        "Not income taxpayer",
+        "Not constitutional post holder"
+      ],
+      "benefits": [
+        "Rs.6,000/year direct bank transfer",
+        "3 installments of Rs.2,000",
+        "Kisan Credit Card linkage"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Land records",
+        "Bank passbook",
+        "Mobile number"
+      ],
+      "tags": [
+        "farmer",
+        "agriculture",
+        "kisan",
+        "income",
+        "pm-kisan"
+      ],
+      "apply_link": "https://pmkisan.gov.in",
+      "source_url": "https://pmkisan.gov.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 85,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:50.667942"
+    },
+    {
+      "id": "nikshay-poshan",
+      "name": "Nikshay Poshan Yojana",
+      "description": "Nutritional support of Rs.500/month to TB patients",
+      "category": "Health",
+      "ministry": "Ministry of Health",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Diagnosed TB patient",
+        "Registered on Nikshay portal",
+        "Indian citizen"
+      ],
+      "benefits": [
+        "Rs.500/month during treatment",
+        "Direct bank transfer",
+        "Support for entire treatment duration"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Bank account",
+        "TB diagnosis certificate",
+        "Nikshay ID"
+      ],
+      "tags": [
+        "tb",
+        "tuberculosis",
+        "nutrition",
+        "health"
+      ],
+      "apply_link": "https://nikshay.in",
+      "source_url": "https://nikshay.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 85,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:50.868109"
+    },
+    {
+      "id": "nsp-pre",
+      "name": "Pre-Matric Scholarship SC/ST/OBC/Minority",
+      "description": "Scholarships for students up to Class 10",
+      "category": "Education",
+      "ministry": "Ministry of Education",
+      "state": "Central",
+      "eligibility_criteria": [
+        "SC/ST/OBC or Minority community",
+        "Class 1 to 10",
+        "Family income below threshold",
+        "Day scholar or hosteller"
+      ],
+      "benefits": [
+        "Rs.100-500/month depending on class and category",
+        "Rs.750-1000 ad-hoc annual grant",
+        "Hostel subsidy"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Caste/community certificate",
+        "Income certificate",
+        "School enrollment",
+        "Bank account"
+      ],
+      "tags": [
+        "scholarship",
+        "education",
+        "student",
+        "pre-matric",
+        "nsp"
+      ],
+      "apply_link": "https://scholarships.gov.in",
+      "source_url": "https://scholarships.gov.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 85,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:51.068368"
+    },
+    {
+      "id": "nsp-post",
+      "name": "Post-Matric Scholarship SC/ST/OBC/Minority",
+      "description": "Scholarships for students studying after Class 10",
+      "category": "Education",
+      "ministry": "Ministry of Education",
+      "state": "Central",
+      "eligibility_criteria": [
+        "SC/ST/OBC or Minority",
+        "Post Class 10 studies",
+        "Family income below Rs.2 lakh",
+        "Enrolled in recognized institution"
+      ],
+      "benefits": [
+        "Maintenance allowance Rs.530-1200/month",
+        "Course fee reimbursement",
+        "Study tour charges",
+        "Thesis typing charges"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Caste certificate",
+        "Income certificate",
+        "Marksheet",
+        "Admission proof",
+        "Bank account"
+      ],
+      "tags": [
+        "scholarship",
+        "education",
+        "student",
+        "post-matric",
+        "nsp"
+      ],
+      "apply_link": "https://scholarships.gov.in",
+      "source_url": "https://scholarships.gov.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 85,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:51.268587"
+    },
+    {
+      "id": "central-sector-college",
+      "name": "Central Sector Scholarship for College Students",
+      "description": "Merit scholarship for top students in Class 12",
+      "category": "Education",
+      "ministry": "Ministry of Education",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Above 80th percentile in state Class 12 board",
+        "Family income below Rs.8 lakh/year",
+        "Enrolled in regular degree course",
+        "Not availing other scholarship"
+      ],
+      "benefits": [
+        "Rs.10,000/year (UG years 1-3)",
+        "Rs.20,000/year (PG)",
+        "Rs.20,000/year (professional courses 4th year+)"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Class 12 marksheet",
+        "Income certificate",
+        "College ID",
+        "Bank account"
+      ],
+      "tags": [
+        "scholarship",
+        "education",
+        "merit",
+        "college",
+        "central-sector"
+      ],
+      "apply_link": "https://scholarships.gov.in",
+      "source_url": "https://scholarships.gov.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 85,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:51.468976"
+    },
+    {
+      "id": "pm-poshan",
+      "name": "PM POSHAN (Midday Meal)",
+      "description": "Free hot cooked meals to school children to improve enrollment and nutrition",
+      "category": "Education",
+      "ministry": "Ministry of Education",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Students in Classes 1-8",
+        "Government and government-aided schools",
+        "Enrolled students"
+      ],
+      "benefits": [
+        "Free nutritious hot meal daily",
+        "Improves attendance and enrollment",
+        "Kitchen garden in schools"
+      ],
+      "documents_required": [
+        "School enrollment (automatic — no application needed)"
+      ],
+      "tags": [
+        "education",
+        "school",
+        "nutrition",
+        "midday meal",
+        "child"
+      ],
+      "apply_link": "https://pmposhan.education.gov.in",
+      "source_url": "https://pmposhan.education.gov.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 85,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:51.669157"
+    },
+    {
+      "id": "pm-research-fellowship",
+      "name": "PM Research Fellowship (PMRF)",
+      "description": "Fellowship for PhD at IITs/IISc/NITs",
+      "category": "Education",
+      "ministry": "Ministry of Education",
+      "state": "Central",
+      "eligibility_criteria": [
+        "BTech from IITs/IISc/NITs (direct PMRF)",
+        "Or MSc/MTech with GATE/NET qualification",
+        "For PhD in IITs/IISc/IISERs"
+      ],
+      "benefits": [
+        "Rs.70,000-80,000/month fellowship",
+        "Rs.2 lakh/year research grant",
+        "International travel support"
+      ],
+      "documents_required": [
+        "Degree certificate",
+        "GATE/NET scorecard",
+        "Admission letter",
+        "Aadhaar"
+      ],
+      "tags": [
+        "fellowship",
+        "phd",
+        "research",
+        "iit",
+        "pmrf"
+      ],
+      "apply_link": "https://www.pmrf.in",
+      "source_url": "https://www.pmrf.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 85,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:51.869493"
+    },
+    {
+      "id": "bbbp",
+      "name": "Beti Bachao Beti Padhao (BBBP)",
+      "description": "Girl child welfare and education promotion scheme",
+      "category": "Women & Child",
+      "ministry": "Ministry of Women & Child",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Girl child",
+        "All districts (especially gender-critical ones)",
+        "Families with girl children"
+      ],
+      "benefits": [
+        "Education support",
+        "Financial incentives in various states",
+        "Legal protection",
+        "Awareness campaigns"
+      ],
+      "documents_required": [
+        "Birth certificate",
+        "Aadhaar of parents",
+        "School enrollment"
+      ],
+      "tags": [
+        "girl",
+        "education",
+        "women",
+        "bbbp",
+        "gender"
+      ],
+      "apply_link": "https://wcd.nic.in/bbbp-schemes",
+      "source_url": "https://wcd.nic.in/bbbp-schemes",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 85,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:52.069742"
+    },
+    {
+      "id": "pm-matru-vandana",
+      "name": "PMMVY — Maternity Benefit",
+      "description": "Cash incentive of Rs.6000 for first child birth",
+      "category": "Women & Child",
+      "ministry": "Ministry of Women & Child",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Pregnant/lactating women for first live birth",
+        "Age 19+ years",
+        "Applicable for first child only"
+      ],
+      "benefits": [
+        "Rs.3000 after registration (1st installment)",
+        "Rs.2000 after 6 months (2nd)",
+        "Rs.1000 after delivery (via JSY)",
+        "Total Rs.6000"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Bank account",
+        "Pregnancy registration",
+        "MCP card"
+      ],
+      "tags": [
+        "women",
+        "pregnancy",
+        "maternity",
+        "pmmvy",
+        "mother"
+      ],
+      "apply_link": "https://wcd.nic.in/schemes/pradhan-mantri-matru-vandana-yojana",
+      "source_url": "https://wcd.nic.in/schemes/pradhan-mantri-matru-vandana-yojana",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 85,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:52.269940"
+    },
+    {
+      "id": "pmjjby",
+      "name": "PMJJBY — Life Insurance",
+      "description": "Rs.2 lakh life insurance at just Rs.436/year",
+      "category": "Business & Finance",
+      "ministry": "Ministry of Finance",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Age 18-50 years",
+        "Savings bank account",
+        "Aadhaar linked to bank",
+        "Auto-debit consent"
+      ],
+      "benefits": [
+        "Rs.2 lakh life cover on death",
+        "Premium Rs.436/year (auto-debited)",
+        "Annual renewal June 1 to May 31"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Bank account",
+        "Consent form"
+      ],
+      "tags": [
+        "insurance",
+        "life insurance",
+        "banking",
+        "pmjjby"
+      ],
+      "apply_link": "https://www.jansuraksha.gov.in",
+      "source_url": "https://www.jansuraksha.gov.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 85,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:52.470119"
+    },
+    {
+      "id": "pmsby",
+      "name": "PMSBY — Accident Insurance",
+      "description": "Rs.2 lakh accident insurance at just Rs.20/year",
+      "category": "Business & Finance",
+      "ministry": "Ministry of Finance",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Age 18-70 years",
+        "Savings bank account",
+        "Aadhaar linked",
+        "Auto-debit consent"
+      ],
+      "benefits": [
+        "Rs.2 lakh for accidental death/full disability",
+        "Rs.1 lakh for partial disability",
+        "Premium Rs.20/year"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Bank account",
+        "Consent form"
+      ],
+      "tags": [
+        "insurance",
+        "accident",
+        "banking",
+        "pmsby"
+      ],
+      "apply_link": "https://www.jansuraksha.gov.in",
+      "source_url": "https://www.jansuraksha.gov.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 85,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:52.670289"
+    },
+    {
+      "id": "deen-dayal-upadhyaya",
+      "name": "DDU-GKY — Rural Livelihood",
+      "description": "Skill training and placement for rural poor youth",
+      "category": "Employment",
+      "ministry": "Ministry of Rural Development",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Rural youth 15-35 years",
+        "BPL family",
+        "Class 5 pass minimum",
+        "Willing to be trained and placed"
+      ],
+      "benefits": [
+        "Free residential training",
+        "Rs.6,500-25,000/month post-placement (min salary)",
+        "Minimum 75% placement guarantee",
+        "Post-placement support"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "BPL certificate",
+        "Educational certificate",
+        "Bank account"
+      ],
+      "tags": [
+        "employment",
+        "rural",
+        "skill",
+        "youth",
+        "ddu-gky"
+      ],
+      "apply_link": "https://ddugky.gov.in",
+      "source_url": "https://ddugky.gov.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 85,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:52.870551"
+    },
+    {
+      "id": "nfsa-ration",
+      "name": "NFSA — PDS Subsidized Ration",
+      "description": "Subsidized food grains to 81 crore beneficiaries",
+      "category": "Food Security",
+      "ministry": "Ministry of Food",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Priority Household (PHH)",
+        "Antyodaya Anna Yojana (AAY) — poorest of poor",
+        "Identified by State Government",
+        "BPL/APL classification"
+      ],
+      "benefits": [
+        "PHH: 5 kg grains/person/month",
+        "AAY: 35 kg/family/month",
+        "Rice Rs.3/kg, Wheat Rs.2/kg, Coarse Rs.1/kg",
+        "PM GKAY: extra 5kg free"
+      ],
+      "documents_required": [
+        "Ration card",
+        "Aadhaar (for e-KYC)",
+        "State eligibility certificate"
+      ],
+      "tags": [
+        "food",
+        "ration",
+        "bpl",
+        "poor",
+        "nfsa",
+        "pds"
+      ],
+      "apply_link": "https://dfpd.gov.in",
+      "source_url": "https://dfpd.gov.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 85,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:53.070813"
+    },
+    {
+      "id": "bhashini",
+      "name": "Bhashini AI Translation",
+      "description": "Real-time AI translation for 22 scheduled languages",
+      "category": "Digital & Tech",
+      "ministry": "MeitY",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Any Indian citizen",
+        "Free API for developers",
+        "Supports voice and text"
+      ],
+      "benefits": [
+        "Real-time translation 22 languages",
+        "Voice to text in Indian languages",
+        "Free for government and citizens",
+        "Open API for developers"
+      ],
+      "documents_required": [
+        "No formal application — free access"
+      ],
+      "tags": [
+        "translation",
+        "language",
+        "ai",
+        "digital",
+        "bhashini"
+      ],
+      "apply_link": "https://bhashini.gov.in",
+      "source_url": "https://bhashini.gov.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 85,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:53.271155"
+    },
+    {
+      "id": "pre-matric-scholarship-sc-st",
+      "name": "Pre-Matric Scholarship SC/ST",
+      "description": "NSP scholarship: SC/ST students Class 9-10",
+      "category": "Education",
+      "ministry": "Ministry of Social Justice",
+      "state": "Central",
+      "eligibility_criteria": [
+        "SC/ST students Class 9-10",
+        "Family income below threshold",
+        "Min 50% marks",
+        "Indian citizen"
+      ],
+      "benefits": [
+        "Rs.150-350/month + ad-hoc grant",
+        "Annual renewal on maintaining grades"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Income certificate",
+        "Marksheet",
+        "Caste/community certificate",
+        "Bank account"
+      ],
+      "tags": [
+        "nsp",
+        "student",
+        "scholarship",
+        "education"
+      ],
+      "apply_link": "https://scholarships.gov.in",
+      "source_url": "https://scholarships.gov.in",
+      "scraped_at": "2026-03-28T10:18:53.301025",
+      "data_quality": "verified",
+      "quality_score": 85,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:53.471498"
+    },
+    {
+      "id": "post-matric-scholarship-sc",
+      "name": "Post-Matric Scholarship SC",
+      "description": "NSP scholarship: SC students post Class 10",
+      "category": "Education",
+      "ministry": "Ministry of Social Justice",
+      "state": "Central",
+      "eligibility_criteria": [
+        "SC students post Class 10",
+        "Family income below threshold",
+        "Min 50% marks",
+        "Indian citizen"
+      ],
+      "benefits": [
+        "Maintenance + course fee reimbursement",
+        "Annual renewal on maintaining grades"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Income certificate",
+        "Marksheet",
+        "Caste/community certificate",
+        "Bank account"
+      ],
+      "tags": [
+        "nsp",
+        "student",
+        "scholarship",
+        "education"
+      ],
+      "apply_link": "https://scholarships.gov.in",
+      "source_url": "https://scholarships.gov.in",
+      "scraped_at": "2026-03-28T10:18:53.301132",
+      "data_quality": "verified",
+      "quality_score": 85,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:53.671765"
+    },
+    {
+      "id": "post-matric-scholarship-st",
+      "name": "Post-Matric Scholarship ST",
+      "description": "NSP scholarship: ST students post Class 10",
+      "category": "Education",
+      "ministry": "Ministry of Tribal Affairs",
+      "state": "Central",
+      "eligibility_criteria": [
+        "ST students post Class 10",
+        "Family income below threshold",
+        "Min 50% marks",
+        "Indian citizen"
+      ],
+      "benefits": [
+        "Maintenance + course fee reimbursement",
+        "Annual renewal on maintaining grades"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Income certificate",
+        "Marksheet",
+        "Caste/community certificate",
+        "Bank account"
+      ],
+      "tags": [
+        "nsp",
+        "student",
+        "scholarship",
+        "education"
+      ],
+      "apply_link": "https://scholarships.gov.in",
+      "source_url": "https://scholarships.gov.in",
+      "scraped_at": "2026-03-28T10:18:53.301188",
+      "data_quality": "verified",
+      "quality_score": 85,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:53.872147"
+    },
+    {
+      "id": "post-matric-scholarship-obc",
+      "name": "Post-Matric Scholarship OBC",
+      "description": "NSP scholarship: OBC students post Class 10",
+      "category": "Education",
+      "ministry": "Ministry of Social Justice",
+      "state": "Central",
+      "eligibility_criteria": [
+        "OBC students post Class 10",
+        "Family income below threshold",
+        "Min 50% marks",
+        "Indian citizen"
+      ],
+      "benefits": [
+        "Maintenance allowance + course fee",
+        "Annual renewal on maintaining grades"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Income certificate",
+        "Marksheet",
+        "Caste/community certificate",
+        "Bank account"
+      ],
+      "tags": [
+        "nsp",
+        "student",
+        "scholarship",
+        "education"
+      ],
+      "apply_link": "https://scholarships.gov.in",
+      "source_url": "https://scholarships.gov.in",
+      "scraped_at": "2026-03-28T10:18:53.301229",
+      "data_quality": "verified",
+      "quality_score": 85,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:54.072531"
+    },
+    {
+      "id": "central-sector-scholarship-college",
+      "name": "Central Sector Scholarship College",
+      "description": "NSP scholarship: Above 80th percentile Class 12",
+      "category": "Education",
+      "ministry": "Ministry of Education",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Above 80th percentile Class 12",
+        "Family income below threshold",
+        "Min 50% marks",
+        "Indian citizen"
+      ],
+      "benefits": [
+        "Rs.10,000-20,000/year",
+        "Annual renewal on maintaining grades"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Income certificate",
+        "Marksheet",
+        "Caste/community certificate",
+        "Bank account"
+      ],
+      "tags": [
+        "nsp",
+        "student",
+        "scholarship",
+        "education"
+      ],
+      "apply_link": "https://scholarships.gov.in",
+      "source_url": "https://scholarships.gov.in",
+      "scraped_at": "2026-03-28T10:18:53.301310",
+      "data_quality": "verified",
+      "quality_score": 85,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:54.272902"
+    },
+    {
+      "id": "pm-scholarship-ex-servicemen",
+      "name": "PM Scholarship Ex-Servicemen",
+      "description": "NSP scholarship: Wards of ex-servicemen",
+      "category": "Education",
+      "ministry": "Ministry of Defence",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Wards of ex-servicemen",
+        "Family income below threshold",
+        "Min 50% marks",
+        "Indian citizen"
+      ],
+      "benefits": [
+        "Rs.2500-3000/month",
+        "Annual renewal on maintaining grades"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Income certificate",
+        "Marksheet",
+        "Caste/community certificate",
+        "Bank account"
+      ],
+      "tags": [
+        "nsp",
+        "student",
+        "scholarship",
+        "education"
+      ],
+      "apply_link": "https://scholarships.gov.in",
+      "source_url": "https://scholarships.gov.in",
+      "scraped_at": "2026-03-28T10:18:53.301349",
+      "data_quality": "verified",
+      "quality_score": 85,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:54.473268"
+    },
+    {
+      "id": "top-class-education-sc",
+      "name": "Top Class Education SC",
+      "description": "NSP scholarship: SC students top institutions",
+      "category": "Education",
+      "ministry": "Ministry of Social Justice",
+      "state": "Central",
+      "eligibility_criteria": [
+        "SC students top institutions",
+        "Family income below threshold",
+        "Min 50% marks",
+        "Indian citizen"
+      ],
+      "benefits": [
+        "Full fees + maintenance allowance",
+        "Annual renewal on maintaining grades"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Income certificate",
+        "Marksheet",
+        "Caste/community certificate",
+        "Bank account"
+      ],
+      "tags": [
+        "nsp",
+        "student",
+        "scholarship",
+        "education"
+      ],
+      "apply_link": "https://scholarships.gov.in",
+      "source_url": "https://scholarships.gov.in",
+      "scraped_at": "2026-03-28T10:18:53.301387",
+      "data_quality": "verified",
+      "quality_score": 85,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:54.673487"
+    },
+    {
+      "id": "ishan-uday-ne-region-scholarship",
+      "name": "Ishan Uday NE Region Scholarship",
+      "description": "NSP scholarship: Students from NE states",
+      "category": "Education",
+      "ministry": "UGC",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Students from NE states",
+        "Family income below threshold",
+        "Min 50% marks",
+        "Indian citizen"
+      ],
+      "benefits": [
+        "Rs.5400-7800/month",
+        "Annual renewal on maintaining grades"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Income certificate",
+        "Marksheet",
+        "Caste/community certificate",
+        "Bank account"
+      ],
+      "tags": [
+        "nsp",
+        "student",
+        "scholarship",
+        "education"
+      ],
+      "apply_link": "https://scholarships.gov.in",
+      "source_url": "https://scholarships.gov.in",
+      "scraped_at": "2026-03-28T10:18:53.301427",
+      "data_quality": "verified",
+      "quality_score": 85,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:54.873676"
+    },
+    {
+      "id": "aicte-pragati-scholarship-girls",
+      "name": "AICTE Pragati Scholarship Girls",
+      "description": "NSP scholarship: Girl students technical education",
+      "category": "Education",
+      "ministry": "AICTE",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Girl students technical education",
+        "Family income below threshold",
+        "Min 50% marks",
+        "Indian citizen"
+      ],
+      "benefits": [
+        "Rs.50,000/year + contingency",
+        "Annual renewal on maintaining grades"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Income certificate",
+        "Marksheet",
+        "Caste/community certificate",
+        "Bank account"
+      ],
+      "tags": [
+        "nsp",
+        "student",
+        "scholarship",
+        "education"
+      ],
+      "apply_link": "https://scholarships.gov.in",
+      "source_url": "https://scholarships.gov.in",
+      "scraped_at": "2026-03-28T10:18:53.301587",
+      "data_quality": "verified",
+      "quality_score": 85,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:55.073842"
+    },
+    {
+      "id": "maulana-azad-fellowship-minority",
+      "name": "Maulana Azad Fellowship Minority",
+      "description": "NSP scholarship: Minority PhD students",
+      "category": "Education",
+      "ministry": "Ministry of Minority Affairs",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Minority PhD students",
+        "Family income below threshold",
+        "Min 50% marks",
+        "Indian citizen"
+      ],
+      "benefits": [
+        "JRF + SRF fellowship",
+        "Annual renewal on maintaining grades"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Income certificate",
+        "Marksheet",
+        "Caste/community certificate",
+        "Bank account"
+      ],
+      "tags": [
+        "nsp",
+        "student",
+        "scholarship",
+        "education"
+      ],
+      "apply_link": "https://scholarships.gov.in",
+      "source_url": "https://scholarships.gov.in",
+      "scraped_at": "2026-03-28T10:18:53.301707",
+      "data_quality": "verified",
+      "quality_score": 85,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:55.274010"
+    },
+    {
+      "id": "begum-hazrat-mahal-girl-scholarship",
+      "name": "Begum Hazrat Mahal Girl Scholarship",
+      "description": "NSP scholarship: Minority girls Class 9-12",
+      "category": "Education",
+      "ministry": "Maulana Azad Foundation",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Minority girls Class 9-12",
+        "Family income below threshold",
+        "Min 50% marks",
+        "Indian citizen"
+      ],
+      "benefits": [
+        "Rs.5000-6000/year",
+        "Annual renewal on maintaining grades"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Income certificate",
+        "Marksheet",
+        "Caste/community certificate",
+        "Bank account"
+      ],
+      "tags": [
+        "nsp",
+        "student",
+        "scholarship",
+        "education"
+      ],
+      "apply_link": "https://scholarships.gov.in",
+      "source_url": "https://scholarships.gov.in",
+      "scraped_at": "2026-03-28T10:18:53.301760",
+      "data_quality": "verified",
+      "quality_score": 85,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:55.474186"
+    },
+    {
+      "id": "soil-health-card",
+      "name": "Soil Health Card Scheme",
+      "description": "Free soil testing and customized fertilizer recommendations for farmers",
+      "category": "Agriculture",
+      "ministry": "Ministry of Agriculture",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Any farmer with agricultural land",
+        "Applicable pan-India"
+      ],
+      "benefits": [
+        "Free soil testing every 3 years",
+        "Customized fertilizer recommendation card",
+        "Reduces input costs by 10-30%"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Land records"
+      ],
+      "tags": [
+        "farmer",
+        "soil",
+        "fertilizer",
+        "agriculture"
+      ],
+      "apply_link": "https://soilhealth.dac.gov.in",
+      "source_url": "https://soilhealth.dac.gov.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 80,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:55.674550"
+    },
+    {
+      "id": "agri-infra-fund",
+      "name": "Agriculture Infrastructure Fund",
+      "description": "Long-term financing for post-harvest infrastructure and agri-logistics",
+      "category": "Agriculture",
+      "ministry": "Ministry of Agriculture",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Farmers, FPOs, PACS, SHGs, agri-entrepreneurs",
+        "For post-harvest management projects"
+      ],
+      "benefits": [
+        "Loans up to Rs.2 crore",
+        "3% interest subvention for 7 years",
+        "Credit guarantee coverage"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Business plan",
+        "Bank account",
+        "Land/lease documents"
+      ],
+      "tags": [
+        "farmer",
+        "infrastructure",
+        "loan",
+        "storage",
+        "agri"
+      ],
+      "apply_link": "https://agriinfra.dac.gov.in",
+      "source_url": "https://agriinfra.dac.gov.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 80,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:55.874852"
+    },
+    {
+      "id": "rbsk",
+      "name": "Rashtriya Bal Swasthya Karyakram (RBSK)",
+      "description": "Free health screening and treatment for children 0-18 years",
+      "category": "Health",
+      "ministry": "Ministry of Health",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Children 0-18 years",
+        "Applicable for government school children and anganwadi children"
+      ],
+      "benefits": [
+        "Free health screening",
+        "Free treatment for 30 conditions",
+        "Free referral to district hospitals"
+      ],
+      "documents_required": [
+        "Birth certificate",
+        "Aadhaar (if available)",
+        "School ID"
+      ],
+      "tags": [
+        "child",
+        "health",
+        "school",
+        "screening"
+      ],
+      "apply_link": "https://rbsk.gov.in",
+      "source_url": "https://rbsk.gov.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 80,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:56.075033"
+    },
+    {
+      "id": "samagra-shiksha",
+      "name": "Samagra Shiksha",
+      "description": "Integrated scheme for school education PreK to Class 12",
+      "category": "Education",
+      "ministry": "Ministry of Education",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Students in government schools",
+        "Special focus on girls, SC/ST, disabled, minorities"
+      ],
+      "benefits": [
+        "Free textbooks",
+        "Free uniforms (2 sets/year for girls, SC/ST)",
+        "Free bicycles",
+        "Scholarships",
+        "ICT labs"
+      ],
+      "documents_required": [
+        "School enrollment",
+        "Aadhaar (for direct benefits)"
+      ],
+      "tags": [
+        "education",
+        "school",
+        "uniform",
+        "textbook",
+        "samagra"
+      ],
+      "apply_link": "https://samagra.education.gov.in",
+      "source_url": "https://samagra.education.gov.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 80,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:56.275318"
+    },
+    {
+      "id": "vanbandhu",
+      "name": "Vanbandhu Kalyan Yojana",
+      "description": "Welfare of tribal communities — education, health, livelihood",
+      "category": "Social Welfare",
+      "ministry": "Ministry of Tribal Affairs",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Scheduled Tribe members",
+        "Tribal villages and PVTG communities"
+      ],
+      "benefits": [
+        "Education support",
+        "Health coverage",
+        "Livelihood programs",
+        "Housing",
+        "Skill development"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "ST certificate",
+        "Income certificate"
+      ],
+      "tags": [
+        "tribal",
+        "st",
+        "welfare",
+        "vanbandhu"
+      ],
+      "apply_link": "https://tribal.gov.in",
+      "source_url": "https://tribal.gov.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 80,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:56.475736"
+    },
+    {
+      "id": "pm-wani",
+      "name": "PM-WANI Public WiFi",
+      "description": "Free/affordable public WiFi hotspots across India",
+      "category": "Digital & Tech",
+      "ministry": "MeitY",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Any Indian citizen",
+        "Access through PM-WANI app",
+        "Available at PDOs (public data offices)"
+      ],
+      "benefits": [
+        "Low-cost public WiFi access",
+        "Mobile connectivity without SIM",
+        "Pan-India coverage planned"
+      ],
+      "documents_required": [
+        "Mobile number for authentication"
+      ],
+      "tags": [
+        "wifi",
+        "internet",
+        "digital",
+        "pm-wani"
+      ],
+      "apply_link": "https://dot.gov.in",
+      "source_url": "https://dot.gov.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 70,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:56.676088"
+    },
+    {
+      "id": "digital-india",
+      "name": "Digital India Programme",
+      "description": "Broadband, mobile, e-services for all citizens",
+      "category": "Digital & Tech",
+      "ministry": "MeitY",
+      "state": "Central",
+      "eligibility_criteria": [
+        "All Indian citizens",
+        "Special focus on rural areas",
+        "Universal access program"
+      ],
+      "benefits": [
+        "BharatNet broadband to 2.5 lakh panchayats",
+        "Common Service Centres",
+        "DigiLocker for documents",
+        "UMANG app for services",
+        "National Digital Literacy Mission"
+      ],
+      "documents_required": [
+        "Aadhaar (for most digital services)"
+      ],
+      "tags": [
+        "digital",
+        "internet",
+        "broadband",
+        "e-governance",
+        "digital-india"
+      ],
+      "apply_link": "https://digitalindia.gov.in",
+      "source_url": "https://digitalindia.gov.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 70,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:56.876438"
+    },
+    {
+      "id": "nhm",
+      "name": "National Health Mission (NHM)",
+      "description": "Universal health coverage in rural and urban areas",
+      "category": "Health",
+      "ministry": "Ministry of Health",
+      "state": "Central",
+      "eligibility_criteria": [
+        "Indian citizen",
+        "Priority to BPL, rural, tribal populations"
+      ],
+      "benefits": [
+        "Free essential medicines",
+        "Free diagnostics",
+        "Free emergency transport",
+        "ASHA worker home visits"
+      ],
+      "documents_required": [
+        "Aadhaar",
+        "Residence proof"
+      ],
+      "tags": [
+        "health",
+        "rural",
+        "medicine",
+        "nhm"
+      ],
+      "apply_link": "https://nhm.gov.in",
+      "source_url": "https://nhm.gov.in",
+      "scraped_at": "2026-03-28T10:18:24.593112",
+      "data_quality": "verified",
+      "eligibility_tags": {},
+      "quality_score": 65,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:57.076606"
+    },
+    {
+      "id": "national-health-mission",
+      "name": "National Health Mission",
+      "description": "Scheme from NHM Schemes",
+      "category": "Health",
+      "ministry": "Ministry of Health",
+      "state": "Central",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "health"
+      ],
+      "apply_link": "https://nhm.gov.in",
+      "source_url": "https://nhm.gov.in",
+      "scraped_at": "2026-03-28T10:19:27.426746",
+      "data_quality": "scraped",
+      "quality_score": 27,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:57.276782"
+    },
+    {
+      "id": "clss-awas-portal-clap",
+      "name": "CLSS Awas Portal (CLAP)",
+      "description": "Scheme from PMAY Urban",
+      "category": "Housing",
+      "ministry": "Ministry of Housing",
+      "state": "Central",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "housing"
+      ],
+      "apply_link": "https://pmaymis.gov.in",
+      "source_url": "https://pmaymis.gov.in",
+      "scraped_at": "2026-03-28T10:19:35.197761",
+      "data_quality": "scraped",
+      "quality_score": 27,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:57.477101"
+    },
+    {
+      "id": "pradhan-mantri-awas-yojana-urban-pmay-u",
+      "name": "Pradhan Mantri Awas Yojana (Urban)-PMAY (U)",
+      "description": "Scheme from PMAY Urban",
+      "category": "Housing",
+      "ministry": "Ministry of Housing",
+      "state": "Central",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "housing"
+      ],
+      "apply_link": "https://pmaymis.gov.in",
+      "source_url": "https://pmaymis.gov.in",
+      "scraped_at": "2026-03-28T10:19:35.197907",
+      "data_quality": "scraped",
+      "quality_score": 27,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:57.677357"
+    },
+    {
+      "id": "integrated-teacher-training-programme-elementary-l",
+      "name": "Integrated Teacher Training Programme (Elementary level)",
+      "description": "Scheme from Samagra Shiksha",
+      "category": "Education",
+      "ministry": "Ministry of Education",
+      "state": "Central",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "education"
+      ],
+      "apply_link": "https://samagra.education.gov.in",
+      "source_url": "https://samagra.education.gov.in",
+      "scraped_at": "2026-03-28T10:19:48.548256",
+      "data_quality": "scraped",
+      "quality_score": 27,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:57.877716"
+    },
+    {
+      "id": "portals-helplines",
+      "name": "Portals / Helplines",
+      "description": "Scheme from UGC Fellowships",
+      "category": "General",
+      "ministry": "UGC",
+      "state": "Central",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "general"
+      ],
+      "apply_link": "https://www.ugc.gov.in",
+      "source_url": "https://www.ugc.gov.in",
+      "scraped_at": "2026-03-28T10:19:50.360514",
+      "data_quality": "scraped",
+      "quality_score": 27,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:58.077940"
+    },
+    {
+      "id": "general-information-on-pmuy-scheme",
+      "name": "General Information on PMUY Scheme",
+      "description": "Scheme from Ujjwala Yojana",
+      "category": "Social Welfare",
+      "ministry": "Ministry of Petroleum",
+      "state": "Central",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "social welfare"
+      ],
+      "apply_link": "https://pmuy.gov.in",
+      "source_url": "https://pmuy.gov.in",
+      "scraped_at": "2026-03-28T10:19:54.865767",
+      "data_quality": "scraped",
+      "quality_score": 27,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:58.278291"
+    },
+    {
+      "id": "commissioner-secretary",
+      "name": "Commissioner & Secretary",
+      "description": "Scheme from Haryana WCD Schemes",
+      "category": "General",
+      "ministry": "Haryana",
+      "state": "Central",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "general"
+      ],
+      "apply_link": "https://wcdhry.gov.in",
+      "source_url": "https://wcdhry.gov.in",
+      "scraped_at": "2026-03-28T10:20:03.229612",
+      "data_quality": "scraped",
+      "quality_score": 27,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:58.478519"
+    },
+    {
+      "id": "schemes-for-women",
+      "name": "Schemes for Women",
+      "description": "Scheme from Haryana WCD Schemes",
+      "category": "Women & Child",
+      "ministry": "Haryana",
+      "state": "Central",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "women & child"
+      ],
+      "apply_link": "https://wcdhry.gov.in",
+      "source_url": "https://wcdhry.gov.in",
+      "scraped_at": "2026-03-28T10:20:03.229957",
+      "data_quality": "scraped",
+      "quality_score": 27,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:58.678845"
+    },
+    {
+      "id": "champions-portal",
+      "name": "CHAMPIONS Portal",
+      "description": "Scheme from MSME Schemes",
+      "category": "General",
+      "ministry": "Ministry of MSME",
+      "state": "Central",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "general"
+      ],
+      "apply_link": "https://msme.gov.in",
+      "source_url": "https://msme.gov.in",
+      "scraped_at": "2026-03-28T10:20:55.043536",
+      "data_quality": "scraped",
+      "quality_score": 27,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:58.879064"
+    },
+    {
+      "id": "schemes-and-policies",
+      "name": "Schemes and Policies",
+      "description": "Scheme from Startup India",
+      "category": "Social Welfare",
+      "ministry": "DPIIT",
+      "state": "Central",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "social welfare"
+      ],
+      "apply_link": "https://www.startupindia.gov.in",
+      "source_url": "https://www.startupindia.gov.in",
+      "scraped_at": "2026-03-28T10:21:00.424515",
+      "data_quality": "scraped",
+      "quality_score": 27,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:59.079441"
+    },
+    {
+      "id": "plan-scheme-on-end-to-end-computerization-of-tpds",
+      "name": "Plan scheme on End-to-End computerization of TPDS operations - extension of the scheme by one year up to 31-03-2020.",
+      "description": "Scheme from NFSA Ration",
+      "category": "Social Welfare",
+      "ministry": "Ministry of Food",
+      "state": "Central",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "social welfare"
+      ],
+      "apply_link": "https://nfsa.gov.in",
+      "source_url": "https://nfsa.gov.in",
+      "scraped_at": "2026-03-28T10:22:45.027881",
+      "data_quality": "scraped",
+      "quality_score": 27,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:59.279814"
+    },
+    {
+      "id": "the-completion-of-records-of-foodgrains-distributi",
+      "name": "The Completion of records of foodgrains distribution on Annavitran portal.",
+      "description": "Scheme from NFSA Ration",
+      "category": "Social Welfare",
+      "ministry": "Ministry of Food",
+      "state": "Central",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "social welfare"
+      ],
+      "apply_link": "https://nfsa.gov.in",
+      "source_url": "https://nfsa.gov.in",
+      "scraped_at": "2026-03-28T10:22:45.027968",
+      "data_quality": "scraped",
+      "quality_score": 27,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:59.480168"
+    },
+    {
+      "id": "schemes-of-the-government-of-assam",
+      "name": "Schemes of the Government of Assam",
+      "description": "Scheme from Assam Schemes",
+      "category": "Social Welfare",
+      "ministry": "Assam Government",
+      "state": "Assam",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "social welfare"
+      ],
+      "apply_link": "https://assam.gov.in",
+      "source_url": "https://assam.gov.in",
+      "scraped_at": "2026-03-28T10:25:43.548490",
+      "data_quality": "scraped",
+      "quality_score": 27,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:59.680331"
+    },
+    {
+      "id": "assam-state-portal",
+      "name": "Assam State Portal",
+      "description": "Scheme from Assam Schemes",
+      "category": "Social Welfare",
+      "ministry": "Assam Government",
+      "state": "Assam",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "social welfare"
+      ],
+      "apply_link": "https://assam.gov.in",
+      "source_url": "https://assam.gov.in",
+      "scraped_at": "2026-03-28T10:25:43.548709",
+      "data_quality": "scraped",
+      "quality_score": 27,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:26:59.880532"
+    },
+    {
+      "id": "pm-fasal-bima-yojana",
+      "name": "PM Fasal Bima Yojana",
+      "description": "Government portal for India — Ministry of Agriculture",
+      "category": "Insurance",
+      "ministry": "Ministry of Agriculture",
+      "state": "Central",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "insurance"
+      ],
+      "apply_link": "https://pmfby.gov.in",
+      "source_url": "https://pmfby.gov.in",
+      "scraped_at": "2026-03-28T10:18:59.671280",
+      "data_quality": "portal_only",
+      "quality_score": 40,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:00.080719"
+    },
+    {
+      "id": "jan-aushadhi",
+      "name": "Jan Aushadhi",
+      "description": "Government portal for India — Ministry of Chemicals",
+      "category": "General",
+      "ministry": "Ministry of Chemicals",
+      "state": "Central",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "general"
+      ],
+      "apply_link": "https://janaushadhi.gov.in",
+      "source_url": "https://janaushadhi.gov.in",
+      "scraped_at": "2026-03-28T10:19:30.581556",
+      "data_quality": "portal_only",
+      "quality_score": 40,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:00.281108"
+    },
+    {
+      "id": "rural-housing",
+      "name": "Rural Housing",
+      "description": "Government portal for India — Ministry of Rural Development",
+      "category": "Housing",
+      "ministry": "Ministry of Rural Development",
+      "state": "Central",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "housing"
+      ],
+      "apply_link": "https://rhreporting.nic.in",
+      "source_url": "https://rhreporting.nic.in",
+      "scraped_at": "2026-03-28T10:19:39.465115",
+      "data_quality": "portal_only",
+      "quality_score": 40,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:00.481361"
+    },
+    {
+      "id": "nsp-scholarships",
+      "name": "NSP Scholarships",
+      "description": "Government portal for India — Ministry of Education",
+      "category": "Education",
+      "ministry": "Ministry of Education",
+      "state": "Central",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "education"
+      ],
+      "apply_link": "https://scholarships.gov.in",
+      "source_url": "https://scholarships.gov.in",
+      "scraped_at": "2026-03-28T10:19:41.466740",
+      "data_quality": "portal_only",
+      "quality_score": 40,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:00.681617"
+    },
+    {
+      "id": "skill-india-schemes",
+      "name": "Skill India Schemes",
+      "description": "Government portal for India — Ministry of Skill Development",
+      "category": "Social Welfare",
+      "ministry": "Ministry of Skill Development",
+      "state": "Central",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "social welfare"
+      ],
+      "apply_link": "https://msde.gov.in",
+      "source_url": "https://msde.gov.in",
+      "scraped_at": "2026-03-28T10:20:27.189484",
+      "data_quality": "portal_only",
+      "quality_score": 40,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:00.881842"
+    },
+    {
+      "id": "social-justice-schemes",
+      "name": "Social Justice Schemes",
+      "description": "Government portal for India — Ministry of Social Justice",
+      "category": "Social Welfare",
+      "ministry": "Ministry of Social Justice",
+      "state": "Central",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "social welfare"
+      ],
+      "apply_link": "https://socialjustice.gov.in",
+      "source_url": "https://socialjustice.gov.in",
+      "scraped_at": "2026-03-28T10:20:32.553021",
+      "data_quality": "portal_only",
+      "quality_score": 40,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:01.082185"
+    },
+    {
+      "id": "minority-affairs-schemes",
+      "name": "Minority Affairs Schemes",
+      "description": "Government portal for India — Ministry of Minority Affairs",
+      "category": "Social Welfare",
+      "ministry": "Ministry of Minority Affairs",
+      "state": "Central",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "social welfare"
+      ],
+      "apply_link": "https://minorityaffairs.gov.in",
+      "source_url": "https://minorityaffairs.gov.in",
+      "scraped_at": "2026-03-28T10:20:41.005055",
+      "data_quality": "portal_only",
+      "quality_score": 40,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:01.282437"
+    },
+    {
+      "id": "disability-welfare",
+      "name": "Disability Welfare",
+      "description": "Government portal for India — Ministry of Social Justice",
+      "category": "Digital & Tech",
+      "ministry": "Ministry of Social Justice",
+      "state": "Central",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "digital & tech"
+      ],
+      "apply_link": "https://disabilityaffairs.gov.in",
+      "source_url": "https://disabilityaffairs.gov.in",
+      "scraped_at": "2026-03-28T10:20:50.788080",
+      "data_quality": "portal_only",
+      "quality_score": 40,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:01.482820"
+    },
+    {
+      "id": "environment-schemes",
+      "name": "Environment Schemes",
+      "description": "Government portal for India — Ministry of Environment",
+      "category": "Social Welfare",
+      "ministry": "Ministry of Environment",
+      "state": "Central",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "social welfare"
+      ],
+      "apply_link": "https://moef.gov.in",
+      "source_url": "https://moef.gov.in",
+      "scraped_at": "2026-03-28T10:23:17.781403",
+      "data_quality": "portal_only",
+      "quality_score": 40,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:01.683001"
+    },
+    {
+      "id": "mahadbt-schemes",
+      "name": "MahaDbt Schemes",
+      "description": "Government portal for Maharashtra — Maharashtra Government",
+      "category": "Social Welfare",
+      "ministry": "Maharashtra Government",
+      "state": "Maharashtra",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "social welfare"
+      ],
+      "apply_link": "https://mahadbt.maharashtra.gov.in",
+      "source_url": "https://mahadbt.maharashtra.gov.in",
+      "scraped_at": "2026-03-28T10:23:28.891619",
+      "data_quality": "portal_only",
+      "quality_score": 40,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:01.883165"
+    },
+    {
+      "id": "aaple-sarkar-portal",
+      "name": "Aaple Sarkar Portal",
+      "description": "Government portal for Maharashtra — Maharashtra Government",
+      "category": "General",
+      "ministry": "Maharashtra Government",
+      "state": "Maharashtra",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "general"
+      ],
+      "apply_link": "https://aaplesarkar.mahaonline.gov.in",
+      "source_url": "https://aaplesarkar.mahaonline.gov.in",
+      "scraped_at": "2026-03-28T10:23:31.423696",
+      "data_quality": "portal_only",
+      "quality_score": 40,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:02.083356"
+    },
+    {
+      "id": "social-justice-mh",
+      "name": "Social Justice MH",
+      "description": "Government portal for Maharashtra — Maharashtra Government",
+      "category": "Social Welfare",
+      "ministry": "Maharashtra Government",
+      "state": "Maharashtra",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "social welfare"
+      ],
+      "apply_link": "https://sjsa.maharashtra.gov.in",
+      "source_url": "https://sjsa.maharashtra.gov.in",
+      "scraped_at": "2026-03-28T10:23:34.635127",
+      "data_quality": "portal_only",
+      "quality_score": 40,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:02.283582"
+    },
+    {
+      "id": "women-child-mh",
+      "name": "Women & Child MH",
+      "description": "Government portal for Maharashtra — Maharashtra Government",
+      "category": "Women & Child",
+      "ministry": "Maharashtra Government",
+      "state": "Maharashtra",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "women & child"
+      ],
+      "apply_link": "https://womenchild.maharashtra.gov.in",
+      "source_url": "https://womenchild.maharashtra.gov.in",
+      "scraped_at": "2026-03-28T10:23:35.747467",
+      "data_quality": "portal_only",
+      "quality_score": 40,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:02.483741"
+    },
+    {
+      "id": "tribal-development-mh",
+      "name": "Tribal Development MH",
+      "description": "Government portal for Maharashtra — Maharashtra Government",
+      "category": "Social Welfare",
+      "ministry": "Maharashtra Government",
+      "state": "Maharashtra",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "social welfare"
+      ],
+      "apply_link": "https://tribal.maharashtra.gov.in",
+      "source_url": "https://tribal.maharashtra.gov.in",
+      "scraped_at": "2026-03-28T10:23:37.770103",
+      "data_quality": "portal_only",
+      "quality_score": 40,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:02.684144"
+    },
+    {
+      "id": "ladki-bahin-scheme",
+      "name": "Ladki Bahin Scheme",
+      "description": "Government portal for Maharashtra — Maharashtra Government",
+      "category": "Social Welfare",
+      "ministry": "Maharashtra Government",
+      "state": "Maharashtra",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "social welfare"
+      ],
+      "apply_link": "https://ladakibahin.maharashtra.gov.in",
+      "source_url": "https://ladakibahin.maharashtra.gov.in",
+      "scraped_at": "2026-03-28T10:23:40.070017",
+      "data_quality": "portal_only",
+      "quality_score": 40,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:02.884505"
+    },
+    {
+      "id": "mjpjay-health-scheme",
+      "name": "MJPJAY Health Scheme",
+      "description": "Government portal for Maharashtra — Maharashtra Government",
+      "category": "Health",
+      "ministry": "Maharashtra Government",
+      "state": "Maharashtra",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "health"
+      ],
+      "apply_link": "https://www.jeevandayee.gov.in",
+      "source_url": "https://www.jeevandayee.gov.in",
+      "scraped_at": "2026-03-28T10:23:41.202924",
+      "data_quality": "portal_only",
+      "quality_score": 40,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:03.084764"
+    },
+    {
+      "id": "pocra-agriculture",
+      "name": "PoCRA Agriculture",
+      "description": "Government portal for Maharashtra — Maharashtra Government",
+      "category": "Agriculture",
+      "ministry": "Maharashtra Government",
+      "state": "Maharashtra",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "agriculture"
+      ],
+      "apply_link": "https://mahapocra.gov.in",
+      "source_url": "https://mahapocra.gov.in",
+      "scraped_at": "2026-03-28T10:23:42.894162",
+      "data_quality": "portal_only",
+      "quality_score": 40,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:03.284942"
+    },
+    {
+      "id": "karnataka-schemes",
+      "name": "Karnataka Schemes",
+      "description": "Government portal for Karnataka — Karnataka Government",
+      "category": "Social Welfare",
+      "ministry": "Karnataka Government",
+      "state": "Karnataka",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "social welfare"
+      ],
+      "apply_link": "https://karnataka.gov.in",
+      "source_url": "https://karnataka.gov.in",
+      "scraped_at": "2026-03-28T10:23:46.663965",
+      "data_quality": "portal_only",
+      "quality_score": 40,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:03.485292"
+    },
+    {
+      "id": "andhra-pradesh-schemes",
+      "name": "Andhra Pradesh Schemes",
+      "description": "Government portal for Andhra Pradesh — Andhra Pradesh Government",
+      "category": "Social Welfare",
+      "ministry": "Andhra Pradesh Government",
+      "state": "Andhra Pradesh",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "social welfare"
+      ],
+      "apply_link": "https://ap.gov.in",
+      "source_url": "https://ap.gov.in",
+      "scraped_at": "2026-03-28T10:23:47.665348",
+      "data_quality": "portal_only",
+      "quality_score": 40,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:03.685543"
+    },
+    {
+      "id": "telangana-schemes",
+      "name": "Telangana Schemes",
+      "description": "Government portal for Telangana — Telangana Government",
+      "category": "Social Welfare",
+      "ministry": "Telangana Government",
+      "state": "Telangana",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "social welfare"
+      ],
+      "apply_link": "https://telangana.gov.in",
+      "source_url": "https://telangana.gov.in",
+      "scraped_at": "2026-03-28T10:24:00.042780",
+      "data_quality": "portal_only",
+      "quality_score": 40,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:03.885729"
+    },
+    {
+      "id": "rajasthan-schemes",
+      "name": "Rajasthan Schemes",
+      "description": "Government portal for Rajasthan — Rajasthan Government",
+      "category": "Social Welfare",
+      "ministry": "Rajasthan Government",
+      "state": "Rajasthan",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "social welfare"
+      ],
+      "apply_link": "https://rajasthan.gov.in",
+      "source_url": "https://rajasthan.gov.in",
+      "scraped_at": "2026-03-28T10:24:48.393247",
+      "data_quality": "portal_only",
+      "quality_score": 40,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:04.086093"
+    },
+    {
+      "id": "uttar-pradesh-schemes",
+      "name": "Uttar Pradesh Schemes",
+      "description": "Government portal for Uttar Pradesh — Uttar Pradesh Government",
+      "category": "Social Welfare",
+      "ministry": "Uttar Pradesh Government",
+      "state": "Uttar Pradesh",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "social welfare"
+      ],
+      "apply_link": "https://up.gov.in",
+      "source_url": "https://up.gov.in",
+      "scraped_at": "2026-03-28T10:25:05.539429",
+      "data_quality": "portal_only",
+      "quality_score": 40,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:04.286444"
+    },
+    {
+      "id": "west-bengal-schemes",
+      "name": "West Bengal Schemes",
+      "description": "Government portal for West Bengal — West Bengal Government",
+      "category": "Social Welfare",
+      "ministry": "West Bengal Government",
+      "state": "West Bengal",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "social welfare"
+      ],
+      "apply_link": "https://wb.gov.in",
+      "source_url": "https://wb.gov.in",
+      "scraped_at": "2026-03-28T10:25:08.675089",
+      "data_quality": "portal_only",
+      "quality_score": 40,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:04.486810"
+    },
+    {
+      "id": "himachal-pradesh-schemes",
+      "name": "Himachal Pradesh Schemes",
+      "description": "Government portal for Himachal Pradesh — Himachal Pradesh Government",
+      "category": "Social Welfare",
+      "ministry": "Himachal Pradesh Government",
+      "state": "Himachal Pradesh",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "social welfare"
+      ],
+      "apply_link": "https://himachal.gov.in",
+      "source_url": "https://himachal.gov.in",
+      "scraped_at": "2026-03-28T10:25:31.021537",
+      "data_quality": "portal_only",
+      "quality_score": 40,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:04.687166"
+    },
+    {
+      "id": "nabard-schemes",
+      "name": "NABARD Schemes",
+      "description": "Government portal for India — NABARD",
+      "category": "Social Welfare",
+      "ministry": "NABARD",
+      "state": "Central",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "social welfare"
+      ],
+      "apply_link": "https://www.nabard.org",
+      "source_url": "https://www.nabard.org",
+      "scraped_at": "2026-03-28T10:19:21.631098",
+      "data_quality": "portal_only",
+      "quality_score": 25,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:04.887330"
+    },
+    {
+      "id": "jan-suraksha-schemes",
+      "name": "Jan Suraksha Schemes",
+      "description": "Government portal for India — Ministry of Finance",
+      "category": "Social Welfare",
+      "ministry": "Ministry of Finance",
+      "state": "Central",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "social welfare"
+      ],
+      "apply_link": "https://www.jansuraksha.gov.in",
+      "source_url": "https://www.jansuraksha.gov.in",
+      "scraped_at": "2026-03-28T10:20:08.958847",
+      "data_quality": "portal_only",
+      "quality_score": 25,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:05.087586"
+    },
+    {
+      "id": "atal-pension-yojana",
+      "name": "Atal Pension Yojana",
+      "description": "Government portal for India — Ministry of Finance",
+      "category": "Social Welfare",
+      "ministry": "Ministry of Finance",
+      "state": "Central",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "social welfare"
+      ],
+      "apply_link": "https://www.india.gov.in/spotlight/atal-pension-yojana",
+      "source_url": "https://www.india.gov.in/spotlight/atal-pension-yojana",
+      "scraped_at": "2026-03-28T10:20:11.810715",
+      "data_quality": "portal_only",
+      "quality_score": 25,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:05.287947"
+    },
+    {
+      "id": "kvic-pmegp",
+      "name": "KVIC / PMEGP",
+      "description": "Government portal for India — Ministry of MSME",
+      "category": "Business & Finance",
+      "ministry": "Ministry of MSME",
+      "state": "Central",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "business & finance"
+      ],
+      "apply_link": "https://www.kviconline.gov.in",
+      "source_url": "https://www.kviconline.gov.in",
+      "scraped_at": "2026-03-28T10:21:03.471596",
+      "data_quality": "portal_only",
+      "quality_score": 25,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:05.488323"
+    },
+    {
+      "id": "nsic-schemes",
+      "name": "NSIC Schemes",
+      "description": "Government portal for India — Ministry of MSME",
+      "category": "Social Welfare",
+      "ministry": "Ministry of MSME",
+      "state": "Central",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "social welfare"
+      ],
+      "apply_link": "https://nsic.co.in",
+      "source_url": "https://nsic.co.in",
+      "scraped_at": "2026-03-28T10:21:06.525281",
+      "data_quality": "portal_only",
+      "quality_score": 25,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:05.688692"
+    },
+    {
+      "id": "dfpd-food-schemes",
+      "name": "DFPD Food Schemes",
+      "description": "Government portal for India — Ministry of Food",
+      "category": "Social Welfare",
+      "ministry": "Ministry of Food",
+      "state": "Central",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "social welfare"
+      ],
+      "apply_link": "https://dfpd.gov.in",
+      "source_url": "https://dfpd.gov.in",
+      "scraped_at": "2026-03-28T10:21:09.406222",
+      "data_quality": "portal_only",
+      "quality_score": 25,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:05.889058"
+    },
+    {
+      "id": "digital-india-schemes",
+      "name": "Digital India Schemes",
+      "description": "Government portal for India — MeitY",
+      "category": "Social Welfare",
+      "ministry": "MeitY",
+      "state": "Central",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "social welfare"
+      ],
+      "apply_link": "https://digitalindia.gov.in",
+      "source_url": "https://digitalindia.gov.in",
+      "scraped_at": "2026-03-28T10:22:53.112255",
+      "data_quality": "portal_only",
+      "quality_score": 25,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:06.089418"
+    },
+    {
+      "id": "meity-schemes",
+      "name": "MeitY Schemes",
+      "description": "Government portal for India — MeitY",
+      "category": "Social Welfare",
+      "ministry": "MeitY",
+      "state": "Central",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "social welfare"
+      ],
+      "apply_link": "https://meity.gov.in",
+      "source_url": "https://meity.gov.in",
+      "scraped_at": "2026-03-28T10:22:55.065343",
+      "data_quality": "portal_only",
+      "quality_score": 25,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:06.289634"
+    },
+    {
+      "id": "dar-pg-schemes",
+      "name": "DAR&PG Schemes",
+      "description": "Government portal for India — DARPG",
+      "category": "Social Welfare",
+      "ministry": "DARPG",
+      "state": "Central",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "social welfare"
+      ],
+      "apply_link": "https://darpg.gov.in",
+      "source_url": "https://darpg.gov.in",
+      "scraped_at": "2026-03-28T10:23:06.279782",
+      "data_quality": "portal_only",
+      "quality_score": 25,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:06.490033"
+    },
+    {
+      "id": "renewable-energy-schemes",
+      "name": "Renewable Energy Schemes",
+      "description": "Government portal for India — Ministry of New & RE",
+      "category": "Social Welfare",
+      "ministry": "Ministry of New & RE",
+      "state": "Central",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "social welfare"
+      ],
+      "apply_link": "https://mnre.gov.in",
+      "source_url": "https://mnre.gov.in",
+      "scraped_at": "2026-03-28T10:23:09.983485",
+      "data_quality": "portal_only",
+      "quality_score": 25,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:06.690357"
+    },
+    {
+      "id": "pm-kusum-solar",
+      "name": "PM KUSUM Solar",
+      "description": "Government portal for India — Ministry of New & RE",
+      "category": "Environment",
+      "ministry": "Ministry of New & RE",
+      "state": "Central",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "environment"
+      ],
+      "apply_link": "https://pmkusum.mnre.gov.in",
+      "source_url": "https://pmkusum.mnre.gov.in",
+      "scraped_at": "2026-03-28T10:23:12.051692",
+      "data_quality": "portal_only",
+      "quality_score": 25,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:06.890562"
+    },
+    {
+      "id": "kerala-schemes",
+      "name": "Kerala Schemes",
+      "description": "Government portal for Kerala — Kerala Government",
+      "category": "Social Welfare",
+      "ministry": "Kerala Government",
+      "state": "Kerala",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "social welfare"
+      ],
+      "apply_link": "https://kerala.gov.in",
+      "source_url": "https://kerala.gov.in",
+      "scraped_at": "2026-03-28T10:24:01.219943",
+      "data_quality": "portal_only",
+      "quality_score": 25,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:07.090894"
+    },
+    {
+      "id": "odisha-schemes",
+      "name": "Odisha Schemes",
+      "description": "Government portal for Odisha — Odisha Government",
+      "category": "Social Welfare",
+      "ministry": "Odisha Government",
+      "state": "Odisha",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "social welfare"
+      ],
+      "apply_link": "https://odisha.gov.in",
+      "source_url": "https://odisha.gov.in",
+      "scraped_at": "2026-03-28T10:25:15.111061",
+      "data_quality": "portal_only",
+      "quality_score": 25,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:07.291246"
+    },
+    {
+      "id": "haryana-schemes",
+      "name": "Haryana Schemes",
+      "description": "Government portal for Haryana — Haryana Government",
+      "category": "Social Welfare",
+      "ministry": "Haryana Government",
+      "state": "Haryana",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "social welfare"
+      ],
+      "apply_link": "https://haryana.gov.in",
+      "source_url": "https://haryana.gov.in",
+      "scraped_at": "2026-03-28T10:25:21.197497",
+      "data_quality": "portal_only",
+      "quality_score": 25,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:07.491498"
+    },
+    {
+      "id": "manipur-schemes",
+      "name": "Manipur Schemes",
+      "description": "Government portal for Manipur — Manipur Government",
+      "category": "Social Welfare",
+      "ministry": "Manipur Government",
+      "state": "Manipur",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "social welfare"
+      ],
+      "apply_link": "https://manipur.gov.in",
+      "source_url": "https://manipur.gov.in",
+      "scraped_at": "2026-03-28T10:25:57.257396",
+      "data_quality": "portal_only",
+      "quality_score": 25,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:07.691763"
+    },
+    {
+      "id": "delhi-schemes",
+      "name": "Delhi Schemes",
+      "description": "Government portal for Delhi — Delhi Government",
+      "category": "Social Welfare",
+      "ministry": "Delhi Government",
+      "state": "Delhi",
+      "eligibility_criteria": [],
+      "benefits": [],
+      "documents_required": [],
+      "tags": [
+        "social welfare"
+      ],
+      "apply_link": "https://delhi.gov.in",
+      "source_url": "https://delhi.gov.in",
+      "scraped_at": "2026-03-28T10:26:21.005997",
+      "data_quality": "portal_only",
+      "quality_score": 25,
+      "url_status": "unknown",
+      "url_checked_at": "2026-03-28T10:27:07.891929"
+    }
+  ]
+}

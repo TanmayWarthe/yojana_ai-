@@ -1,0 +1,199 @@
+2026-03-22 21:09:06,170 [INFO] ════════════════════════════════════════════════════════════
+2026-03-22 21:09:06,171 [INFO]   STARTING FULL SCRAPE RUN
+2026-03-22 21:09:06,171 [INFO]   Time: 2026-03-22 21:09:06
+2026-03-22 21:09:06,172 [INFO] ════════════════════════════════════════════════════════════
+2026-03-22 21:09:06,202 [INFO]   Existing DB: 237 schemes
+2026-03-22 21:09:06,203 [INFO] ▶  Loading hardcoded baseline (60 verified schemes)
+2026-03-22 21:09:06,203 [INFO]    ✓ Hardcoded baseline: 53 verified schemes
+2026-03-22 21:09:06,204 [INFO] ▶  myScheme.gov.in — official portal
+2026-03-22 21:09:06,751 [INFO]    Trying Next.js data extraction...
+2026-03-22 21:09:13,649 [INFO]    ✓ myScheme: 0 schemes
+2026-03-22 21:09:14,849 [INFO] ▶  scholarships.gov.in (NSP)
+2026-03-22 21:09:19,119 [INFO]    ✓ NSP: 15 scholarships
+2026-03-22 21:09:20,320 [INFO] ▶  Wikipedia — List of Government of India schemes
+2026-03-22 21:09:20,825 [INFO]    ✓ Wikipedia: 104 schemes
+2026-03-22 21:09:22,025 [INFO] ▶  Scraping 50+ ministry and state portals...
+2026-03-22 21:09:57,791 [INFO]    Progress: 10/84 portals (6 schemes so far)
+2026-03-22 21:10:20,000 [INFO]    Progress: 20/84 portals (13 schemes so far)
+2026-03-22 21:10:46,069 [INFO]    Progress: 30/84 portals (20 schemes so far)
+2026-03-22 21:11:14,587 [INFO]    Progress: 40/84 portals (30 schemes so far)
+2026-03-22 21:11:37,761 [INFO]    Progress: 50/84 portals (35 schemes so far)
+2026-03-22 21:14:08,493 [INFO]    ✓ Portals: 59 schemes from 84 portals
+2026-03-22 21:14:08,494 [INFO] ▶  india.gov.in — National Portal of India
+2026-03-22 21:14:15,884 [INFO]    ✓ india.gov.in: 0 schemes
+2026-03-22 21:14:17,084 [INFO] ▶  pib.gov.in — Press Information Bureau (new schemes)
+2026-03-22 21:14:21,723 [INFO]    ✓ PIB: 0 recent scheme announcements
+2026-03-22 21:14:21,723 [INFO] 
+  Merging 231 total records...
+2026-03-22 21:14:21,726 [INFO]   NEW: 8 new schemes added
+2026-03-22 21:14:21,727 [INFO]   REMOVED: 19 schemes no longer found
+2026-03-22 21:14:21,739 [INFO] 
+════════════════════════════════════════════════════════════
+2026-03-22 21:14:21,739 [INFO]   SCRAPE COMPLETE in 315.6s
+2026-03-22 21:14:21,739 [INFO]   Total unique schemes: 226
+2026-03-22 21:14:21,739 [INFO]   Saved to: data/schemes.json
+2026-03-22 21:14:21,739 [INFO] 
+  By source:
+2026-03-22 21:14:21,739 [INFO]     hardcoded_baseline                    53  ██████████████████████████
+2026-03-22 21:14:21,739 [INFO]     myscheme_gov_in                        0  
+2026-03-22 21:14:21,739 [INFO]     scholarships_gov_in                   15  ███████
+2026-03-22 21:14:21,739 [INFO]     wikipedia                            104  ██████████████████████████████
+2026-03-22 21:14:21,739 [INFO]     ministry_state_portals                59  █████████████████████████████
+2026-03-22 21:14:21,740 [INFO]     india_gov_in                           0  
+2026-03-22 21:14:21,740 [INFO]     pib_press_releases                     0  
+2026-03-22 21:14:21,740 [INFO] 
+  By category:
+2026-03-22 21:14:21,740 [INFO]     Social Welfare                  82 schemes
+2026-03-22 21:14:21,740 [INFO]     Education                       28 schemes
+2026-03-22 21:14:21,742 [INFO]     General                         26 schemes
+2026-03-22 21:14:21,743 [INFO]     Women & Child                   16 schemes
+2026-03-22 21:14:21,743 [INFO]     Agriculture                     15 schemes
+2026-03-22 21:14:21,743 [INFO]     Health                          15 schemes
+2026-03-22 21:14:21,743 [INFO]     Business & Finance              10 schemes
+2026-03-22 21:14:21,743 [INFO]     Digital & Tech                  10 schemes
+2026-03-22 21:14:21,744 [INFO]     Housing                          9 schemes
+2026-03-22 21:14:21,744 [INFO]     Employment                       9 schemes
+2026-03-22 21:14:21,744 [INFO]     Food Security                    3 schemes
+2026-03-22 21:14:21,744 [INFO]     Insurance                        2 schemes
+2026-03-22 21:14:21,744 [INFO]     Environment                      1 schemes
+2026-03-22 21:14:21,745 [INFO] 
+  Data quality:
+2026-03-22 21:14:21,745 [INFO]     verified              67
+2026-03-22 21:14:21,745 [INFO]     scraped               13
+2026-03-22 21:14:21,745 [INFO]     wikipedia            104
+2026-03-22 21:14:21,745 [INFO]     portal_only           42
+2026-03-22 21:14:21,745 [INFO] 
+  Next run: 2026-03-23T03:14:21
+2026-03-22 21:14:21,746 [INFO] ════════════════════════════════════════════════════════════
+2026-03-22 21:21:25,086 [INFO] ════════════════════════════════════════════════════════════
+2026-03-22 21:21:25,086 [INFO]   STARTING FULL SCRAPE RUN
+2026-03-22 21:21:25,087 [INFO]   Time: 2026-03-22 21:21:25
+2026-03-22 21:21:25,087 [INFO] ════════════════════════════════════════════════════════════
+2026-03-22 21:21:25,096 [INFO]   Existing DB: 244 schemes
+2026-03-22 21:21:25,097 [INFO] ▶  Loading hardcoded baseline (60 verified schemes)
+2026-03-22 21:21:25,097 [INFO]    ✓ Hardcoded baseline: 53 verified schemes
+2026-03-22 21:21:25,097 [INFO] ▶  myScheme.gov.in — official portal
+2026-03-22 21:21:25,470 [INFO]    Trying Next.js data extraction...
+2026-03-22 21:21:32,220 [INFO]    ✓ myScheme: 0 schemes
+2026-03-22 21:21:33,420 [INFO] ▶  scholarships.gov.in (NSP)
+2026-03-22 21:21:37,648 [INFO]    ✓ NSP: 15 scholarships
+2026-03-22 21:21:38,849 [INFO] ▶  Wikipedia — List of Government of India schemes
+2026-03-22 21:21:39,292 [INFO]    ✓ Wikipedia: 104 schemes
+2026-03-22 21:21:40,492 [INFO] ▶  Scraping 50+ ministry and state portals...
+2026-03-22 21:22:12,180 [INFO]    Progress: 10/84 portals (6 schemes so far)
+2026-03-22 21:22:28,504 [INFO]    Progress: 20/84 portals (13 schemes so far)
+2026-03-22 21:22:43,823 [INFO]    Progress: 30/84 portals (20 schemes so far)
+2026-03-22 21:23:09,377 [INFO]    Progress: 40/84 portals (30 schemes so far)
+2026-03-22 21:23:26,752 [INFO]    Progress: 50/84 portals (35 schemes so far)
+2026-03-22 21:25:41,948 [INFO]    ✓ Portals: 58 schemes from 84 portals
+2026-03-22 21:25:41,955 [INFO] ▶  india.gov.in — National Portal of India
+2026-03-22 21:25:49,197 [INFO]    ✓ india.gov.in: 0 schemes
+2026-03-22 21:25:50,397 [INFO] ▶  pib.gov.in — Press Information Bureau (new schemes)
+2026-03-22 21:25:54,087 [INFO]    ✓ PIB: 0 recent scheme announcements
+2026-03-22 21:25:54,087 [INFO] 
+  Merging 230 total records...
+2026-03-22 21:25:54,089 [INFO]   REMOVED: 19 schemes no longer found
+2026-03-22 21:25:54,098 [INFO] 
+════════════════════════════════════════════════════════════
+2026-03-22 21:25:54,098 [INFO]   SCRAPE COMPLETE in 269.0s
+2026-03-22 21:25:54,098 [INFO]   Total unique schemes: 225
+2026-03-22 21:25:54,098 [INFO]   Saved to: data/schemes.json
+2026-03-22 21:25:54,098 [INFO] 
+  By source:
+2026-03-22 21:25:54,098 [INFO]     hardcoded_baseline                    53  ██████████████████████████
+2026-03-22 21:25:54,099 [INFO]     myscheme_gov_in                        0  
+2026-03-22 21:25:54,099 [INFO]     scholarships_gov_in                   15  ███████
+2026-03-22 21:25:54,099 [INFO]     wikipedia                            104  ██████████████████████████████
+2026-03-22 21:25:54,099 [INFO]     ministry_state_portals                58  █████████████████████████████
+2026-03-22 21:25:54,099 [INFO]     india_gov_in                           0  
+2026-03-22 21:25:54,099 [INFO]     pib_press_releases                     0  
+2026-03-22 21:25:54,099 [INFO] 
+  By category:
+2026-03-22 21:25:54,099 [INFO]     Social Welfare                  81 schemes
+2026-03-22 21:25:54,099 [INFO]     Education                       28 schemes
+2026-03-22 21:25:54,099 [INFO]     General                         26 schemes
+2026-03-22 21:25:54,099 [INFO]     Women & Child                   16 schemes
+2026-03-22 21:25:54,099 [INFO]     Agriculture                     15 schemes
+2026-03-22 21:25:54,099 [INFO]     Health                          15 schemes
+2026-03-22 21:25:54,099 [INFO]     Business & Finance              10 schemes
+2026-03-22 21:25:54,099 [INFO]     Digital & Tech                  10 schemes
+2026-03-22 21:25:54,099 [INFO]     Housing                          9 schemes
+2026-03-22 21:25:54,100 [INFO]     Employment                       9 schemes
+2026-03-22 21:25:54,100 [INFO]     Food Security                    3 schemes
+2026-03-22 21:25:54,100 [INFO]     Insurance                        2 schemes
+2026-03-22 21:25:54,100 [INFO]     Environment                      1 schemes
+2026-03-22 21:25:54,100 [INFO] 
+  Data quality:
+2026-03-22 21:25:54,100 [INFO]     verified              67
+2026-03-22 21:25:54,100 [INFO]     scraped               13
+2026-03-22 21:25:54,100 [INFO]     wikipedia            104
+2026-03-22 21:25:54,100 [INFO]     portal_only           41
+2026-03-22 21:25:54,100 [INFO] 
+  Next run: 2026-03-23T03:25:54
+2026-03-22 21:25:54,100 [INFO] ════════════════════════════════════════════════════════════
+2026-03-28 10:18:24,591 [INFO] ════════════════════════════════════════════════════════════
+2026-03-28 10:18:24,592 [INFO]   STARTING FULL SCRAPE RUN
+2026-03-28 10:18:24,592 [INFO]   Time: 2026-03-28 10:18:24
+2026-03-28 10:18:24,592 [INFO] ════════════════════════════════════════════════════════════
+2026-03-28 10:18:24,593 [INFO] ▶  Loading hardcoded baseline (60 verified schemes)
+2026-03-28 10:18:24,593 [INFO]    ✓ Hardcoded baseline: 53 verified schemes
+2026-03-28 10:18:24,593 [INFO] ▶  myScheme.gov.in — official portal
+2026-03-28 10:18:25,687 [INFO]    Trying Next.js data extraction...
+2026-03-28 10:18:47,575 [INFO]    ✓ myScheme: 0 schemes
+2026-03-28 10:18:48,776 [INFO] ▶  scholarships.gov.in (NSP)
+2026-03-28 10:18:53,301 [INFO]    ✓ NSP: 15 scholarships
+2026-03-28 10:18:54,502 [INFO] ▶  Wikipedia — List of Government of India schemes
+2026-03-28 10:18:55,796 [INFO]    ✓ Wikipedia: 104 schemes
+2026-03-28 10:18:56,996 [INFO] ▶  Scraping 50+ ministry and state portals...
+2026-03-28 10:19:30,581 [INFO]    Progress: 10/84 portals (6 schemes so far)
+2026-03-28 10:19:54,869 [INFO]    Progress: 20/84 portals (13 schemes so far)
+2026-03-28 10:20:29,627 [INFO]    Progress: 30/84 portals (20 schemes so far)
+2026-03-28 10:22:45,061 [INFO]    Progress: 40/84 portals (30 schemes so far)
+2026-03-28 10:23:13,634 [INFO]    Progress: 50/84 portals (35 schemes so far)
+2026-03-28 10:26:21,606 [INFO]    ✓ Portals: 59 schemes from 84 portals
+2026-03-28 10:26:21,606 [INFO] ▶  india.gov.in — National Portal of India
+2026-03-28 10:26:30,098 [INFO]    ✓ india.gov.in: 0 schemes
+2026-03-28 10:26:31,299 [INFO] ▶  pib.gov.in — Press Information Bureau (new schemes)
+2026-03-28 10:26:44,018 [INFO]    ✓ PIB: 0 recent scheme announcements
+2026-03-28 10:26:44,018 [INFO] 
+  Merging 231 total records (+ 0 protected)...
+2026-03-28 10:26:44,023 [INFO]   Checking URL health...
+2026-03-28 10:27:08,092 [INFO]    URL health: 0 live · 0 blocked/ssl · 0 dead · 120 newly checked
+2026-03-28 10:27:08,095 [INFO]   NEW: 120 new schemes added
+2026-03-28 10:27:08,112 [INFO] 
+════════════════════════════════════════════════════════════
+2026-03-28 10:27:08,113 [INFO]   SCRAPE COMPLETE in 523.5s
+2026-03-28 10:27:08,113 [INFO]   Total unique schemes: 120
+2026-03-28 10:27:08,113 [INFO]   Saved to: data/schemes.json
+2026-03-28 10:27:08,113 [INFO] 
+  By source:
+2026-03-28 10:27:08,114 [INFO]     hardcoded_baseline                    53  ██████████████████████████
+2026-03-28 10:27:08,114 [INFO]     myscheme_gov_in                        0  
+2026-03-28 10:27:08,114 [INFO]     scholarships_gov_in                   15  ███████
+2026-03-28 10:27:08,114 [INFO]     wikipedia                            104  ██████████████████████████████
+2026-03-28 10:27:08,115 [INFO]     ministry_state_portals                59  █████████████████████████████
+2026-03-28 10:27:08,115 [INFO]     india_gov_in                           0  
+2026-03-28 10:27:08,115 [INFO]     pib_press_releases                     0  
+2026-03-28 10:27:08,115 [INFO] 
+  By category:
+2026-03-28 10:27:08,115 [INFO]     Social Welfare                  39 schemes
+2026-03-28 10:27:08,116 [INFO]     Education                       23 schemes
+2026-03-28 10:27:08,116 [INFO]     Health                          10 schemes
+2026-03-28 10:27:08,116 [INFO]     Agriculture                      9 schemes
+2026-03-28 10:27:08,116 [INFO]     Women & Child                    8 schemes
+2026-03-28 10:27:08,117 [INFO]     Business & Finance               7 schemes
+2026-03-28 10:27:08,117 [INFO]     Housing                          7 schemes
+2026-03-28 10:27:08,117 [INFO]     Employment                       5 schemes
+2026-03-28 10:27:08,117 [INFO]     General                          5 schemes
+2026-03-28 10:27:08,117 [INFO]     Digital & Tech                   4 schemes
+2026-03-28 10:27:08,118 [INFO]     Food Security                    1 schemes
+2026-03-28 10:27:08,118 [INFO]     Insurance                        1 schemes
+2026-03-28 10:27:08,118 [INFO]     Environment                      1 schemes
+2026-03-28 10:27:08,118 [INFO] 
+  Data quality:
+2026-03-28 10:27:08,118 [INFO]     verified              66
+2026-03-28 10:27:08,119 [INFO]     scraped               14
+2026-03-28 10:27:08,119 [INFO]     portal_only           40
+2026-03-28 10:27:08,119 [INFO] 
+  Next run: 2026-03-28T16:27:08
+2026-03-28 10:27:08,119 [INFO] ════════════════════════════════════════════════════════════
