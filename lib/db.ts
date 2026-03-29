@@ -9,11 +9,14 @@ import { join } from "path";
 import { mkdirSync } from "fs";
 import { randomBytes, scryptSync, timingSafeEqual, randomUUID } from "crypto";
 
-const DB_DIR  = join(process.cwd(), "data");
+const isVercel = process.env.VERCEL === "1";
+const DB_DIR  = isVercel ? "/tmp" : join(process.cwd(), "data");
 const DB_PATH = join(DB_DIR, "yojana.db");
 
-// Ensure /data folder exists
-mkdirSync(DB_DIR, { recursive: true });
+// Ensure /data folder exists if running locally
+if (!isVercel) {
+  mkdirSync(DB_DIR, { recursive: true });
+}
 
 const db = new Database(DB_PATH);
 
