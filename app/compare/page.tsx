@@ -121,22 +121,11 @@ export default function ComparePage() {
         }),
       });
 
-      if (!res.body) {
+      const data = await res.json();
+      if (data.reply) {
+        setVerdict(data.reply);
+      } else {
         setVerdict("Failed to get response");
-        setVerdictLoading(false);
-        return;
-      }
-
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let fullText = "";
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        const chunk = decoder.decode(value, { stream: true });
-        fullText += chunk;
-        setVerdict(fullText);
       }
     } catch (err) {
       console.error(err);
@@ -158,6 +147,23 @@ export default function ComparePage() {
       })
       .slice(0, 8);
   }, [searchQuery, allSchemes, list]);
+
+  function renderMarkdown(text: string) {
+    if (!text) return null;
+    return text.split(/\n/g).map((line, i) => {
+      const parts = line.split(/(\*\*.*?\*\*)/g);
+      return (
+        <span key={i}>
+          {parts.map((part, j) => 
+            part.startsWith("**") && part.endsWith("**") 
+              ? <strong key={j}>{part.slice(2, -2)}</strong> 
+              : <span key={j}>{part}</span>
+          )}
+          <br />
+        </span>
+      );
+    });
+  }
 
   return (
     <>
@@ -433,7 +439,7 @@ export default function ComparePage() {
                       lineHeight: 1.6,
                       color: "#1e293b",
                     }}>
-                      {verdict}
+                      {renderMarkdown(verdict)}
                     </div>
                   </div>
                 )}

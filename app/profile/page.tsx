@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import { ensureUserId } from "@/lib/user-id";
 
 const STATES_UT = [
   "Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Goa",
@@ -183,6 +184,7 @@ export default function ProfilePage(){
   const [errs,    setErrs]    = useState<Partial<Record<keyof PF,string>>>({});
 
   useEffect(()=>{
+    ensureUserId();
     fetch("/api/profile").then(r=>r.json()).then(d=>{
       if(d.profile){
         const p=d.profile; const det=p.details?JSON.parse(p.details):{}; 

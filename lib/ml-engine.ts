@@ -307,15 +307,16 @@ export async function mlSearch(
       profileBonus += 0.25;
     }
 
-    // Final score
-    const rawScore = Math.min(1.0, (similarity * 0.5) + (profileBonus * 0.5)) * urlWeight;
+    // Final score - boost profileBonus impact instead of halving it
+    let rawScore = (similarity * 0.4) + profileBonus;
+    rawScore = Math.min(1.0, rawScore) * urlWeight;
 
     // Skip very weak matches
-    if (rawScore < 0.18) continue;
+    if (rawScore < 0.25) continue;
 
-    // Spread across 30-98% — wider range now
-    const spread = Math.max(0, Math.min(1, (rawScore - 0.18) / (0.82 - 0.18)));
-    const confidence = Math.min(98, Math.max(30, Math.floor(30 + spread * 68)));
+    // Spread across 40-98%
+    const spread = Math.max(0, Math.min(1, (rawScore - 0.25) / (0.75 - 0.25)));
+    const confidence = Math.min(98, Math.max(40, Math.floor(40 + spread * 58)));
 
     scored.push({
       scheme,

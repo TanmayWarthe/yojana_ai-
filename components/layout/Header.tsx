@@ -10,6 +10,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
+import { ensureUserId } from "@/lib/user-id";
+import AuthModal from "@/components/auth/AuthModal";
 
 const BASE_NAV_LINKS = [
   { href: "/",          label: "🏠 Home" },
@@ -33,16 +35,21 @@ interface ProfileSnap {
   state: string;
 }
 
+interface AuthUser {
+  name: string;
+  email: string;
+}
+
 export default function Header({ totalSchemes = 219, lastUpdated }: HeaderProps) {
   const pathname = usePathname();
   const [menuOpen,  setMenuOpen]  = useState(false);
   const [profile,   setProfile]   = useState<ProfileSnap | null>(null);
+  const [authUser,  setAuthUser]  = useState<AuthUser | null>(null);
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
 
   const navLinks = [
     ...BASE_NAV_LINKS,
-    ...(profile
-      ? [{ href: "/my-profile", label: "👤 My Profile" }]
-      : [{ href: "/profile", label: "📝 Profile Form" }]),
   ];
 
   function applyProfile(p: { name?: string; occupation?: string; state?: string } | null) {
@@ -57,31 +64,52 @@ export default function Header({ totalSchemes = 219, lastUpdated }: HeaderProps)
     }
   }
 
-  // ── Load profile badge data ──────────────────────────────────────────────
+  // ── Load profile and auth identity ──────────────────────────────────────────────
   useEffect(() => {
+    ensureUserId();
+    
+    // Attempt local cache load for snappy render
     try {
-      const cached = localStorage.getItem("yojana_profile_cache");
-      if (cached) applyProfile(JSON.parse(cached));
+      const cachedProf = localStorage.getItem("yojana_profile_cache");
+      if (cachedProf) applyProfile(JSON.parse(cachedProf));
+      
+      const cachedAuth = localStorage.getItem("yojana_auth_cache");
+      if (cachedAuth) setAuthUser(JSON.parse(cachedAuth));
     } catch {}
 
-    fetch("/api/profile")
-      .then((r) => r.json())
-      .then((d) => {
-        applyProfile(d.profile || null);
-        if (d.profile) {
-          localStorage.setItem("yojana_profile_cache", JSON.stringify(d.profile));
-        }
-      })
-      .catch(() => {});
+    function fetchState() {
+      // 1. Fetch Demographic Profile
+      fetch("/api/profile")
+        .then((r) => r.json())
+        .then((d) => {
+          applyProfile(d.profile || null);
+          if (d.profile) localStorage.setItem("yojana_profile_cache", JSON.stringify(d.profile));
+          else localStorage.removeItem("yojana_profile_cache");
+        })
+        .catch(() => {});
+        
+      // 2. Fetch Auth Identity
+      fetch("/api/auth/me")
+        .then((r) => r.json())
+        .then((d) => {
+          if (d.authenticated && d.user) {
+            setAuthUser({ name: d.user.name, email: d.user.email });
+            localStorage.setItem("yojana_auth_cache", JSON.stringify({ name: d.user.name, email: d.user.email }));
+          } else {
+            setAuthUser(null);
+            localStorage.removeItem("yojana_auth_cache");
+          }
+        })
+        .catch(() => {});
+    }
 
-    const onProfileUpdated = (evt: Event) => {
-      const custom = evt as CustomEvent;
-      if (custom.detail) applyProfile(custom.detail);
-    };
+    fetchState();
 
-    window.addEventListener("yojana_profile_updated", onProfileUpdated as EventListener);
+    const onStateUpdated = () => fetchState();
+    window.addEventListener("yojana_profile_updated", onStateUpdated);
+    
     return () => {
-      window.removeEventListener("yojana_profile_updated", onProfileUpdated as EventListener);
+      window.removeEventListener("yojana_profile_updated", onStateUpdated);
     };
   }, [pathname]);
 
@@ -111,47 +139,101 @@ export default function Header({ totalSchemes = 219, lastUpdated }: HeaderProps)
         </div>
 
         {/* ── Profile Badge (top-right of header) ── */}
-        {profile ? (
-          <Link href="/my-profile" style={{
-            display: "flex", alignItems: "center", gap: 10,
-            background: "rgba(255,255,255,0.12)",
-            border: "1px solid rgba(255,255,255,0.25)",
-            borderRadius: 10, padding: "8px 14px",
-            textDecoration: "none", color: "#fff",
-            transition: "background 0.2s",
-            flexShrink: 0,
-          }}>
+        {authUser ? (
+          <div style={{ position: "relative" }} 
+               onMouseEnter={() => setProfileMenuOpen(true)}
+               onMouseLeave={() => setProfileMenuOpen(false)}>
             <div style={{
-              width: 34, height: 34, borderRadius: "50%",
-              background: "linear-gradient(135deg, #FF9933, #138808)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: 16, fontWeight: 800, flexShrink: 0,
+              display: "flex", alignItems: "center", gap: 10,
+              background: "rgba(255,255,255,0.12)",
+              border: "1px solid rgba(255,255,255,0.25)",
+              borderRadius: 10, padding: "8px 14px",
+              cursor: "pointer", color: "#fff",
+              transition: "background 0.2s",
+              flexShrink: 0,
             }}>
-              {profile.name.charAt(0).toUpperCase()}
-            </div>
-            <div>
-              <div style={{ fontSize: 13, fontWeight: 700, lineHeight: 1 }}>
-                {profile.name.split(" ")[0]}
+              <div style={{
+                width: 34, height: 34, borderRadius: "50%",
+                background: "linear-gradient(135deg, #FF9933, #138808)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 16, fontWeight: 800, flexShrink: 0,
+              }}>
+                {authUser.name.charAt(0).toUpperCase()}
               </div>
-              <div style={{ fontSize: 11, opacity: 0.8, marginTop: 2 }}>
-                {profile.occupation?.split(" ")[0]} · {profile.state?.split(" ")[0]}
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 700, lineHeight: 1 }}>
+                  {authUser.name.split(" ")[0]}
+                </div>
+                {profile && profile.occupation && profile.state ? (
+                  <div style={{ fontSize: 11, opacity: 0.8, marginTop: 2 }}>
+                    {profile.occupation.split(" ")[0]} · {profile.state.split(" ")[0]}
+                  </div>
+                ) : (
+                  <div style={{ fontSize: 11, opacity: 0.8, marginTop: 2 }}>
+                    {authUser.email.slice(0, 15)}...
+                  </div>
+                )}
               </div>
+              <div style={{ fontSize: 11, opacity: 0.6, marginLeft: 2 }}>▼</div>
             </div>
-            <div style={{ fontSize: 11, opacity: 0.6, marginLeft: 2 }}>✎</div>
-          </Link>
+
+            {profileMenuOpen && (
+              <div style={{
+                position: "absolute", top: "100%", right: 0, marginTop: 8,
+                background: "#ffffff", borderRadius: 8,
+                boxShadow: "0 10px 25px rgba(0,0,0,0.15)", minWidth: 160,
+                zIndex: 9999, overflow: "hidden"
+              }}>
+                <Link href="/my-profile" style={{
+                  display: "block", padding: "12px 16px", color: "#334155",
+                  textDecoration: "none", fontSize: 14, fontWeight: 500,
+                  borderBottom: "1px solid #f1f5f9"
+                }}>
+                  👤 Profile
+                </Link>
+                <button onClick={async () => {
+                  setProfileMenuOpen(false);
+                  await fetch("/api/auth/logout", { method: "POST" });
+                  localStorage.removeItem("yojana_profile_cache");
+                  localStorage.removeItem("yojana_auth_cache");
+                  applyProfile(null);
+                  setAuthUser(null);
+                  window.dispatchEvent(new Event("yojana_profile_updated"));
+                  window.location.href = "/";
+                }} style={{
+                  display: "block", width: "100%", textAlign: "left",
+                  padding: "12px 16px", color: "#ef4444", background: "none",
+                  border: "none", fontSize: 14, fontWeight: 500, cursor: "pointer"
+                }}>
+                  🚪 Sign Out
+                </button>
+              </div>
+            )}
+          </div>
         ) : (
-          <Link href="/profile" style={{
+          <button onClick={() => setAuthModalOpen(true)} style={{
             display: "flex", alignItems: "center", gap: 6,
-            background: "rgba(255,153,51,0.25)",
-            border: "1px solid rgba(255,153,51,0.5)",
-            borderRadius: 10, padding: "8px 14px",
-            textDecoration: "none", color: "#fff",
-            fontSize: 13, fontWeight: 600, flexShrink: 0,
+            background: "#1e824c", // Green matching the screenshot
+            border: "none",
+            borderRadius: 6, padding: "8px 18px",
+            color: "#fff", cursor: "pointer",
+            fontSize: 16, fontWeight: 600, flexShrink: 0,
+            transition: "opacity 0.2s"
           }}>
-            👤 Create Profile
-          </Link>
+            Sign In →
+          </button>
         )}
       </header>
+      
+      {authModalOpen && (
+        <AuthModal 
+          onClose={() => setAuthModalOpen(false)} 
+          onSuccess={() => {
+            setAuthModalOpen(false);
+            window.dispatchEvent(new Event("yojana_profile_updated"));
+          }} 
+        />
+      )}
 
       <div className="stats-bar">
         {[

@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import { ensureUserId } from "@/lib/user-id";
 
 type SavedProfile = {
   name: string;
@@ -35,6 +36,7 @@ export default function MyProfilePage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    ensureUserId();
     fetch("/api/profile")
       .then((r) => r.json())
       .then((d) => {

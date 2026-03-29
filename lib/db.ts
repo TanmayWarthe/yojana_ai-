@@ -7,6 +7,7 @@
 import Database from "better-sqlite3";
 import { join } from "path";
 import { mkdirSync } from "fs";
+import { randomBytes, scryptSync, timingSafeEqual, randomUUID } from "crypto";
 
 const DB_DIR  = join(process.cwd(), "data");
 const DB_PATH = join(DB_DIR, "yojana.db");
@@ -47,6 +48,18 @@ db.exec(`
 
   -- Migration: Add new columns if they don't exist (idempotent)
   PRAGMA table_info(profiles);
+`);
+
+// ─── Auth Schema (Users) ──────────────────────────────────────────────────────
+db.exec(`
+  CREATE TABLE IF NOT EXISTS users (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    phone TEXT NOT NULL,
+    password_hash TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+  );
 `);
 
 // Add new columns safely if they don't exist
@@ -124,18 +137,18 @@ export interface ProfileData {
 
 // ─── Queries ──────────────────────────────────────────────────────────────────
 
-const stmtGet = db.prepare<[], ProfileRow>(
-  `SELECT * FROM profiles WHERE id = 'default' LIMIT 1`
+const stmtGet = db.prepare<[string], ProfileRow>(
+  `SELECT * FROM profiles WHERE id = ? LIMIT 1`
 );
 
 const stmtUpsert = db.prepare<[
-  string, number, string, string, string, number, string, number, number, number,
+  string, string, number, string, string, string, number, string, number, number, number,
   string, number, string, string, number, number, number, string
 ]>(`
   INSERT INTO profiles 
     (id, name, age, gender, state, occupation, income, category, bpl, has_land, disabled, 
      marital_status, children_count, education, farmer_type, annual_ration_card, is_student, is_senior, details, updated_at)
-  VALUES ('default', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
   ON CONFLICT(id) DO UPDATE SET
     name               = excluded.name,
     age                = excluded.age,
@@ -158,13 +171,13 @@ const stmtUpsert = db.prepare<[
     updated_at         = datetime('now')
 `);
 
-const stmtDelete = db.prepare(`DELETE FROM profiles WHERE id = 'default'`);
+const stmtDelete = db.prepare<[string]>(`DELETE FROM profiles WHERE id = ?`);
 
 // ─── Exported helpers ─────────────────────────────────────────────────────────
 
 /** Returns the saved profile or null if none exists */
-export function getProfile(): ProfileData | null {
-  const row = stmtGet.get() as ProfileRow | undefined;
+export function getProfile(userId: string = "default"): ProfileData | null {
+  const row = stmtGet.get(userId) as ProfileRow | undefined;
   if (!row) return null;
   return {
     name:               row.name,
@@ -189,9 +202,10 @@ export function getProfile(): ProfileData | null {
 }
 
 /** Upserts the profile (insert or update) */
-export function saveProfile(p: ProfileData): void {
+export function saveProfile(p: ProfileData, userId: string = "default"): void {
   const details = JSON.stringify(p.details || {});
   stmtUpsert.run(
+    userId,
     p.name,
     p.age,
     p.gender,
@@ -214,8 +228,64 @@ export function saveProfile(p: ProfileData): void {
 }
 
 /** Deletes the saved profile */
-export function deleteProfile(): void {
-  stmtDelete.run();
+export function deleteProfile(userId: string = "default"): void {
+  stmtDelete.run(userId);
+}
+
+// ─── Auth Helpers ─────────────────────────────────────────────────────────────
+
+export interface UserRow {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  password_hash: string;
+}
+
+const stmtCreateUser = db.prepare<[string, string, string, string, string]>(
+  `INSERT INTO users (id, name, email, phone, password_hash) VALUES (?, ?, ?, ?, ?)`
+);
+
+const stmtGetUserByEmail = db.prepare<[string], UserRow>(
+  `SELECT * FROM users WHERE email = ? LIMIT 1`
+);
+
+export function hashPassword(password: string): string {
+  const salt = randomBytes(16).toString("hex");
+  const derivedKey = scryptSync(password, salt, 64).toString("hex");
+  return `${salt}:${derivedKey}`;
+}
+
+export function verifyPassword(password: string, hash: string): boolean {
+  try {
+    const [salt, key] = hash.split(":");
+    const derivedKey = scryptSync(password, salt, 64);
+    const keyBuffer = Buffer.from(key, "hex");
+    return timingSafeEqual(derivedKey, keyBuffer);
+  } catch {
+    return false;
+  }
+}
+
+export function createUser(name: string, email: string, phone: string, passwordRaw: string): UserRow {
+  const existing = stmtGetUserByEmail.get(email);
+  if (existing) {
+    throw new Error("Email already registered");
+  }
+
+  const id = randomUUID();
+  const passHash = hashPassword(passwordRaw);
+  
+  stmtCreateUser.run(id, name, email, phone, passHash);
+  
+  return { id, name, email, phone, password_hash: passHash };
+}
+
+export function authenticateUser(email: string, passwordRaw: string): UserRow | null {
+  const user = stmtGetUserByEmail.get(email);
+  if (!user) return null;
+  if (!verifyPassword(passwordRaw, user.password_hash)) return null;
+  return user;
 }
 
 export default db;

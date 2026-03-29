@@ -2,15 +2,21 @@
 const nextConfig = {
   reactStrictMode: true,
 
-  // Allow images from government domains
+  // ✅ Fix 1: Replace deprecated domains with remotePatterns
   images: {
-    domains: ["pmkisan.gov.in", "pmjay.gov.in", "scholarships.gov.in"],
+    remotePatterns: [
+      { protocol: "https", hostname: "pmkisan.gov.in" },
+      { protocol: "https", hostname: "pmjay.gov.in" },
+      { protocol: "https", hostname: "scholarships.gov.in" },
+    ],
   },
 
-  // Tell webpack NOT to bundle these — they run in Node.js only (API routes)
+  // ✅ Fix 2: Moved out of experimental to root level
+  serverExternalPackages: ["@xenova/transformers", "onnxruntime-node"],
+
+  // ✅ Fix 3: Keep webpack for server-side externals (still valid)
   webpack: (config, { isServer }) => {
     if (isServer) {
-      // Keep @xenova/transformers and onnxruntime as external — don't bundle native .node files
       config.externals = config.externals || [];
       config.externals.push(
         "@xenova/transformers",
@@ -21,10 +27,8 @@ const nextConfig = {
     return config;
   },
 
-  // Required for @xenova/transformers to work in API routes
-  experimental: {
-    serverComponentsExternalPackages: ["@xenova/transformers", "onnxruntime-node"],
-  },
+  // ✅ Fix 4: Empty turbopack config silences the webpack/Turbopack conflict warning
+  turbopack: {},
 };
 
 module.exports = nextConfig;

@@ -6,41 +6,86 @@ import { LANG_MAP, LANGUAGES } from "@/lib/constants";
 import { loadProfile } from "@/lib/profile";
 import type { ChatMessage, CitizenProfile, Language } from "@/types";
 
-const SUGGESTIONS: Record<string, string[]> = {
-  "English":  [
-    "What is PM-KISAN?",
-    "Tell me about Ayushman Bharat",
-    "Schemes for farmers in Maharashtra",
-    "How to apply for MUDRA loan?",
-    "Scholarship for SC students",
-    "Housing scheme for BPL family",
+// ── Large pool of realistic quick questions ──────────────────────────────────
+const QUESTION_POOL: Record<string, string[]> = {
+  "English": [
+    "I am a farmer in Maharashtra with 2 acres of land. Which schemes can I apply for?",
+    "What documents do I need to apply for PM Awas Yojana (PMAY)?",
+    "How can a BPL family get free health insurance under Ayushman Bharat?",
+    "My daughter scored 85% in Class 12. What scholarships are available for her?",
+    "I want to start a small tailoring business. Can I get a MUDRA loan?",
+    "What pension schemes are available for senior citizens above 60 years?",
+    "How to check if I am eligible for PM-KISAN Samman Nidhi?",
+    "I am a construction worker. Which welfare schemes can help me?",
+    "My family income is below ₹2.5 lakh. Which schemes can I benefit from?",
+    "How to get Kisan Credit Card (KCC) and what are the interest rates?",
+    "What is Sukanya Samriddhi Yojana and how much can I deposit?",
+    "My husband passed away. What widow pension and support schemes exist?",
+    "I am an SC student pursuing B.Tech. Which scholarships can I avail?",
+    "How to apply for free LPG connection under Ujjwala Yojana 2.0?",
+    "What is PM Vishwakarma Yojana? Can blacksmiths and carpenters benefit?",
+    "I have a disability certificate (40%). Which special schemes are for me?",
+    "How to get free treatment under Ayushman Bharat PMJAY in government hospitals?",
+    "What is the Atal Pension Yojana and how much pension will I get at age 60?",
+    "I lost my job during COVID. Are there any employment or skill training schemes?",
+    "How can tribal families get house pattas under Forest Rights Act?",
+    "What is PM Garib Kalyan Anna Yojana? Am I eligible for free ration?",
+    "My son wants to study MBBS. Are there fee waivers for OBC students?",
+    "How to apply for PMEGP loan to open a small grocery shop?",
+    "What maternity benefits can a pregnant woman get from the government?",
+    "I am a fisherman in Kerala. Which central and state schemes help me?",
+    "Can retired army personnel get any special government benefits?",
+    "What is Standup India scheme? How much loan can women entrepreneurs get?",
+    "I want to install a solar panel on my rooftop. Is there a government subsidy?",
   ],
   "हिंदी": [
-    "PM-KISAN क्या है?",
-    "मैं किसान हूँ, कौन सी योजना?",
-    "Ayushman Bharat के बारे में बताओ",
-    "Scholarship कैसे मिलेगी?",
-    "MUDRA loan kaise milega?",
-    "BPL परिवार के लिए योजनाएं",
+    "मैं एक किसान हूँ और मेरे पास 2 एकड़ ज़मीन है। मुझे कौन सी योजनाएं मिल सकती हैं?",
+    "PM आवास योजना के लिए कौन से दस्तावेज़ चाहिए?",
+    "BPL परिवार को आयुष्मान भारत में मुफ्त स्वास्थ्य बीमा कैसे मिलेगा?",
+    "मेरी बेटी ने 12वीं में 85% अंक प्राप्त किए। उसके लिए कौन सी छात्रवृत्ति है?",
+    "मैं एक छोटा सिलाई का बिज़नेस शुरू करना चाहती हूँ। क्या मुझे MUDRA लोन मिल सकता है?",
+    "60 साल से ऊपर के बुजुर्गों के लिए कौन सी पेंशन योजना है?",
+    "PM-KISAN सम्मान निधि के लिए पात्रता कैसे जांचें?",
+    "मैं एक निर्माण मज़दूर हूँ। मेरे लिए कौन सी कल्याणकारी योजनाएं हैं?",
+    "मेरे परिवार की आय ₹2.5 लाख से कम है। कौन सी योजनाएं फायदेमंद होंगी?",
+    "किसान क्रेडिट कार्ड (KCC) कैसे मिलता है और ब्याज दर क्या है?",
+    "सुकन्या समृद्धि योजना क्या है और इसमें कितना जमा कर सकते हैं?",
+    "मेरे पति का देहांत हो गया है। विधवा पेंशन और सहायता योजनाएं क्या हैं?",
+    "मैं SC वर्ग का B.Tech छात्र हूँ। कौन सी छात्रवृत्तियां मिल सकती हैं?",
+    "उज्ज्वला योजना 2.0 में मुफ्त LPG कनेक्शन कैसे पाएं?",
+    "PM विश्वकर्मा योजना क्या है? क्या लोहार और बढ़ई को लाभ मिलेगा?",
+    "प्रधानमंत्री गरीब कल्याण अन्न योजना क्या है? क्या मुझे मुफ्त राशन मिलेगा?",
+    "गर्भवती महिलाओं को सरकार से कौन से मातृत्व लाभ मिलते हैं?",
+    "अटल पेंशन योजना क्या है? 60 साल की उम्र में कितनी पेंशन मिलेगी?",
   ],
   "தமிழ்": [
-    "PM-KISAN என்றால் என்ன?",
-    "Ayushman Bharat பற்றி சொல்லுங்கள்",
-    "விவசாயிகளுக்கான திட்டங்கள்",
+    "நான் ஒரு விவசாயி, எனக்கு PM-KISAN கிடைக்குமா?",
+    "ஆயுஷ்மான் பாரத் திட்டத்தில் இலவச சிகிச்சை எப்படி பெறுவது?",
+    "SC மாணவர்களுக்கு உதவித்தொகை திட்டங்கள் என்ன?",
+    "சிறு தொழில் தொடங்க MUDRA கடன் எப்படி பெறுவது?",
+    "மூத்த குடிமக்களுக்கான ஓய்வூதிய திட்டங்கள் என்ன?",
+    "PM ஆவாஸ் யோஜனா மூலம் வீடு கட்ட எவ்வளவு மானியம் கிடைக்கும்?",
   ],
   "తెలుగు": [
-    "PM-KISAN అంటే ఏమిటి?",
-    "రైతులకు పథకాలు ఏమిటి?",
-    "Ayushman Bharat గురించి చెప్పండి",
+    "నేను రైతును, PM-KISAN కోసం ఎలా అప్లై చేయాలి?",
+    "ఆయుష్మాన్ భారత్ ద్వారా ఉచిత వైద్యం ఎలా పొందాలి?",
+    "SC విద్యార్థులకు స్కాలర్‌షిప్‌లు ఏమిటి?",
+    "చిన్న వ్యాపారం కోసం MUDRA లోన్ ఎలా తీసుకోవాలి?",
+    "సీనియర్ సిటిజన్ల కోసం పెన్షన్ పథకాలు ఏమిటి?",
   ],
   "मराठी": [
-    "PM-KISAN म्हणजे काय?",
-    "शेतकऱ्यांसाठी योजना सांगा",
-    "Ayushman Bharat बद्दल सांगा",
+    "मी एक शेतकरी आहे, PM-KISAN साठी कसे अर्ज करावे?",
+    "आयुष्मान भारत अंतर्गत मोफत उपचार कसे मिळतात?",
+    "SC विद्यार्थ्यांसाठी शिष्यवृत्ती योजना कोणत्या?",
+    "छोटा व्यवसाय सुरू करण्यासाठी MUDRA कर्ज कसे मिळते?",
+    "ज्येष्ठ नागरिकांसाठी पेन्शन योजना कोणती?",
+    "PM आवास योजनेत घर बांधण्यासाठी किती अनुदान मिळते?",
   ],
   "বাংলা": [
-    "PM-KISAN কী?",
-    "কৃষকদের জন্য প্রকল্প কী?",
+    "আমি একজন কৃষক, PM-KISAN এর জন্য কীভাবে আবেদন করব?",
+    "আয়ুষ্মান ভারত প্রকল্পে বিনামূল্যে চিকিৎসা কীভাবে পাব?",
+    "SC ছাত্রদের জন্য কোন কোন বৃত্তি আছে?",
+    "ছোট ব্যবসার জন্য MUDRA ঋণ কীভাবে পাব?",
   ],
 };
 
@@ -56,23 +101,29 @@ const WELCOME: Record<string, string> = {
   "ગુજરાતી": "નમસ્તે! 🙏 હું YojanaAI છું. સરકારી યોજનાઓ વિશે પૂછો.",
 };
 
+/** Pick N random items from array without repeats */
+function pickRandom<T>(arr: T[], n: number): T[] {
+  const shuffled = [...arr].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, n);
+}
+
 export default function ChatPage() {
   const [messages,      setMessages]      = useState<ChatMessage[]>([]);
   const [input,         setInput]         = useState("");
   const [loading,       setLoading]       = useState(false);
   const [language,      setLanguage]      = useState<Language>("हिंदी");
   const [recording,     setRecording]     = useState(false);
-  const [ttsEnabled,    setTtsEnabled]    = useState(true);
   const [sttStatus,     setSttStatus]     = useState<"idle"|"recording"|"transcribing"|"done"|"error">("idle");
   const [sttMsg,        setSttMsg]        = useState("");
   const [profile, setProfile] = useState<Partial<CitizenProfile>>({});
+  const [quickQuestions, setQuickQuestions] = useState<string[]>([]);
 
   const bodyRef    = useRef<HTMLDivElement>(null);
   const mediaRef   = useRef<MediaRecorder | null>(null);
   const streamRef  = useRef<MediaStream | null>(null);
   const chunksRef  = useRef<Blob[]>([]);
   const mimeRef    = useRef("audio/webm");
-  const audioRef   = useRef<HTMLAudioElement | null>(null);
+
   const recTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const sttTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -99,6 +150,12 @@ export default function ChatPage() {
     }
   }, []);
 
+  // Randomize quick questions on load and when language changes
+  useEffect(() => {
+    const pool = QUESTION_POOL[language] || QUESTION_POOL["English"];
+    setQuickQuestions(pickRandom(pool, 5));
+  }, [language]);
+
   useEffect(() => {
     return () => {
       if (recTimerRef.current) clearTimeout(recTimerRef.current);
@@ -112,73 +169,9 @@ export default function ChatPage() {
         streamRef.current.getTracks().forEach((t) => t.stop());
         streamRef.current = null;
       }
-
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
-
-      window.speechSynthesis?.cancel();
     };
   }, []);
 
-  // ── TTS: gTTS via /api/tts, fallback to Web Speech API ──────────
-const speakText = useCallback(async (text: string) => {
-  if (!ttsEnabled || !text.trim()) return;
-
-  // Stop everything already playing
-  if (audioRef.current) {
-    audioRef.current.pause();
-    audioRef.current = null;
-  }
-  window.speechSynthesis?.cancel();
-
-  const langCode  = LANG_MAP[language]?.tts || "hi";
-  const cleanText = text.replace(/[*#_`]/g, "").trim().slice(0, 350);
-
-  let gttsOk = false;
-
-  try {
-    const res = await fetch(
-      `/api/tts?text=${encodeURIComponent(cleanText)}&lang=${langCode}`
-    );
-
-    if (res.ok) {
-      const blob     = await res.blob();
-      const audioUrl = URL.createObjectURL(blob);
-      const audio    = new Audio(audioUrl);
-      audioRef.current = audio;
-      audio.onended = () => {
-        URL.revokeObjectURL(audioUrl);
-        audioRef.current = null;
-      };
-
-      try {
-        await audio.play();
-        gttsOk = true;
-      } catch {
-        // Chrome autoplay blocked — destroy and fall through to Web Speech
-        URL.revokeObjectURL(audioUrl);
-        audioRef.current = null;
-        gttsOk = false;
-      }
-    }
-  } catch {
-    // fetch/network error — fall through
-  }
-
-  // Web Speech ONLY if gTTS did not play
-  if (!gttsOk && typeof window !== "undefined" && "speechSynthesis" in window) {
-    const bcp47: Record<string, string> = {
-      hi: "hi-IN", en: "en-IN", ta: "ta-IN", te: "te-IN",
-      mr: "mr-IN", bn: "bn-IN", pa: "pa-IN", gu: "gu-IN", kn: "kn-IN",
-    };
-    const utter  = new SpeechSynthesisUtterance(cleanText);
-    utter.lang   = bcp47[langCode] || "hi-IN";
-    utter.rate   = 0.9;
-    window.speechSynthesis.speak(utter);
-  }
-}, [ttsEnabled, language]);
 
   // ── Send message to AI ───────────────────────────────────────────
   const sendMessage = useCallback(async (text: string) => {
@@ -191,6 +184,10 @@ const speakText = useCallback(async (text: string) => {
     setMessages(history);
     setInput("");
     setLoading(true);
+
+    // Refresh quick questions after send
+    const pool = QUESTION_POOL[language] || QUESTION_POOL["English"];
+    setQuickQuestions(pickRandom(pool, 5));
 
     // Find relevant schemes for context
     let schemeContext = "";
@@ -229,9 +226,6 @@ const speakText = useCallback(async (text: string) => {
 
       setMessages([...history, replyMsg]);
 
-      // Speak the reply
-      speakText(reply);
-
     } catch {
       setMessages([...history, {
         role: "assistant",
@@ -241,7 +235,7 @@ const speakText = useCallback(async (text: string) => {
     }
 
     setLoading(false);
-  }, [messages, loading, language, profile, speakText]);
+  }, [messages, loading, language, profile]);
 
   // ── Voice recording ──────────────────────────────────────────────
   function clearSttTimer() {
@@ -449,8 +443,6 @@ const speakText = useCallback(async (text: string) => {
     }
   }
 
-  const suggestions = SUGGESTIONS[language] || SUGGESTIONS["English"];
-
   return (
     <>
       <Header />
@@ -474,23 +466,10 @@ const speakText = useCallback(async (text: string) => {
               </select>
             </div>
 
-            <label className="form-checkbox" style={{ flex:1, minWidth:180, cursor:"pointer" }}>
-              <input
-                type="checkbox"
-                checked={ttsEnabled}
-                onChange={(e) => {
-                  setTtsEnabled(e.target.checked);
-                  if (!e.target.checked && audioRef.current) audioRef.current.pause();
-                  if (!e.target.checked) window.speechSynthesis?.cancel();
-                }}
-              />
-              🔊 Read AI replies aloud
-            </label>
-
             {messages.length > 0 && (
               <button
                 className="btn-outline btn-sm"
-                onClick={() => { setMessages([]); window.speechSynthesis?.cancel(); }}
+                onClick={() => setMessages([])}
               >
                 🗑️ Clear Chat
               </button>
@@ -528,7 +507,7 @@ const speakText = useCallback(async (text: string) => {
               {messages.map((m, i) => (
                 <div key={i} className={m.role === "user" ? "chat-bubble-user" : "chat-bubble-bot"}>
                   <div className={m.role === "user" ? "bubble-inner-user" : "bubble-inner-bot"}>
-                    {m.content}
+                    {m.role === "assistant" ? <FormattedMessage text={m.content} /> : m.content}
                   </div>
                   <div className="bubble-time">
                     {m.role === "user" ? "You" : "YojanaAI"} &nbsp;·&nbsp; {m.timestamp}
@@ -546,19 +525,37 @@ const speakText = useCallback(async (text: string) => {
               )}
             </div>
 
-            {/* Quick suggestions */}
-            <div style={{ padding:"10px 20px 0", borderTop:"1px solid #f0f4fa" }}>
-              <div style={{ fontSize:11, color:"#8898aa", fontWeight:700, marginBottom:6, textTransform:"uppercase", letterSpacing:"0.06em" }}>
-                Quick questions
+            {/* Quick suggestions — bigger and randomized */}
+            <div style={{ padding:"14px 20px 0", borderTop:"1px solid #f0f4fa" }}>
+              <div style={{ fontSize:12, color:"#002366", fontWeight:700, marginBottom:10,
+                textTransform:"uppercase", letterSpacing:"0.06em",
+                display:"flex", alignItems:"center", gap:8 }}>
+                <span>💡 Quick Questions</span>
+                <button
+                  onClick={() => {
+                    const pool = QUESTION_POOL[language] || QUESTION_POOL["English"];
+                    setQuickQuestions(pickRandom(pool, 5));
+                  }}
+                  style={{
+                    background: "none", border: "1px solid #d0d9e8", borderRadius: 6,
+                    padding: "2px 8px", fontSize: 11, cursor: "pointer", color: "#8898aa",
+                  }}
+                  title="Refresh questions"
+                >
+                  🔄 Refresh
+                </button>
               </div>
-              <div style={{ display:"flex", flexWrap:"wrap", gap:6, marginBottom:10 }}>
-                {suggestions.map((s) => (
+              <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:14 }}>
+                {quickQuestions.map((s, i) => (
                   <button
-                    key={s}
-                    className="quick-q-btn"
+                    key={`${s}-${i}`}
+                    className="quick-q-btn-large"
                     onClick={() => sendMessage(s)}
                     disabled={loading}
                   >
+                    <span style={{ marginRight:8, fontSize:16 }}>
+                      {["🌾","🏥","🎓","🏠","💼","👩","⚙️","🤝","🛡️","💰"][i % 10]}
+                    </span>
                     {s}
                   </button>
                 ))}
@@ -640,6 +637,186 @@ const speakText = useCallback(async (text: string) => {
         </div>
       </main>
       <Footer />
+
+      {/* Quick question large button styles */}
+      <style>{`
+        .quick-q-btn-large {
+          display: flex;
+          align-items: center;
+          width: 100%;
+          text-align: left;
+          padding: 12px 16px;
+          border: 1.5px solid #e0e6f0;
+          border-radius: 10px;
+          background: linear-gradient(135deg, #fafbff, #f5f7fc);
+          color: #1a2340;
+          font-size: 13px;
+          font-weight: 500;
+          line-height: 1.5;
+          cursor: pointer;
+          transition: all 0.2s;
+          font-family: inherit;
+        }
+        .quick-q-btn-large:hover:not(:disabled) {
+          border-color: #002366;
+          background: linear-gradient(135deg, #eef2ff, #e8ecfa);
+          transform: translateY(-1px);
+          box-shadow: 0 3px 10px rgba(0,35,102,0.1);
+          color: #002366;
+          font-weight: 600;
+        }
+        .quick-q-btn-large:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+
+        /* ── Formatted Message Styles ── */
+        .fmt-msg {
+          font-size: 13.5px;
+          line-height: 1.7;
+          color: #1a2340;
+        }
+        .fmt-spacer {
+          height: 8px;
+        }
+        .fmt-header {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 13px;
+          font-weight: 700;
+          color: #002366;
+          margin: 14px 0 6px;
+          padding-bottom: 4px;
+          border-bottom: 1.5px solid #e8ecf4;
+          letter-spacing: 0.02em;
+        }
+        .fmt-header:first-child {
+          margin-top: 0;
+        }
+        .fmt-header-icon {
+          font-size: 16px;
+          flex-shrink: 0;
+        }
+        .fmt-bullet {
+          display: flex;
+          align-items: flex-start;
+          gap: 8px;
+          padding: 4px 0 4px 4px;
+          font-size: 13px;
+          color: #374567;
+          line-height: 1.65;
+        }
+        .fmt-bullet-dot {
+          color: #002366;
+          font-weight: 700;
+          flex-shrink: 0;
+          min-width: 14px;
+          margin-top: 1px;
+        }
+        .fmt-bullet-text {
+          flex: 1;
+        }
+        .fmt-para {
+          margin: 4px 0;
+          color: #374567;
+          font-size: 13.5px;
+          line-height: 1.7;
+        }
+        .fmt-bold {
+          color: #002366;
+          font-weight: 700;
+        }
+        .fmt-link {
+          color: #1565c0;
+          text-decoration: underline;
+          text-decoration-style: dotted;
+          text-underline-offset: 2px;
+          word-break: break-all;
+          font-weight: 600;
+          font-size: 12px;
+        }
+        .fmt-link:hover {
+          color: #002366;
+          text-decoration-style: solid;
+        }
+      `}</style>
+    </>
+  );
+}
+
+// ── Formatted Message Component ──────────────────────────────────────────────
+function FormattedMessage({ text }: { text: string }) {
+  const lines = text.split("\n");
+
+  return (
+    <div className="fmt-msg">
+      {lines.map((line, i) => {
+        const trimmed = line.trim();
+        if (!trimmed) return <div key={i} className="fmt-spacer" />;
+
+        // Section headers with emoji (e.g. "📋 Eligibility:" or "**Benefits:**")
+        const headerMatch = trimmed.match(/^((?:[\p{Emoji}\u200d\ufe0f]+\s*)?\*\*(.+?)\*\*:?\s*)$/u)
+          || trimmed.match(/^((?:[\p{Emoji}\u200d\ufe0f]+\s*)(.+?):)\s*$/u);
+        if (headerMatch && trimmed.length < 60) {
+          const content = headerMatch[2] || headerMatch[1];
+          const emoji = trimmed.match(/^[\p{Emoji}\u200d\ufe0f]+/u)?.[0] || "";
+          return (
+            <div key={i} className="fmt-header">
+              {emoji && <span className="fmt-header-icon">{emoji}</span>}
+              <span>{content.replace(/^\*\*|\*\*$/g, "").replace(/^[\p{Emoji}\u200d\ufe0f]+\s*/u, "")}</span>
+            </div>
+          );
+        }
+
+        // Bullet points (•, -, *, ✅, ✓, ▸)
+        const bulletMatch = trimmed.match(/^([•\-\*✅✓▸►➤]|\d+[\.\)]?)\s+(.+)/);
+        if (bulletMatch) {
+          return (
+            <div key={i} className="fmt-bullet">
+              <span className="fmt-bullet-dot">
+                {/\d/.test(bulletMatch[1]) ? bulletMatch[1] : "•"}
+              </span>
+              <span className="fmt-bullet-text">
+                <FormatInline text={bulletMatch[2]} />
+              </span>
+            </div>
+          );
+        }
+
+        // Regular paragraph
+        return (
+          <p key={i} className="fmt-para">
+            <FormatInline text={trimmed} />
+          </p>
+        );
+      })}
+    </div>
+  );
+}
+
+// ── Inline text formatting (bold, links) ─────────────────────────────────────
+function FormatInline({ text }: { text: string }) {
+  // Split on **bold** patterns
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return (
+    <>
+      {parts.map((part, i) => {
+        if (part.startsWith("**") && part.endsWith("**")) {
+          return <strong key={i} className="fmt-bold">{part.slice(2, -2)}</strong>;
+        }
+        // Auto-link URLs
+        const urlParts = part.split(/(https?:\/\/[^\s,)]+)/g);
+        return urlParts.map((seg, j) => {
+          if (seg.match(/^https?:\/\//)) {
+            return (
+              <a key={`${i}-${j}`} href={seg} target="_blank" rel="noopener noreferrer"
+                className="fmt-link">{seg.replace(/^https?:\/\//, "").slice(0, 35)}</a>
+            );
+          }
+          return <span key={`${i}-${j}`}>{seg}</span>;
+        });
+      })}
     </>
   );
 }

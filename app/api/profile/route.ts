@@ -1,23 +1,51 @@
 /**
  * app/api/profile/route.ts
- * GET  — fetch saved profile
- * POST — save / update profile
- * DELETE — clear profile
+ * GET  — fetch saved profile (per-user via cookie)
+ * POST — save / update profile (per-user via cookie)
+ * DELETE — clear profile (per-user via cookie)
+ *
+ * Users are identified by a `yojana_uid` cookie (UUID).
+ * If no cookie exists, one is generated and set automatically.
  */
 
 import { NextRequest, NextResponse } from "next/server";
 import { getProfile, saveProfile, deleteProfile } from "@/lib/db";
+import { randomUUID } from "crypto";
 
 export const dynamic = "force-dynamic";
 
+/** Read or create the yojana_uid from cookies */
+function getUserId(req: NextRequest): { userId: string; isNew: boolean } {
+  const existing = req.cookies.get("yojana_uid")?.value;
+  if (existing && existing.length >= 8) {
+    return { userId: existing, isNew: false };
+  }
+  return { userId: randomUUID(), isNew: true };
+}
+
+/** Attach set-cookie header when we create a new UID */
+function withCookie(res: NextResponse, userId: string, isNew: boolean): NextResponse {
+  if (isNew) {
+    res.cookies.set("yojana_uid", userId, {
+      path: "/",
+      httpOnly: false,       // needs to be readable by client for localStorage key
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 365 * 5, // 5 years
+    });
+  }
+  return res;
+}
+
 // GET /api/profile
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
-    const profile = getProfile();
-    if (!profile) {
-      return NextResponse.json({ profile: null }, { status: 200 });
-    }
-    return NextResponse.json({ profile }, { status: 200 });
+    const { userId, isNew } = getUserId(req);
+    const profile = getProfile(userId);
+    const res = NextResponse.json(
+      { profile: profile || null, userId },
+      { status: 200 }
+    );
+    return withCookie(res, userId, isNew);
   } catch (err) {
     console.error("[profile GET]", err);
     return NextResponse.json({ error: "Failed to read profile" }, { status: 500 });
@@ -27,6 +55,7 @@ export async function GET() {
 // POST /api/profile
 export async function POST(req: NextRequest) {
   try {
+    const { userId, isNew } = getUserId(req);
     const body = await req.json();
 
     // Basic validation of required fields
@@ -59,9 +88,10 @@ export async function POST(req: NextRequest) {
       is_student:         Boolean(body.is_student),
       is_senior:          Boolean(body.is_senior),
       details:            body.details || {},
-    });
+    }, userId);
 
-    return NextResponse.json({ success: true }, { status: 200 });
+    const res = NextResponse.json({ success: true, userId }, { status: 200 });
+    return withCookie(res, userId, isNew);
   } catch (err) {
     console.error("[profile POST]", err);
     return NextResponse.json({ error: "Failed to save profile" }, { status: 500 });
@@ -69,9 +99,10 @@ export async function POST(req: NextRequest) {
 }
 
 // DELETE /api/profile
-export async function DELETE() {
+export async function DELETE(req: NextRequest) {
   try {
-    deleteProfile();
+    const { userId } = getUserId(req);
+    deleteProfile(userId);
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (err) {
     console.error("[profile DELETE]", err);
