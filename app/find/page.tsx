@@ -9,7 +9,7 @@ import type { CitizenProfile, MatchedScheme, Scheme } from "@/types";
 
 const DEFAULT_PROFILE: CitizenProfile = {
   name: "",
-  age: 0,
+  age: "" as unknown as number,
   gender: "",
   state: "",
   occupation: "",
@@ -136,18 +136,19 @@ export default function FindPage() {
                   <div className="form-group">
                     <label className="form-label">Age / उम्र *</label>
                     <input className="form-input" type="number" min={1} max={100}
-                      value={profile.age || ""}
-                      onChange={(e) => setProfile({ ...profile, age: +e.target.value })} />
+                      value={profile.age === 0 && !(profile.age) ? "" : profile.age}
+                      placeholder="e.g. 25"
+                      onChange={(e) => setProfile({ ...profile, age: e.target.value === "" ? "" as unknown as number : +e.target.value })} />
                   </div>
                   <div className="form-group">
                     <label className="form-label">Gender / लिंग *</label>
                     <select className="form-select"
-                      value={profile.gender?.toLowerCase()}
+                      value={profile.gender}
                       onChange={(e) => setProfile({ ...profile, gender: e.target.value })}>
-                      <option value="">— Select —</option>
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
-                      <option value="other">Other</option>
+                      <option value="">-- Select Gender --</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Other">Other</option>
                     </select>
                   </div>
                 </div>
@@ -159,29 +160,25 @@ export default function FindPage() {
                     <select className="form-select"
                       value={profile.state}
                       onChange={(e) => setProfile({ ...profile, state: e.target.value })}>
-                      <option value="">— Select State —</option>
-                      {STATES.map((s) => <option key={s}>{s}</option>)}
+                      <option value="">-- Select State --</option>
+                      {STATES.map((s) => <option key={s} value={s}>{s}</option>)}
                     </select>
                   </div>
                   <div className="form-group">
                     <label className="form-label">Occupation / व्यवसाय *</label>
                     <select className="form-select"
                       value={profile.occupation}
-                      onChange={(e) => setProfile({
-                        ...profile,
-                        occupation: e.target.value,
-                      })}>
-                      <option value="">— Select Occupation —</option>
-                      {OCCUPATIONS.map((o) => (
-                        <option key={o} value={o.split("/")[0].trim().toLowerCase()}>{o}</option>
-                      ))}
+                      onChange={(e) => setProfile({ ...profile, occupation: e.target.value })}>
+                      <option value="">-- Select Occupation --</option>
+                      {OCCUPATIONS.map((o) => <option key={o} value={o}>{o}</option>)}
                     </select>
                   </div>
                   <div className="form-group">
                     <label className="form-label">Annual Income / सालाना आमदनी (₹) *</label>
-                    <input className="form-input" type="number" min={0} step={10000}
-                      value={profile.income || ""}
-                      onChange={(e) => setProfile({ ...profile, income: +e.target.value })} />
+                    <input className="form-input" type="number" min={0} step={1000}
+                      value={profile.income}
+                      placeholder="e.g. 120000"
+                      onChange={(e) => setProfile({ ...profile, income: e.target.value === "" ? 0 : +e.target.value })} />
                   </div>
                 </div>
 
@@ -192,7 +189,7 @@ export default function FindPage() {
                     <select className="form-select"
                       value={profile.category}
                       onChange={(e) => setProfile({ ...profile, category: e.target.value })}>
-                      <option value="">— Select Category —</option>
+                      <option value="">-- Select Category --</option>
                       {[
                         { value: "general",  label: "General" },
                         { value: "sc",       label: "SC — Scheduled Caste" },
@@ -286,7 +283,7 @@ export default function FindPage() {
                   <div className="metric-lbl">Medium Match</div>
                 </div>
                 <div className="metric-card">
-                  <div className="metric-num">{results.length > 0 ? (results[0]?.confidence ?? 0) : 0}%</div>
+                  <div className="metric-num">{results[0]?.confidence ?? 0}%</div>
                   <div className="metric-lbl">Best Score</div>
                 </div>
               </div>
@@ -307,15 +304,14 @@ export default function FindPage() {
               {/* FILTERS */}
               <div style={{ display: "flex", gap: 12, margin: "16px 0", flexWrap: "wrap", alignItems: "center" }}>
                 <div className="form-group" style={{ flex: 2, minWidth: 140 }}>
-                  <label className="form-label" style={{marginBottom: 4}}>Filter Category</label>
+                  <label className="form-label">Filter Category</label>
                   <select className="form-select" value={filterCat}
                     onChange={(e) => setFilterCat(e.target.value)}>
-                    <option value="All">All Categories</option>
                     {CATEGORIES.map((c) => <option key={c}>{c}</option>)}
                   </select>
                 </div>
                 <div className="form-group" style={{ flex: 1, minWidth: 100 }}>
-                  <label className="form-label" style={{marginBottom: 4}}>Show</label>
+                  <label className="form-label">Show</label>
                   <select className="form-select" value={showN}
                     onChange={(e) => setShowN(+e.target.value)}>
                     {[5,10,15,20,50].map((n) => <option key={n} value={n}>{n}</option>)}
@@ -336,31 +332,29 @@ export default function FindPage() {
                 Showing {Math.min(showN, filtered.length)} of {filtered.length} schemes
               </div>
 
-              <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                {filtered.slice(0, showN).map((r, i) => (
-                  <SchemeCard
-                    key={r.scheme.id}
-                    result={r}
-                    index={i}
-                    onAddCompare={addCompare}
-                    compareCount={compareList.length}
-                    inCompareList={compareList.some((c) => c.id === r.scheme.id)}
-                  />
-                ))}
-              </div>
+              {filtered.slice(0, showN).map((r, i) => (
+                <SchemeCard
+                  key={r.scheme.id}
+                  result={r}
+                  index={i}
+                  onAddCompare={addCompare}
+                  compareCount={compareList.length}
+                  inCompareList={compareList.some((c) => c.id === r.scheme.id)}
+                />
+              ))}
 
               {compareList.length > 0 && (
                 <div style={{
-                  position: "fixed", bottom: 24, right: 24, background: "#1a2340",
+                  position: "fixed", bottom: 24, right: 24, background: "#002366",
                   color: "#fff", borderRadius: 12, padding: "14px 22px",
-                  boxShadow: "0 6px 24px rgba(0,0,0,0.15)", zIndex: 200,
+                  boxShadow: "0 6px 24px rgba(0,35,102,0.4)", zIndex: 200,
                   display: "flex", alignItems: "center", gap: 14,
                 }}>
-                  <span style={{ fontWeight: 600 }}>
+                  <span style={{ fontWeight: 700 }}>
                     ⚖️ {compareList.length} scheme{compareList.length > 1 ? "s" : ""} in compare
                   </span>
                   <a href="/compare" style={{
-                    background: "#ede9fe", color: "#4c1d95", padding: "6px 14px",
+                    background: "#FF9800", color: "#fff", padding: "6px 14px",
                     borderRadius: 6, textDecoration: "none", fontWeight: 700, fontSize: 13,
                   }}>
                     View Compare →
@@ -370,159 +364,6 @@ export default function FindPage() {
             </div>
           )}
         </div>
-        <style suppressHydrationWarning dangerouslySetInnerHTML={{ __html: `
-          main {
-            background-color: #fafbfc;
-            min-height: 100vh;
-            font-family: inherit;
-          }
-          .page-wrap {
-            max-width: 1300px;
-            margin: 0 auto;
-            padding: 40px 24px;
-          }
-          .section-title {
-            font-size: 22px;
-            font-weight: 700;
-            color: #0f172a;
-            margin-bottom: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-          }
-          .section-title small {
-            font-size: 13px;
-            font-weight: 500;
-            color: #64748b;
-          }
-          .box {
-            padding: 14px 18px;
-            border-radius: 8px;
-            font-size: 13.5px;
-            margin-bottom: 16px;
-            line-height: 1.5;
-          }
-          .box-info { background: #f0f4ff; border: 1px solid #dbeafe; color: #1e40af; }
-          .box-ok { background: #f0fdf4; border: 1px solid #dcfce7; color: #166534; }
-          .box-warn { background: #fffbeb; border: 1px solid #fef08a; color: #92400e; }
-          .form-section {
-            background: #fff;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 28px 32px;
-            margin-bottom: 32px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
-          }
-          .form-section-title {
-            font-size: 15px;
-            font-weight: 600;
-            color: #0f172a;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #f1f5f9;
-          }
-          .form-label {
-            display: block;
-            font-size: 12.5px;
-            font-weight: 600;
-            color: #475569;
-            margin-bottom: 6px;
-          }
-          .form-input, .form-select {
-            width: 100%;
-            padding: 10px 14px;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            font-size: 14px;
-            outline: none;
-            transition: all 0.2s;
-            background: #fff;
-            color: #0f172a;
-            box-sizing: border-box;
-            appearance: none;
-            -webkit-appearance: none;
-          }
-          .form-select {
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right 14px center;
-            background-size: 16px;
-            padding-right: 40px;
-          }
-          .form-input:focus, .form-select:focus {
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
-          }
-          .form-checkbox {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 13px;
-            font-weight: 500;
-            color: #334155;
-            cursor: pointer;
-            user-select: none;
-          }
-          .form-checkbox input {
-            width: 16px; height: 16px;
-            accent-color: #3b82f6;
-            cursor: pointer;
-            margin: 0;
-          }
-          .btn-primary {
-            background: #1a2340;
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-          }
-          .btn-primary:not(:disabled):hover { background: #2a3556; }
-          .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
-          .btn-outline {
-            background: #fff;
-            border: 1px solid #cbd5e1;
-            color: #475569;
-            border-radius: 6px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-          }
-          .btn-outline:hover { background: #f8fafc; color: #0f172a; border-color: #94a3b8; }
-          .btn-sm { padding: 8px 16px; font-size: 13px; }
-          .metrics-row {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-            margin: 24px 0;
-          }
-          .metric-card {
-            background: #fff;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 16px;
-            text-align: center;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
-          }
-          .metric-num { font-size: 26px; font-weight: 700; color: #0f172a; margin-bottom: 4px; }
-          .metric-lbl { font-size: 11px; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-          .spinner {
-            width: 16px; height: 16px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-top-color: #fff;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            display: inline-block;
-          }
-          @keyframes spin { to { transform: rotate(360deg); } }
-          
-          /* Scheme Cards grid adjustment */
-          @media (max-width: 768px) {
-            .metrics-row { grid-template-columns: repeat(2, 1fr); }
-            .form-section > div[style] { grid-template-columns: 1fr !important; }
-          }
-        `}} />
       </main>
       <Footer />
     </>
