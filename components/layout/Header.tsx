@@ -21,7 +21,8 @@ const BASE_NAV_LINKS = [
   { href: "/events",    label: "📅 Life Events" },
   { href: "/compare",   label: "⚖️ Compare" },
   { href: "/doc-check", label: "📎 Doc Check" },
-  { href: "/about",     label: "ℹ️ About" },
+  // { href: "/about",     label: "ℹ️ About" },
+  
 ];
 
 interface HeaderProps {
