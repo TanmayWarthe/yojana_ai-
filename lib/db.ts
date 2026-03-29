@@ -271,7 +271,8 @@ export function verifyPassword(password: string, hash: string): boolean {
 }
 
 export function createUser(name: string, email: string, phone: string, passwordRaw: string): UserRow {
-  const existing = stmtGetUserByEmail.get(email);
+  const normEmail = email.trim().toLowerCase();
+  const existing = stmtGetUserByEmail.get(normEmail);
   if (existing) {
     throw new Error("Email already registered");
   }
@@ -279,13 +280,14 @@ export function createUser(name: string, email: string, phone: string, passwordR
   const id = randomUUID();
   const passHash = hashPassword(passwordRaw);
   
-  stmtCreateUser.run(id, name, email, phone, passHash);
+  stmtCreateUser.run(id, name, normEmail, phone, passHash);
   
-  return { id, name, email, phone, password_hash: passHash };
+  return { id, name, email: normEmail, phone, password_hash: passHash };
 }
 
 export function authenticateUser(email: string, passwordRaw: string): UserRow | null {
-  const user = stmtGetUserByEmail.get(email);
+  const normEmail = email.trim().toLowerCase();
+  const user = stmtGetUserByEmail.get(normEmail);
   if (!user) return null;
   if (!verifyPassword(passwordRaw, user.password_hash)) return null;
   return user;
