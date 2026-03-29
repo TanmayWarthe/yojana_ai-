@@ -114,7 +114,7 @@ export default function SchemeCard({ result, index, onAddCompare, compareCount =
 
       {open && (
         <div className="expander-content" style={{ border: "1px solid #dde4f0", borderTop: "none", borderRadius: "0 0 8px 8px", background: "#fafbff" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+          <div className="resp-grid-2">
             <div>
               <p style={{ fontWeight: 700, fontSize: 13, color: "#002366", marginBottom: 8 }}>✅ Benefits / लाभ</p>
               {(s.benefits || []).slice(0, 4).map((b, i) => (

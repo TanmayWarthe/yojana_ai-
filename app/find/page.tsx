@@ -123,7 +123,7 @@ export default function FindPage() {
           <form onSubmit={handleSubmit}>
             <div className="form-section">
               <div className="form-section-title">👤 Citizen Profile / नागरिक प्रोफ़ाइल</div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 18 }}>
+              <div className="resp-grid-3">
 
                 {/* Column 1 */}
                 <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>

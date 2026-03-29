@@ -99,7 +99,7 @@ export default function HomeClient({ db }: { db: SchemesDB }) {
               <div className="section-title" style={{ marginTop: 32 }}>
                 📋 Recently Added Schemes
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+              <div className="resp-grid-2" style={{ gap: 10 }}>
                 {recent.map((s) => {
                   const cm = CAT_META[s.category] || CAT_META["General"];
                   return (

@@ -358,7 +358,7 @@ export default function DocCheckPage() {
             due to wrong documents.</strong> We solve this.
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+          <div className="resp-grid-2">
 
             {/* LEFT — Upload + Settings */}
             <div>

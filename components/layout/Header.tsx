@@ -308,9 +308,12 @@ export default function Header({ totalSchemes = 219, lastUpdated }: HeaderProps)
         @media (max-width: 768px) {
           .desktop-nav-links { display: none !important; }
           .hamburger-btn { display: block !important; }
-          .site-header { flex-direction: column; gap: 12px; text-align: center; padding: 16px; }
-          .stats-bar { overflow-x: auto; flex-wrap: nowrap; }
-          .stat-cell { min-width: 70px; }
+          .site-header { flex-direction: row; flex-wrap: wrap; gap: 10px; padding: 12px 16px !important; }
+          .stats-bar { overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; }
+          .stat-cell { min-width: 70px; flex: 0 0 auto; }
+        }
+        @media (max-width: 480px) {
+          .site-header { justify-content: center; text-align: center; padding: 10px 12px !important; }
         }
       `}</style>
     </>

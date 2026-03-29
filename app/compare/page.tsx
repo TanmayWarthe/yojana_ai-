@@ -176,7 +176,7 @@ export default function ComparePage() {
           </div>
 
           {/* ── SCHEME SELECTOR CARDS ── */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14, marginBottom: 20 }}>
+          <div className="resp-grid-3" style={{ marginBottom: 20 }}>
             {[0, 1, 2].map((idx) => {
               const s = list[idx];
               if (s) {
@@ -280,7 +280,7 @@ export default function ComparePage() {
                   <div style={{ fontSize: 12, fontWeight: 700, color: "var(--text-muted)", marginBottom: 10 }}>
                     💡 ML Confidence Scores for Your Profile
                   </div>
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginBottom: 20 }}>
+                  <div className="resp-grid-3" style={{ gap: 12, marginBottom: 20 }}>
                     {list.map((s) => (
                       <div key={s.id} style={{
                         background: "linear-gradient(135deg, #f0f4ff, #f8faff)",
@@ -324,7 +324,7 @@ export default function ComparePage() {
                 ✅ Comparing <strong>{list.length} schemes</strong> side-by-side.
                 Differences are highlighted for quick scanning.
               </div>
-              <div style={{ overflowX: "auto" }}>
+              <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" }}>
                 <table className="compare-table">
                   <thead>
                     <tr>
